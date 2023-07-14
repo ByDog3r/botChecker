@@ -45,7 +45,14 @@ async def cmd_buttons(update, context, key, markup, ParseMode) -> None:
 
         ],
 
-        [key("Close Menu", callback_data="close")]
+        [key("Misk functions", callback_data="misk")],
+
+        [
+
+            key("Go back", callback_data="menu"),
+            key("Close menu", callback_data="close")
+        
+        ]
 
     ]
 
@@ -108,6 +115,29 @@ async def cmd_buttons(update, context, key, markup, ParseMode) -> None:
         await query.edit_message_text(msg, reply_markup=buttons, parse_mode=ParseMode)
 
 
+    elif query.data == "misk":
+
+        msg = f"""╔═══════════════════════╗
+╟ • [ 鰲  ] <b>Tools.</b>
+╟═══════════════════════╝
+╟ • [  宏 ] Name: <b>Translator</b>
+╟ •「 夾 」Use: <code>.tr example text</code>
+╟━━━━━━━━━━━
+╟ • [  宏 ] Name: <b>Get your information.</b>
+╟ •「 夾 」Use: <code>.me</code>
+╚═══════「@𝑩𝒚𝑪𝒉𝒆𝒄𝒌𝒆𝒓」═══════╝""" 
+
+        keyboard = [
+
+        [key("Go back", callback_data="cmds")],
+
+        [key("Close Menu", callback_data="close")]
+
+    ]
+
+        buttons = markup(keyboard)
+        await query.edit_message_text(msg, reply_markup=buttons, parse_mode=ParseMode)
+
 
     elif query.data == "close":
         msg = f"<b>Thanks for using :)</b>"
@@ -137,13 +167,13 @@ async def cmd_buttons(update, context, key, markup, ParseMode) -> None:
 
         ],
 
+
         [key("Close Menu", callback_data="close")]
+
 
     ]
 
-
-        buttons = markup(keyboard)
-   
+        buttons = markup(keyboard)   
         msg = f"⊂支⊃ ByCheck! ⊂支⊃\n━━━━━━━━━━━━━━━━━━"
         await query.edit_message_text(msg, reply_markup=buttons, parse_mode=ParseMode)
 
