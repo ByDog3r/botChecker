@@ -11,7 +11,8 @@ from src.tools.gen import GeneatedCC as gen
 from src.tools.cmds import CommandsFunction as cmd
 from src.tools.me import StartFnction as start
 from src.tools.cmds import cmd_buttons
-from src.gates.stripe_seti import Stripe_command
+from src.tools.gen import gen_buttons
+from src.gates.stripe_mora import getLive
 from src.tools.address import genAddress as faker
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ApplicationBuilder, ContextTypes, PrefixHandler, CallbackContext, CallbackQueryHandler
@@ -58,8 +59,11 @@ async def binlookup_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await bin_info(update, context, ParseMode.HTML, ChatAction.TYPING)
 
 # =========== BIN GEN ================
-async def gen_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await gen(update, context, ParseMode.HTML, ChatAction.TYPING)
+async def gen_command(update: Update, context: ContextTypes.DEFAULT_TYPE, key = InlineKeyboardButton , markup= InlineKeyboardMarkup):
+    await gen(update, context, key, markup, ParseMode.HTML, ChatAction.TYPING)
+
+async def gen_keyboard(update: Update, context: ContextTypes.DEFAULT_TYPE, key = InlineKeyboardButton , markup= InlineKeyboardMarkup):
+    await gen_buttons(update, context, key, markup, ParseMode.HTML)
     
 # ======== Dox Function ===============
 async def dox_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -71,7 +75,7 @@ async def comando_delck(update: Update, _):
 
 # ======== STRIPE GATES ===============
 async def stripe_gate_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await Stripe_command(update, ParseMode.HTML, ChatAction.TYPING)
+    await getLive(update, context, ParseMode.HTML, ChatAction.TYPING)
 
 logging.basicConfig(
     level=logging.ERROR
@@ -97,9 +101,10 @@ if __name__ == '__main__':
     application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['faker', 'rand', 'address'], fakeaddress_command))
     application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['cmds', 'cmd', 'commands'], cmd_command))
     application.add_handler(PrefixHandler(["/", "#", ".", ",", "!"], ["delck"], comando_delck))
-    application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['st'], stripe_gate_command))
+    application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['mr'], stripe_gate_command))
 
     #KeyBoard Handlers
     application.add_handler(CallbackQueryHandler(cmd_keyboard))
+    application.add_handler(CallbackQueryHandler(gen_keyboard))
 
     application.run_polling()

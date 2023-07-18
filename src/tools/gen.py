@@ -190,7 +190,7 @@ class Generar_tarjeta():
 	
 		
 
-async def GeneatedCC(update, extra, ParseMode, ChatAction):
+async def GeneatedCC(update, extra, key, markup, ParseMode, ChatAction):
     try:
         extra = extra.args[0] if update.message.reply_to_message == None else update.message.reply_to_message.text 
         extra = extra.replace(":", "|").replace("/", "|").replace(" ", "|")
@@ -219,7 +219,23 @@ async def GeneatedCC(update, extra, ParseMode, ChatAction):
 ╟ {ccs[10]}
 <b>╚═══════「@𝑩𝒚𝑪𝒉𝒆𝒄𝒌𝒆𝒓」═══════╝</b>"""
 
-        await update.message.reply_text(msg, reply_to_message_id=update.message.message_id, parse_mode=ParseMode)
+        keyboard = [
+            [key("Regenerate", callback_data="gen")]
+        ]
+        buttons = markup(keyboard)
+        await update.message.reply_text(msg, reply_to_message_id=update.message.message_id, parse_mode=ParseMode, reply_markup=buttons)
+
 
     except:
         await update.message.reply_text("<b>Example to use:</b> /gen 411116xxxx", reply_to_message_id=update.message.message_id, parse_mode=ParseMode)
+
+
+
+async def gen_buttons(update, context, key, markup, ParseMode):
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == "gen":
+        msg = f"<b>Not working now</b>"
+        await query.edit_message_text(msg, parse_mode=ParseMode)
+
