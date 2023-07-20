@@ -14,6 +14,7 @@ from src.tools.cmds import cmd_buttons
 from src.tools.gen import gen_buttons
 from src.gates.stripe_mora import getLive
 from src.tools.address import genAddress as faker
+from src.tools.translate import translate as tr
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ApplicationBuilder, ContextTypes, PrefixHandler, CallbackContext, CallbackQueryHandler
 
@@ -53,6 +54,10 @@ async def me_command(update: Update, _) -> None:
 # ========== Fake address US =========
 async def fakeaddress_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await faker(update, context, ParseMode.HTML, ChatAction.TYPING)
+
+# ========== Translator =========
+async def translator_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await tr(update, context, ParseMode.HTML)
 
 # ======== BIN LOCKUP =============
 async def binlookup_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -100,6 +105,7 @@ if __name__ == '__main__':
     application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['start', 'Start', 'START'], start_command)) 
     application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['faker', 'rand', 'address'], fakeaddress_command))
     application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['cmds', 'cmd', 'commands'], cmd_command))
+    application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['tr', 'translator', 'Tr', 'TR'], translator_command))
     application.add_handler(PrefixHandler(["/", "#", ".", ",", "!"], ["delck"], comando_delck))
     application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['mr'], stripe_gate_command))
 

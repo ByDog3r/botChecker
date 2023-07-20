@@ -20,7 +20,7 @@ async def getLive(update, extra, ParseMode, ChatAction):
         cvv = card_details[3]
 
         
-        msg = await update.message.reply_text(f"checking card\n→ card: {card}:{month}:{year}:{cvv}\n▲ ▱▱▱▱▱▱▱▱▱▱ 0%")
+        msg = await update.message.reply_text(f"checking card\n→ card: {card}:{month}:{year}:{cvv}\n▲ ▱▱▱▱▱▱▱▱▱▱ 0%", reply_to_message_id=update.message.message_id, parse_mode=ParseMode)
  
 
         # =============== Req Login =========
@@ -95,13 +95,11 @@ async def getLive(update, extra, ParseMode, ChatAction):
         await msg.edit_text("▲ ▰▰▰▰▰▰▰▰▰▰ 100%", parse_mode=ParseMode.HTML)
 
 
-        msg = f"<b>CC</b>: <code>{card}|{month}|{year}|{cvv}</code>\n<b>Status</b>: Dead ❌.\n<b>Response</b>: {stripe['error']['message']}"
-        await msg.edit_text(msg, parse_mode=ParseMode)
+        await msg.edit_text(f"<b>CC</b>: <code>{card}|{month}|{year}|{cvv}</code>\n<b>Status</b>: Dead ❌.\n<b>Response</b>: {stripe['error']['message']}", parse_mode=ParseMode)
 
 
     except:
-        msg = f"<b>CC</b>: <code>{card}|{month}|{year}|{cvv}</code>\n<b>Status</b>: Dead ❌.\n<b>Response</b>: 3D"
-        await update.message.reply_text(msg, reply_to_message_id=update.message.message_id, parse_mode=ParseMode)
+        await msg.edit_text(f"<b>CC</b>: <code>{card}|{month}|{year}|{cvv}</code>\n<b>Status</b>: Dead ❌.\n<b>Response</b>: 3D", parse_mode=ParseMode.HTML)
 
 
 # ================= you can see requests by requests in a page ===========
