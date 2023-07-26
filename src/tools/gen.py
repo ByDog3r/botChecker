@@ -2,6 +2,7 @@ import json
 import random
 import datetime
 import re
+from telegram import  InlineKeyboardButton, InlineKeyboardMarkup
 
 class Generar_tarjeta():
 	def __init__(self,BIN, cantidad=1, solo_impresion=False):
@@ -187,7 +188,6 @@ class Generar_tarjeta():
 						return numero[0:3]
 			return str(random.randint(101,998))
 
-	
 		
 
 async def GeneatedCC(update, extra, key, markup, ParseMode, ChatAction):
@@ -220,22 +220,25 @@ async def GeneatedCC(update, extra, key, markup, ParseMode, ChatAction):
 <b>╚═══════「@𝑩𝒚𝑪𝒉𝒆𝒄𝒌𝒆𝒓」═══════╝</b>"""
 
         keyboard = [
-            [key("Regenerate", callback_data="gen")]
+            [key("Regenerate", callback_data="regen")]
         ]
+        
         buttons = markup(keyboard)
         await update.message.reply_text(msg, reply_to_message_id=update.message.message_id, parse_mode=ParseMode, reply_markup=buttons)
 
 
     except:
         await update.message.reply_text("<b>Example to use:</b> /gen 411116xxxx", reply_to_message_id=update.message.message_id, parse_mode=ParseMode)
+	
 
 
 
-async def gen_buttons(update, context, key, markup, ParseMode):
+async def gen_buttons(update, context, key:InlineKeyboardButton, markup, ParseMode) -> None:
     query = update.callback_query
     await query.answer()
 
-    if query.data == "gen":
-        msg = f"<b>Not working now</b>"
-        await query.edit_message_text(msg, parse_mode=ParseMode)
+
+    if query.data == "regen":
+	
+        await query.edit_message_text(f"<b>Not working now</b>", parse_mode=ParseMode)
 

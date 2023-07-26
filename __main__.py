@@ -1,7 +1,7 @@
-from time import sleep
+import logging, sys
+from asyncio import sleep
 from pickle import load
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-import asyncio, logging, sys
 from src.tools.doxxer import dox
 from src.tools.delck import delckc
 from huepy import lightred, lightgreen
@@ -18,7 +18,6 @@ from src.tools.translate import translate as tr
 from telegram.constants import ParseMode, ChatAction
 from telegram.ext import ApplicationBuilder, ContextTypes, PrefixHandler, CallbackContext, CallbackQueryHandler
 
-
 def banner():
     print(lightred("""
      /$$                           /$$                           /$$      
@@ -28,7 +27,7 @@ def banner():
     | $$  \ $$| $$  | $$| $$      | $$  \ $$| $$$$$$$$| $$      | $$$$$$/ 
     | $$  | $$| $$  | $$| $$      | $$  | $$| $$_____/| $$      | $$_  $$ 
  /$$| $$$$$$$/|  $$$$$$$|  $$$$$$$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
-|__/|_______/  \____  $$ \_______/|__/  |__/ \_______/ \_______/|__/  \__/
+|__/|_______/  \____  $$ \_______/|__/ si |__/ \_______/ \_______/|__/  \__/
                /$$  | $$                                                  
               |  $$$$$$/                                                  
                \______/                                                   \n"""))
@@ -44,8 +43,10 @@ async def start_command(update: Update, _) -> None:
 async def cmd_command(update: Update, context: ContextTypes.DEFAULT_TYPE, key = InlineKeyboardButton , markup= InlineKeyboardMarkup) -> None:
     await cmd(update, context, key, markup, ParseMode.HTML)
 
-async def cmd_keyboard(update: Update, context: ContextTypes.DEFAULT_TYPE, key = InlineKeyboardButton , markup= InlineKeyboardMarkup):
+# ======== Handling buttons =========
+async def handler_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE, key = InlineKeyboardButton , markup= InlineKeyboardMarkup):
     await cmd_buttons(update, context, key, markup, ParseMode.HTML)
+    await gen_buttons(update, context, key, markup, ParseMode.HTML)
 
 # ======== Me function =============
 async def me_command(update: Update, _) -> None:
@@ -66,9 +67,6 @@ async def binlookup_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # =========== BIN GEN ================
 async def gen_command(update: Update, context: ContextTypes.DEFAULT_TYPE, key = InlineKeyboardButton , markup= InlineKeyboardMarkup):
     await gen(update, context, key, markup, ParseMode.HTML, ChatAction.TYPING)
-
-async def gen_keyboard(update: Update, context: ContextTypes.DEFAULT_TYPE, key = InlineKeyboardButton , markup= InlineKeyboardMarkup):
-    await gen_buttons(update, context, key, markup, ParseMode.HTML)
     
 # ======== Dox Function ===============
 async def dox_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -110,7 +108,6 @@ if __name__ == '__main__':
     application.add_handler(PrefixHandler(['/', "#", '.', ',', "!"], ['mr'], stripe_gate_command))
 
     #KeyBoard Handlers
-    application.add_handler(CallbackQueryHandler(cmd_keyboard))
-    application.add_handler(CallbackQueryHandler(gen_keyboard))
-
+    application.add_handler(CallbackQueryHandler(handler_buttons))
+   
     application.run_polling()
