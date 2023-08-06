@@ -1,4 +1,5 @@
 from requests import get
+from bs4 import BeautifulSoup as soup
 
 API = (# ======= RRSS ========= 
        'https://facebook.com/', 
@@ -10,13 +11,15 @@ API = (# ======= RRSS =========
        "https://www.linkedin.com/in/",
        # ======== Games =========
        "https://socialclub.rockstargames.com/member/",
-       "https://my.playstation.com/profile/",
+        "https://my.playstation.com/profile/",
        "https://steamcommunity.com/id/",
        "https://www.roblox.com/user.aspx?username=",
        # ======== Misc ==========
        "https://open.spotify.com/user/",
        "https://www.wattpad.com/user/")
 
+headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
 class Sherlock:
 
@@ -29,18 +32,17 @@ class Sherlock:
         req = get(self.API+self.Usr, headers=headers)
 
         if req.status_code == 200:
-            self.response = f"<b>{self.Company_name} encontrado.</b>\n"+"╟ • "+self.API+self.Usr
+            prf = soup(req.text, 'html.parser')
+            if "The specified profile could not be found." in req.text or "Sorry, nobody on Reddit goes by that name." in req.text or 'no_js' in req.text or '<title>Instagram</title>' in req.text:
+                self.response = f"<b>{self.Company_name} not found.</b>"
+            else:
+                self.response = f"<b>{self.Company_name} found.</b>\n"+"╟ • "+self.API+self.Usr
 
         else:
-            self.response = f"<b>{self.Company_name} no encontrado.</b>"
+            self.response = f"<b>{self.Company_name} not found.</b>"
 
         return self.response
-
-
-headers = {
-    "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)Chrome/74.0.3729.169 Safari/537.36"
-}
-
+    
 
 def sherlock(user):
 
@@ -54,7 +56,7 @@ def sherlock(user):
         RD = Sherlock(usr, API[5], "Reddit").whois()
         LK = Sherlock(usr, API[6], "Linkedin").whois()
         #RG = Sherlock(usr, API[7], "RockstarGames").whois()
-        PS = Sherlock(usr, API[8], "PlayStation").whois()
+        #PS = Sherlock(usr, API[8], "PlayStation").whois()
         ST = Sherlock(usr, API[9], "Steam").whois()
         RB = Sherlock(usr, API[10], "Roblox").whois()
         SP = Sherlock(usr, API[11], "Spotify").whois()
@@ -74,7 +76,6 @@ def sherlock(user):
 ╔═══════════════════════╗
 ╟ • [ 🎮 ] 𝐆𝐚𝐦𝐞𝐬
 ╟═══════════════════════╝
-╟ •「德」{PS}
 ╟ •「德」{ST}
 ╟ •「德」{RB}
 ╔═══════════════════════╗
