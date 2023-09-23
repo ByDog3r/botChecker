@@ -1,8 +1,21 @@
 import os
 from shutil import rmtree
+from pyrogram import Client, filters
+from pyrogram.types import Message
+
+@Client.on_message(filters.command("delck", ["/", ",", ".", ";"]))
+async def delck(client: Client, m: Message):
+    result = await delcache(client, m)
+    if result:
+        await m.reply(
+            "<b>Cache has been deleted successfully ✅</b>",
+            quote=True,
+        )
+    else:
+        pass
 
 
-def delcache() -> bool:  # Mejorar usando while y no varios bucles
+async def delcache(client, message) -> bool: 
     cache_borrada = False
     directorio = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,21 +33,5 @@ def delcache() -> bool:  # Mejorar usando while y no varios bucles
                         rmtree(os.path.join(os.path.join(elemento, i2), "__pycache__"))
     else:
         cache_borrada = True
+
     return cache_borrada
-
-
-async def delckc(update, ParseMode):
-    result = delcache()
-    if result:
-        await update.message.reply_text(
-            "<b>Cache has been deleted successfully ✅</b>",
-            reply_to_message_id=update.message.message_id,
-            parse_mode=ParseMode,
-        )
-    else:
-        await update.message.reply_text(
-            "<b>IDK XD aun no se manejan excepciones</b>",
-            reply_to_message_id=update.message.message_id,
-            parse_mode=ParseMode,
-        )
-

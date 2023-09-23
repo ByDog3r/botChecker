@@ -1,5 +1,6 @@
 import requests as req
-from urllib.parse import quote as quote
+from urllib.parse import quote
+
 
 session = req.Session()
 
@@ -21,7 +22,7 @@ async def getLive(update, extra, ParseMode, ChatAction):
 
         
         msg = await update.message.reply_text(f"checking card\n→ card: {card}:{month}:{year}:{cvv}\n▲ ▱▱▱▱▱▱▱▱▱▱ 0%", reply_to_message_id=update.message.message_id, parse_mode=ParseMode)
- 
+
 
         # =============== Req Login =========
         headers = {
@@ -98,8 +99,9 @@ async def getLive(update, extra, ParseMode, ChatAction):
         await msg.edit_text(f"<b>CC</b>: <code>{card}|{month}|{year}|{cvv}</code>\n<b>Status</b>: Dead ❌.\n<b>Response</b>: {stripe['error']['message']}", parse_mode=ParseMode)
 
 
-    except:
-        await msg.edit_text(f"<b>CC</b>: <code>{card}|{month}|{year}|{cvv}</code>\n<b>Status</b>: Dead ❌.\n<b>Response</b>: 3D", parse_mode=ParseMode.HTML)
+    except Exception as e:
+        print(e)
+        return await update.message.reply_text("Ingresa una cc valida", reply_to_message_id=update.message.message_id, parse_mode=ParseMode) 
 
 
 # ================= you can see requests by requests in a page ===========

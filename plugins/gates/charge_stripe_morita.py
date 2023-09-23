@@ -1,3 +1,5 @@
+"""
+
 import requests as r
 
 
@@ -209,3 +211,5 @@ print(response.json()['error']['message'])
 #with open("pagina.html", "w", encoding="utf-8") as f:
 #    f.write(response.text)
 
+
+"""
