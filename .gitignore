@@ -5,3 +5,8 @@ Checker_Resources
 #files
 bot.session
 bot.session-journal
+
+# environments
+# .env
+
+
