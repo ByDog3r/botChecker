@@ -9,7 +9,7 @@ from src.extras.rand_api import GenerateInformation
 @Client.on_message(filters.command(["faker", "fake"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
     await client.send_chat_action(m.chat.id, action=ChatAction.TYPING)
-    message = m.text[len("/faker ") :]
+    message = m.text.split(" ", 1)[1] if not m.reply_to_message.text else m.reply_to_message.text
     user_id = m.from_user.id
     name = m.from_user.first_name
     address = await genAddress(message, user_id, name)

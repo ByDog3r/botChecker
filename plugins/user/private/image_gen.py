@@ -6,16 +6,13 @@ from pyrogram.enums import ParseMode
 from src.extras.hypergpt import image_gen
 from pyrogram import Client, filters, enums
 
-
-
-
 @Client.on_message(filters.command(["img", "image"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-    img = m.text[len("/img ") :]
+    img = m.text.split(" ", 1)[1] if not m.reply_to_message.text else m.reply_to_message.text
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
     generate = await image_gen(img)
     pic = await rand_img(generate)
-    send_pic = await client.send_photo(
+    await client.send_photo(
         chat_id=m.chat.id,
         photo=pic,
         caption=f"{img}"

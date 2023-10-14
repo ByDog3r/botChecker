@@ -7,7 +7,7 @@ API = "https://bins.antipublic.cc/bins/"
 
 @Client.on_message(filters.command("bin", ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-    bin = m.text[len("/bin ") :] if m.reply_to_message.text == None else m.reply_to_message.text
+    bin = m.text.split(" ", 1)[1] if not m.reply_to_message.text else m.reply_to_message.text
     user_id = m.from_user.id
     name = m.from_user.first_name
     lookup = await bin_lookup(bin, user_id, name)

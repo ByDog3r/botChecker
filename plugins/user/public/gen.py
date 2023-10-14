@@ -7,14 +7,8 @@ from pyrogram.types import Message
 
 @Client.on_message(filters.command("gen", ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-   
-    if m.text:
-      query = m.text.split(" ", 1)[1] if len(m.text.split(" ")) > 1 else None
-    elif m.reply_to_message and m.reply_to_message.text:
-      query = m.reply_to_message.text.split(" ") if len(m.reply_to_message.text.split(" ")) > 1 else None
-    else:
-      query = None
-
+    
+    query = m.text.split(" ", 1)[1] if not m.reply_to_message.text else m.reply_to_message.text
     
     generate = await GenerateCC(query)
     await m.reply(
