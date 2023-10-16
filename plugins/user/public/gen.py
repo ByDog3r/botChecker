@@ -7,8 +7,10 @@ from pyrogram.types import Message
 
 @Client.on_message(filters.command("gen", ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-    gen = m.text[len("/gen ") :] if m.reply_to_message.text == None else m.reply_to_message.text
-    generate = await GenerateCC(gen)
+    
+    query = m.text.split(" ", 1)[1] if not m.reply_to_message.text else m.reply_to_message.text
+    
+    generate = await GenerateCC(query)
     await m.reply(
             generate,
             quote=True,
@@ -62,10 +64,11 @@ class Generar_tarjeta():
 
 	def __repr__(self) :
 		listcc = ""
+		listcc = "Card Generator\n━━━━━━━━━━━\n"
 		for n in self.lista_tarjetas:
 			listcc+=f"<code>{n}</code>\n"
 
-		return f"{listcc}• {self.ccnum}"
+		return f"{listcc}━━━━━━━━━━━"
 
 	def json(self):
 		return json.dumps(self.dic_tarjetas)
@@ -209,24 +212,10 @@ async def GenerateCC(extra):
             cant = 16
 
         gen = str(Generar_tarjeta(extra, cant, True))
-        ccs = gen.split("\n")
-        msg = f"""Card Generator
-━━━━━━━━━━━
-<code>{ccs[0]}</code>
-<code>{ccs[1]}</code>
-<code>{ccs[2]}</code>
-<code>{ccs[3]}</code>
-<code>{ccs[4]}</code>
-<code>{ccs[5]}</code>
-<code>{ccs[6]}</code>
-<code>{ccs[7]}</code>
-<code>{ccs[8]}</code>
-<code>{ccs[9]}</code>
-━━━━━━━━━━━
-{extra[:6]}"""
+        
+        msg = f"""{gen}"""
 
         return msg
-
 
     except:
         return "<b>Example to use:</b> /gen 411116xxxx"
