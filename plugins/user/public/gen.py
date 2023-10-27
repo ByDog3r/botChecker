@@ -7,7 +7,7 @@ from pyrogram.types import Message
 
 @Client.on_message(filters.command("gen", ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-    gen = m.text[len("/gen ") :] if m.reply_to_message.text == None else m.reply_to_message.text
+    gen = m.text[len("/gen ") :] if m.reply_to_message == None else m.reply_to_message.text
     generate = await GenerateCC(gen)
     await m.reply(
             generate,

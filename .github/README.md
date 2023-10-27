@@ -5,9 +5,9 @@
 
 <h2 align="center"> Some Functions </h2>
 
-| FAKE ADDRESS GEN | BIN CHECK    |
-| ---------------- | ------------ |
-| ![Fake Address Gen](https://user-images.githubusercontent.com/66902449/211212738-28b36314-d494-4597-9c24-503fc8253896.png)      | ![Bin Checker](https://user-images.githubusercontent.com/66902449/211212931-cde8c6ff-0a4d-48b0-a6be-3e23d97e39cc.png)        |
+| FAKE ADDRESS GEN                                                                                                           | BIN CHECK                                                                                                             |
+| -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| ![Fake Address Gen](https://user-images.githubusercontent.com/66902449/211212738-28b36314-d494-4597-9c24-503fc8253896.png) | ![Bin Checker](https://user-images.githubusercontent.com/66902449/211212931-cde8c6ff-0a4d-48b0-a6be-3e23d97e39cc.png) |
 
 ## .bycheck installation
 
@@ -16,6 +16,7 @@ pip install setup.py install
 ```
 
 ## Details
+
 Bellow is a list with a requirements that your need to get in order to run without problem the bot.
 
 - **Programming Languaje** --- [PYTHON](https://www.python.org/)
@@ -25,10 +26,12 @@ Bellow is a list with a requirements that your need to get in order to run witho
   - **python-telegram-bot** -- [Documentation](https://docs.python-telegram-bot.org/en/v20.0a4/index.html)
   - **Json** -- [Documentation](https://docs.python.org/3/library/json.html)
   - **Huepy** -- [Documentation](https://pypi.org/project/huepy/)
-  - **Whois** -- [Documentation](https://pypi.org/project/python-whois/)
+  - **bs4** -- [Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
   - **AioHTTP** -- [Documentation](https://docs.aiohttp.org/en/stable/)
+  - **TGCrypto** -- [Documentation](https://pypi.org/project/TgCrypto/)
 
 <br>
 
 <!-- Footer-->
+
 <br><h4 align="center"> ⚈ < /bydog3r > ⚈ </h4>

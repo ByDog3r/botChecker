@@ -7,7 +7,7 @@ from pyrogram import Client, filters, enums
 
 @Client.on_message(filters.command(["gpt", "GPT"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-    text = m.text[len("/gpt ") :] if m.reply_to_message.text == None else m.reply_to_message.text
+    text = m.text[len("/gpt ") :] if m.reply_to_message == None else m.reply_to_message.text
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
     msg = await m.reply("Generating...", quote=True)
     gpt_msg = await fb_llama(text)

@@ -5,7 +5,7 @@ from pyrogram.types import Message
 
 @Client.on_message(filters.command(["tr", "tra"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-    text = m.text[len("/tr ") :] if m.reply_to_message.text == None else m.reply_to_message.text
+    text = m.text[len("/tr ") :] if m.reply_to_message == None else m.reply_to_message.text
     traduction = await translate(text)
     await m.reply(
             traduction,
