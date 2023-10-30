@@ -24,11 +24,11 @@ ________________________._”$$_______”$$$$b__”$$$$
 _________________________L.”$.______.$$$$$.__                           """
 from setuptools import setup 
 
-setup(name='@ByCheckerBot',
+setup(name='ByCheckerBot',
       version='1.0.3',
       description='CC Checker / Hacking Toolkit',
-      author='@ByDog3r',
+      author='ByDog3r',
       author_email='bydoger@pm.me',
       python_requires='>=3',
-      install_requires=['lxml', 'requests', 'json', 'python-telegram-bot', 'huepy', 'python-whois', 'aiohttp']
+      install_requires=['lxml', 'requests', 'python-telegram-bot', 'huepy', 'python-whois', 'aiohttp']
 )
