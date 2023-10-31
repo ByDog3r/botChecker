@@ -27,13 +27,11 @@ async def add_premium(client: Client, m: Message):
                 "<b>The ID is not found in the database, you must start a conversation with the bot</b>",
                 quote=True,
             )
-        await m.reply(
-            f"""<b>
-<code>{id}</code> promoted to premium
-Days: <code>{days}</code>
-Credits: <code>{credits}</code>
-Expiration: <code>{result}</code>
-</b>""",
+        await m.reply(f"""<code>{id}</code> <b>promoted to premium</b>
+━━━━━━━━━━━
+└ <b>Days:</b> <code>{days}</code>
+└ <b>Credits:</b> <code>{credits}</code>
+└ <b>Expiration:</b> <code>{result}</code>""",
             quote=True,
         )
         

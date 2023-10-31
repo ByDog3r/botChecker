@@ -10,32 +10,35 @@ from src.assets.Db import Database
 
 @Client.on_message(filters.command([">>", ">"], ['>>', '>']))
 async def start(client: Client, m: Message):
-    try:
-        target = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
-    except:
-        target = ""
+    
     user_id = m.from_user.id
     with Database() as db:
         if not db.IsPremium(user_id):
             return await m.reply("<b>You are not premium</b>", quote=True)
         user_info = db.GetInfoUser(m.from_user.id)
-    if not text:
-        return await m.reply("You need to provide a text to generate", quote=True)
     antispam_result = antispam(user_id, user_info["ANTISPAM"])
     if antispam_result != False:
         return await m.reply(
             f"Please wait <code>{antispam_result}'s</code>", quote=True
         )
+    
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
-    user_id = m.from_user.id
-    name = m.from_user.first_name
+    
     msg = await m.reply("Doxxing...", quote=True)
-    doxed = await dox(target, name, user_id)
-    await msg.edit_text(
+    try:
+        name = m.from_user.first_name
+        target = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+        doxed = await dox(target, name, user_id)
+        await msg.edit_text(
             doxed,
             #quote=True,
             disable_web_page_preview=True
         )
+        
+    except:
+        msg = await msg.edit_text(
+            "<b>Example to use:</b> >>> host/user/ip")
+        return msg
     
 async def verify_web(url: str) -> bool:
     try:

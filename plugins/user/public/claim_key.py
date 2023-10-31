@@ -19,12 +19,10 @@ async def claim(client: Client, m: Message):
             ),
             quote=True,
         )
-    await m.reply(
-        f"""<b>
-Key successfully claimed!
-Expiration: <code>{result}</code>
-
-</b>""",
+    await m.reply(f"""<b>Now you are premium</b>
+━━━━━━━━━━━
+└ <b>Key successfully claimed!
+└ Expiration:</b> <code>{result}</code>""",
         quote=True,
     )
     

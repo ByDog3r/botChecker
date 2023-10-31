@@ -11,30 +11,46 @@ from src.assets.Db import Database
 @Client.on_message(filters.command(["faker", "fake"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
     await client.send_chat_action(m.chat.id, action=ChatAction.TYPING)
-    try:
-        message = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
-    except:
-         message = "<b> Enter a valid Area code.</b>"
     user_id = m.from_user.id
     with Database() as db:
         if not db.IsPremium(user_id):
             return await m.reply("<b>You are not premium</b>", quote=True)
         user_info = db.GetInfoUser(m.from_user.id)
-    if not text:
-        return await m.reply("You need to provide a text to generate", quote=True)
     antispam_result = antispam(user_id, user_info["ANTISPAM"])
     if antispam_result != False:
         return await m.reply(
             f"Please wait <code>{antispam_result}'s</code>", quote=True
         )
-    user_id = m.from_user.id
-    name = m.from_user.first_name
-    address = await genAddress(message, user_id, name)
-    await m.reply(
+    try:
+        name = m.from_user.first_name
+        message = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+        address = await genAddress(message, user_id, name)
+        await m.reply(
             address,
             quote=True,
             parse_mode=ParseMode.HTML,
         )
+    except:
+        msg = """<b>Countries available:</b>
+\t<code>usa</code> - United States
+\t<code>can</code> - Canada
+\t<code>mx</code>  - Mexico
+\t<code>fr</code>  - France
+\t<code>ger</code> - Germany
+\t<code>ru</code>  - Russia
+\t<code>ja</code>  - Japan
+\t<code>ge</code>  - Georgia
+\t<code>it</code>  - Italy
+\t<code>ko</code>  - Korea
+\t<code>nl</code>  - Netherlands
+\t<code>aus</code> - Australia
+\t<code>br</code>  - Brazil
+━━━━━━━━━━━
+<b>Example to use:</b> /faker usa
+"""
+        message = await m.reply(msg, quote=True, parse_mode=ParseMode.HTML)
+        return message
+    
 
 async def genAddress(AreaCode, user_id, u_name):
 

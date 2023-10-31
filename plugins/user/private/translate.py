@@ -17,7 +17,7 @@ async def start(client: Client, m: Message):
             return await m.reply("<b>You are not premium</b>", quote=True)
         user_info = db.GetInfoUser(m.from_user.id)
     if not text:
-        return await m.reply("You need to provide a text to generate", quote=True)
+        return await m.reply("You need to provide a text to translate", quote=True)
     antispam_result = antispam(user_id, user_info["ANTISPAM"])
     if antispam_result != False:
         return await m.reply(
