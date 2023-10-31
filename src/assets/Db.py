@@ -194,6 +194,21 @@ class Database:
         data = data.fetchone()
         return data
 
+    def RemoveKey(self, key: str) -> Optional[bool]:
+        data = self.cursor.execute(
+            "SELECT BOT_KEY FROM {} WHERE BOT_KEY=?".format(self.BOT_KEYS_TABLE),
+            (key,),
+        )
+        data = data.fetchone()
+        if data is None:
+            return None
+        self.cursor.execute(
+            "DELETE FROM {} WHERE BOT_KEY=?".format(self.BOT_KEYS_TABLE), (key,)
+        )
+        self.connection.commit()
+        return True
+
+
     def GetInfoUser(self, user_id: int) -> Dict[str, Union[str, int]] | None:
         user_data = self.__GetInfo(user_id)
         return (
