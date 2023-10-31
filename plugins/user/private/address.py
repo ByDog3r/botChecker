@@ -32,19 +32,19 @@ async def start(client: Client, m: Message):
         )
     except:
         msg = """<b>Countries available:</b>
-\t<code>usa</code> - United States
-\t<code>can</code> - Canada
-\t<code>mx</code>  - Mexico
-\t<code>fr</code>  - France
-\t<code>ger</code> - Germany
-\t<code>ru</code>  - Russia
-\t<code>ja</code>  - Japan
-\t<code>ge</code>  - Georgia
-\t<code>it</code>  - Italy
-\t<code>ko</code>  - Korea
-\t<code>nl</code>  - Netherlands
-\t<code>aus</code> - Australia
-\t<code>br</code>  - Brazil
+\t└ <code>usa</code> - United States
+\t└ <code>can</code> - Canada
+\t└ <code>mx</code>  - Mexico
+\t└ <code>fr</code>  - France
+\t└ <code>ger</code> - Germany
+\t└ <code>ru</code>  - Russia
+\t└ <code>ja</code>  - Japan
+\t└ <code>ge</code>  - Georgia
+\t└ <code>it</code>  - Italy
+\t└ <code>ko</code>  - Korea
+\t└ <code>nl</code>  - Netherlands
+\t└ <code>aus</code> - Australia
+\t└ <code>br</code>  - Brazil
 ━━━━━━━━━━━
 <b>Example to use:</b> /faker usa
 """

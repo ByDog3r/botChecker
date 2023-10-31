@@ -14,14 +14,12 @@ async def getMe(client: Client, message: Message):
     with Database() as db:
         user_info= db.GetInfoUser(userID)
     
-    msg = f"""╔═══════════════════════╗
-╟ • [ 👤 ] User: @{user}
-╟═══════════════════════╝
-╟ •「火 」 ID: <code>{userID}</code>
-╟ •「火 」 Name: {name}
-╟ •「火 」 Credits: {user_info["CREDITS"]}
-╟ •「火 」 Estatus: {user_info["MEMBERSHIP"].capitalize()}
-╟━━━━━━━━━━━
-╟ •「火 」 Chat ID: <code>{chatID}</code>
-╚═══════「@𝑩𝒚𝑪𝒉𝒆𝒄𝒌𝒆𝒓」═══════╝"""
+    msg = f""" 👤  User: @{user}
+━━━━━━━━━━━
+└ ID: <code>{userID}</code>
+└ Name: {name}
+└ Credits: {user_info["CREDITS"]}
+└ Estatus: {user_info["MEMBERSHIP"].capitalize()}
+━━━━━━━━━━━
+Chat ID: <code>{chatID}</code>"""
     await message.reply_text(msg,quote=True)

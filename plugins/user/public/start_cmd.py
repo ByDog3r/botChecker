@@ -12,14 +12,11 @@ async def StartFnction(client: Client, message: Message):
     chatID = message.chat.id
     userID = message.from_user.id
 
-    msg = f"""╔═════════════════╗
-╟ • ⊂支⊃ {name}! ⊂支⊃
-╟══════════════════
-╟ •「夾 」 ID: <code>{userID}</code>
-╟ •「夾 」 𝚄𝚂𝙴𝚁: @{user}
-╟ •「夾 」 Chat ID: <code>{chatID}</code>
-╟ •「夾 」 𝚆𝚛𝚒𝚝𝚎 /cmd 𝚝𝚘 𝚔𝚗𝚘𝚠 𝚖𝚢 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜.
-╚═══「@𝑩𝒚𝑪𝒉𝒆𝒄𝒌𝒆𝒓」═══╝"""
+    msg = f"""           {name}! 
+━━━━━━━━━━━
+└ ID: <code>{userID}</code>
+└  𝚄𝚂𝙴𝚁: @{user}
+└  Chat ID: <code>{chatID}</code>"""
 
     await message.reply_audio(
         audio="src/assets/start.mp3",
