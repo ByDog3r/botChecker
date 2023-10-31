@@ -4,12 +4,29 @@ from pyrogram.types import Message
 from pyrogram import Client, filters
 from pyrogram.enums import ParseMode, ChatAction
 from src.extras.rand_api import GenerateInformation
+from src.assets.functions import antispam
+from src.assets.Db import Database
 
 
 @Client.on_message(filters.command(["faker", "fake"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
     await client.send_chat_action(m.chat.id, action=ChatAction.TYPING)
-    message = m.text[len("/faker ") :]
+    try:
+        message = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+    except:
+         message = "<b> Enter a valid Area code.</b>"
+    user_id = m.from_user.id
+    with Database() as db:
+        if not db.IsPremium(user_id):
+            return await m.reply("<b>You are not premium</b>", quote=True)
+        user_info = db.GetInfoUser(m.from_user.id)
+    if not text:
+        return await m.reply("You need to provide a text to generate", quote=True)
+    antispam_result = antispam(user_id, user_info["ANTISPAM"])
+    if antispam_result != False:
+        return await m.reply(
+            f"Please wait <code>{antispam_result}'s</code>", quote=True
+        )
     user_id = m.from_user.id
     name = m.from_user.first_name
     address = await genAddress(message, user_id, name)

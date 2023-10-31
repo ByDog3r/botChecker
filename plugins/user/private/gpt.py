@@ -8,7 +8,10 @@ from src.assets.Db import Database
 
 @Client.on_message(filters.command(["gpt", "GPT"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
-    text = m.text[len("/gpt ") :] if m.reply_to_message == None else m.reply_to_message.text
+    try:
+        text = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+    except:
+        text = ""
     user_id = m.from_user.id
     with Database() as db:
         if not db.IsPremium(user_id):
