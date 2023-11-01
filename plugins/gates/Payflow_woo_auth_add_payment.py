@@ -33,9 +33,7 @@ async def jaico(client: Client, m: Message):
         )
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
     msg = await m.reply("checking...", quote=True)
-    cc_check = await getLive(card, msg)
-    await msg.edit_text(cc_check, parse_mode=ParseMode.MARKDOWN)
-    
+    cc_check = await getLive(card, msg)    
     
 def getIndex(response):
     with open("index.html", "w", encoding="utf-8") as f:
@@ -168,6 +166,7 @@ async def getLive(card, msg):
 ━━━━━━━━━━━
 └ Card: <code>{card}:{month}:{year}:{cvv}</code>"""
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
+
     else:
         response_code = getStr(response.text, """<div class="woocommerce-MyAccount-content">
 	<div class="woocommerce-notices-wrapper"><ul class="woocommerce-error" role="alert">
@@ -180,3 +179,6 @@ async def getLive(card, msg):
 └ Response: {response_code}
 └ Proxy: """
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
+        
+    session.cookies.clear()
+        
