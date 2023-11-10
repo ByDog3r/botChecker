@@ -23,15 +23,15 @@ async def bin_lookup(BIN, user_id, u_name):
     try:
         data = get(API+BIN).json()
         final_time = time.perf_counter() - initial_time
-        msg = f"""Bin Information
+        msg = f"""<b>Bin Information</b>
 ━━━━━━━━━━━━
-└ Bin <code>{data['bin']}</code>
-└ Info <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
-└ <code>{data['bank']}</code>
-└ Country <code>{data['country_name']}</code> {data['country_flag']}
+┌ <b>Bin</b> <code>{data['bin']}</code>
+├ <b>Info</b> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+├ <code>{data['bank']}</code>
+└ <b>Country</b> <code>{data['country_name']}</code> {data['country_flag']}
 ━━━━━━━━━━━━
-Time : {final_time:0.2}
-Checked by: <a href='tg://user?id={user_id}'>{u_name}</a> """
+<b>Time</b> : {final_time:0.2}
+<b>Checked by:</b> <a href='tg://user?id={user_id}'>{u_name}</a> """
 
     except:
         msg = f"<b>Example to use:</b> /bin 411116"

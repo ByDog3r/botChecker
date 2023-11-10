@@ -17,8 +17,8 @@ async def gkey(client: Client, m: Message):
         await m.reply(
             f"""<b>Key generated successfully</b>
 ━━━━━━━━━━━━
-└ <b>Key:</b> <code>{generated_key[0]}</code>
-└ <b>Days:</b> <code>{days}</code>
-└ <b>Expiration:</b> <code>{generated_key[1]}</code>""",
+• ┌ <b>Key:</b> <code>{generated_key[0]}</code>
+• ├ <b>Days:</b> <code>{days}</code>
+• └ <b>Expiration:</b> <code>{generated_key[1]}</code>""",
             quote=True,
         )
