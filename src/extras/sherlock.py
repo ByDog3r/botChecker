@@ -36,7 +36,7 @@ class Sherlock:
             if "The specified profile could not be found." in req.text or "Sorry, nobody on Reddit goes by that name." in req.text or 'no_js' in req.text or '<title>Instagram</title>' in req.text:
                 self.response = f"<b>{self.Company_name} not found.</b>"
             else:
-                self.response = f"<b>{self.Company_name} found.</b>\n"+"╟ • "+self.API+self.Usr
+                self.response = f"<a href='{self.API+self.Usr}'><b>{self.Company_name} found ✅.</b></a>"
 
         else:
             self.response = f"<b>{self.Company_name} not found.</b>"
@@ -47,46 +47,40 @@ class Sherlock:
 def sherlock(user):
 
     usr = user
-    try:
-        FB = Sherlock(usr, API[0], "Facebook").whois()
-        IG = Sherlock(usr, API[1], "Instagram").whois()
-        TW = Sherlock(usr, API[2], "Twitter").whois()
-        GT = Sherlock(usr, API[3], "Github").whois()
-        YT = Sherlock(usr, API[4], "YouTube").whois()
-        RD = Sherlock(usr, API[5], "Reddit").whois()
-        LK = Sherlock(usr, API[6], "Linkedin").whois()
-        #RG = Sherlock(usr, API[7], "RockstarGames").whois()
-        #PS = Sherlock(usr, API[8], "PlayStation").whois()
-        ST = Sherlock(usr, API[9], "Steam").whois()
-        RB = Sherlock(usr, API[10], "Roblox").whois()
-        SP = Sherlock(usr, API[11], "Spotify").whois()
-        WT = Sherlock(usr, API[12], "Wattpad").whois()
+    # try:
+    FB = Sherlock(usr, API[0], "Facebook").whois()
+    IG = Sherlock(usr, API[1], "Instagram").whois()
+    TW = Sherlock(usr, API[2], "Twitter").whois()
+    GT = Sherlock(usr, API[3], "Github").whois()
+    YT = Sherlock(usr, API[4], "YouTube").whois()
+    RD = Sherlock(usr, API[5], "Reddit").whois()
+    LK = Sherlock(usr, API[6], "Linkedin").whois()
+    #RG = Sherlock(usr, API[7], "RockstarGames").whois()
+    #PS = Sherlock(usr, API[8], "PlayStation").whois()
+    ST = Sherlock(usr, API[9], "Steam").whois()
+    RB = Sherlock(usr, API[10], "Roblox").whois()
+    SP = Sherlock(usr, API[11], "Spotify").whois()
+    WT = Sherlock(usr, API[12], "Wattpad").whois()
 
 
-        msg = f"""╔═══════════════════════╗
-╟ • [ 👤 ] 𝐷𝑜𝑥𝑒𝑎𝑛𝑑𝑜 𝑈𝑠𝑢𝑎𝑟𝑖𝑜: {usr}
-╟═══════════════════════╝
-╟ •「德」{FB}
-╟ •「德」{IG}
-╟ •「德」{TW}
-╟ •「德」{GT}
-╟ •「德」{YT}
-╟ •「德」{RD}
-╟ •「德」{LK}
-╔═══════════════════════╗
-╟ • [ 🎮 ] 𝐆𝐚𝐦𝐞𝐬
-╟═══════════════════════╝
-╟ •「德」{ST}
-╟ •「德」{RB}
-╔═══════════════════════╗
-╟ • [ 🔗 ] 𝐎𝐭𝐫𝐨𝐬
-╟═══════════════════════╝
-╟ •「德」{SP}
-╟ •「德」{WT}
-╚═══════「@𝑩𝒚𝑪𝒉𝒆𝒄𝒌𝒆𝒓」═══════╝"""
+    msg = f"""<b>𝘜𝘴𝘦𝘳 𝘥𝘰𝘹𝘹𝘦𝘥:</b> {usr}
+━━━━━━━━━━━
+┌ {FB}
+├ {IG}
+├ {TW}
+├ {GT}
+├ {YT}
+├ {RD}
+└ {LK}
+
+┌{ST}
+└ {RB}
+
+┌{SP}
+└ {WT} """
         
     
-    except:
-        msg = "⚠️ An error ocurred, please try again."
+    # except:
+        # msg = "⚠️ An error ocurred, please try again."
         
     return msg

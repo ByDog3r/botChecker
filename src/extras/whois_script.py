@@ -26,19 +26,18 @@ class dox_site:
         return True if 'recaptcha/api.js' in self.code.text or 'g-recaptcha' in self.code.text or 'recaptcha/api.js' in self.code.text or 'www.google.com/recaptcha' in self.code.text else False
         
     def gateway(self):
-        set_cookie = self.url.headers['Set-Cookie']
-        cookies = SimpleCookie()
-        cookies.load(set_cookie)
-        domain = cookies["squareGeo"]["domain"]
+        set_cookie = self.code.headers['Set-Cookie']
+        cookies = SimpleCookie().load(set_cookie)
 
-        if "Shopify" == self.code.headers['powered-by']:
+        if  self.code.headers.get('Powered-by', None) == "Shopify":
             return "Shopify"
-        
-        elif 'squareup.com' == domain:
-            return "Squareup"
         
         elif 'stripe.com' in self.code.text:
             return "Stripe"
+        
+        elif isinstance(cookies, dict) and cookies["squareGeo"]["domain"] == 'squareup.com':
+            return "Squareup"
+        
         else:
             return "No Gateway"
 
@@ -52,19 +51,19 @@ def whois_lookup(site:str, name, user_id):
     web = dox_site(site)
     final_time = perf_counter() - init_time
 
-    msg = f"""𝑽𝒂𝒍𝒊𝒅 𝒑𝒂𝒈𝒆.
-└ Site : <code>{site}</code>
+    msg = f"""<b>𝑽𝒂𝒍𝒊𝒅 𝒑𝒂𝒈𝒆</b>
 ━━━━━━━━━━━━
 <b>Security:</b>
-└  Cloudflare : <code>{web.cloudflare()}</code>
-└ Captcha : <code>{web.captcha()}</code>
-└ reCaptcha : <code>{web.recaptcha()}</code>
+┌ <b>Cloudflare :</b> <code>{web.cloudflare()}</code>
+├ <b>Captcha :</b> <code>{web.captcha()}</code>
+└ <b>reCaptcha :</b> <code>{web.recaptcha()}</code>
 
 <b>Site Information:</b>
-└ Gateway : <code>{web.gateway()}</code>
-└ Server : <code>{web.server()}</code>
+┌ <b>Gateway :</b> <code>{web.gateway()}</code>
+└ <b>Server :</b> <code>{web.server()}</code>
 ━━━━━━━━━━━━
-Time : {final_time:0.2}
-Checked by: <a href='tg://user?id={user_id}'>{name}</a>"""
+┌ <b>Site :</b> <code>{site}</code>
+├ <b>Time :</b> {final_time:0.2}
+└ <b>Checked by :</b> <a href='tg://user?id={user_id}'>{name}</a>"""
 
     return msg
