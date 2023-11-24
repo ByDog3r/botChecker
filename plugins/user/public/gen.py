@@ -210,7 +210,7 @@ async def GenerateCC(extra):
 
         gen = str(Generar_tarjeta(extra, cant, True))
         ccs = gen.split("\n")
-        msg = f"""Card Generator
+        msg = f"""<b>Card Generator</b>
 ━━━━━━━━━━━
 <code>{ccs[0]}</code>
 <code>{ccs[1]}</code>

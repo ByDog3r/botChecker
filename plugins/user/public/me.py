@@ -16,10 +16,10 @@ async def getMe(client: Client, message: Message):
     
     msg = f""" 👤  User: @{user}
 ━━━━━━━━━━━
-└ ID: <code>{userID}</code>
-└ Name: {name}
-└ Credits: {user_info["CREDITS"]}
-└ Estatus: {user_info["MEMBERSHIP"].capitalize()}
+└ <b>ID:</b> <code>{userID}</code>
+└ <b>Name:</b> {name}
+└ <b>Credits:</b> {user_info["CREDITS"]}
+└ <b>Estatus:</b> {user_info["MEMBERSHIP"].capitalize()}
 ━━━━━━━━━━━
-Chat ID: <code>{chatID}</code>"""
+<b>Chat ID:</b> <code>{chatID}</code>"""
     await message.reply_text(msg,quote=True)

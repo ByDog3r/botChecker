@@ -103,25 +103,25 @@ async def genAddress(AreaCode, user_id, u_name):
         
             try:
                 int(address[3])
-                msg = f"""Fake Data [{initial}] {flag}
+                msg = f"""<b>Fake Data [{initial}] {flag}</b>
 ━━━━━━━━━━━━
-└ Name <code>{name}</code>
-└ Street <code>{address[0]}</code>
-└ City <code>{address[4]}</code>
-└ State <code>{address[5]}</code>
-└ Zipcode <code>{address[3]}</code>
+└ <b>Name</b> <code>{name}</code>
+└ <b>Street</b> <code>{address[0]}</code>
+└ <b>City</b> <code>{address[4]}</code>
+└ <b>State</b> <code>{address[5]}</code>
+└ <b>Zipcode</b> <code>{address[3]}</code>
 ━━━━━━━━━━━━
 Time : {final_time:0.2}
 Checked by: <a href='tg://user?id={user_id}'>{u_name}</a>"""
 
             except:
-                msg = f"""Fake Data [{initial}] {flag}
+                msg = f"""<b>Fake Data [{initial}] {flag}</b>
 ━━━━━━━━━━━━
-└ Name <code>{name}</code>
-└ Street <code>{address[0]}</code>
-└ City <code>{address[3]}</code>
-└ State <code>{address[4]}</code>
-└ Zipcode <code>{address[2]}</code>
+└ <b>Name</b> <code>{name}</code>
+└ <b>Street</b> <code>{address[0]}</code>
+└ <b>City</b> <code>{address[3]}</code>
+└ <b>State</b> <code>{address[4]}</code>
+└ <b>Zipcode</b> <code>{address[2]}</code>
 ━━━━━━━━━━━━
 Time : {final_time:0.2}
 Checked by: <a href='tg://user?id={user_id}'>{u_name}</a>"""

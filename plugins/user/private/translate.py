@@ -56,9 +56,9 @@ async def translate(text: str, translate_to: Languages=Languages.SPANISH) -> str
     }
     traduction = get("https://translate.google.com/translate_a/t?", params=params).json()[0][0]
 
-    msg = f""" Translator [🇪🇸]
+    msg = f"""<b>Translator [🇪🇸]</b>
 ━━━━━━━━━━━━
-Traduction: <code>{traduction}</code>
+<b>Traduction:</b> <code>{traduction}</code>
 ━━━━━━━━━━━━
 Checked by @ByDog3r
 """

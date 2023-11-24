@@ -20,27 +20,10 @@ class dox_site:
     def captcha(self):
         soup = BeautifulSoup(self.code.text, 'html.parser')
         return True if len(soup.select('form[action*="/captcha/"]')) > 0 else False
-
-        
+   
     def recaptcha(self):
         return True if 'recaptcha/api.js' in self.code.text or 'g-recaptcha' in self.code.text or 'recaptcha/api.js' in self.code.text or 'www.google.com/recaptcha' in self.code.text else False
         
-    def gateway(self):
-        set_cookie = self.code.headers['Set-Cookie']
-        cookies = SimpleCookie().load(set_cookie)
-
-        if  self.code.headers.get('Powered-by', None) == "Shopify":
-            return "Shopify"
-        
-        elif 'stripe.com' in self.code.text:
-            return "Stripe"
-        
-        elif isinstance(cookies, dict) and cookies["squareGeo"]["domain"] == 'squareup.com':
-            return "Squareup"
-        
-        else:
-            return "No Gateway"
-
     def server(self):
         try: return self.code.headers['Server'] if self.code.headers else False
         except: return False
@@ -56,11 +39,9 @@ def whois_lookup(site:str, name, user_id):
 <b>Security:</b>
 ┌ <b>Cloudflare :</b> <code>{web.cloudflare()}</code>
 ├ <b>Captcha :</b> <code>{web.captcha()}</code>
-└ <b>reCaptcha :</b> <code>{web.recaptcha()}</code>
-
-<b>Site Information:</b>
-┌ <b>Gateway :</b> <code>{web.gateway()}</code>
+├ <b>reCaptcha :</b> <code>{web.recaptcha()}</code>
 └ <b>Server :</b> <code>{web.server()}</code>
+
 ━━━━━━━━━━━━
 ┌ <b>Site :</b> <code>{site}</code>
 ├ <b>Time :</b> {final_time:0.2}

@@ -39,15 +39,15 @@ async def start(client: Client, m: Message):
     except:
         msg = await msg.edit_text(
             "<b>Example to use:</b> >>> host/user/ip")
-        return msg
+    return msg
     
 async def verify_web(url: str) -> bool:
-    try:
-        url = "http://"+url if "https://" not in url and "http://" not in url else url
-        status = get(url).status_code
-        return True, url if status == 200 or status == 403 else False
-    except:
-        return False
+
+    if not url.startswith('http://') and not url.startswith('https://'):
+        try: url = "http://"+url, get(url)
+        except: url = "https://"+url
+    return True, url
+
     
 async def is_a_valid_ip(ip:str) -> bool:
     ip_pattern = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." \
@@ -60,11 +60,8 @@ async def dox(t:str, u, id):
     
     do_is_site = await verify_web(t)
     do_is_an_ip = await is_a_valid_ip(t)
-    if do_is_an_ip:
-        msg = ip(t)
-    elif do_is_site:
-        msg = w(do_is_site[1], u, id)
-    else:
-        msg = shrlck(t)
+    if do_is_an_ip: msg = ip(t)
+    elif do_is_site: msg = w(do_is_site[1], u, id)
+    else: msg = shrlck(t)
 
     return msg
