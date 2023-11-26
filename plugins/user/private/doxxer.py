@@ -32,9 +32,9 @@ async def start(client: Client, m: Message):
         doxed = await dox(target, name, user_id)
         await msg.edit_text(
             doxed,
-            disable_web_page_preview=True,
-            parse_mode=ParseMode.HTML
-        )
+                disable_web_page_preview=True,
+                parse_mode=ParseMode.HTML
+            )
         
     except:
         msg = await msg.edit_text(
@@ -44,8 +44,9 @@ async def start(client: Client, m: Message):
 async def verify_web(url: str) -> bool:
 
     if not url.startswith('http://') and not url.startswith('https://'):
-        try: url = "http://"+url, get(url)
+        try: url = "http://"+url, get(url, timeout=10)
         except: url = "https://"+url
+    else: url=url
     return True, url
 
     

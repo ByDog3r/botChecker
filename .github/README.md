@@ -1,4 +1,4 @@
-<h1 align='center'> .bycheck</h1> 
+<h1 align='center'> .𝑩𝒚𝑪𝒉𝒆𝒄𝒌 ﷻ</h1> 
 <img align="center" src="https://user-images.githubusercontent.com/66902449/208341491-af5757b4-941b-4b8c-892b-a57dcad4d1e3.png">
 <h4 align="center">by <a href='https://github.com/ByDog3r/'>@ByDog3r.</a></h4>
 <h1 align="center">THIS IS THE BEST CHECKER BOT EVER</h1>
@@ -19,6 +19,10 @@ pip install setup.py install
 
 Bellow is a list with a requirements that your need to get in order to run without problem the bot.
 
+<details align="center">
+<summary> &#9655;</summary>
+<br>
+
 - **Programming Languaje** --- [PYTHON](https://www.python.org/)
 - **Dependencies** -- [Documentation](https://docs.python.org/3/)
   - **REQUESTS** -- [Documentation](https://requests.readthedocs.io/en/latest/)
@@ -31,6 +35,8 @@ Bellow is a list with a requirements that your need to get in order to run witho
   - **TGCrypto** -- [Documentation](https://pypi.org/project/TgCrypto/)
 
 <br>
+
+ </details>
 
 <!-- Footer-->
 
