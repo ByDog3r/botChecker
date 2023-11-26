@@ -25,7 +25,7 @@ def ip_dox(ip):
 └ 𝒁𝒊𝒑 𝑪𝒐𝒅𝒆: {data['zip']}
 
 ┌ 𝑹𝒊𝒔𝒌 𝒍𝒆𝒗𝒆𝒍: {risk_lvl[0]}
-└<b>{fraud_score[0]}</b>
+└ <b>{fraud_score[0]}</b>
 
 ├ 𝑰𝑺𝑷: {data['isp']}
 ├ 𝑨𝑺𝑵: {data['as']}

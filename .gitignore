@@ -7,3 +7,4 @@ venv/
 #files
 bot.session
 bot.session-journal
+db_bot.db

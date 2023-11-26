@@ -12,6 +12,7 @@ config_bot = load(open("src/assets/cfgbot.json"))
 API_ID = config_bot["API_ID"]
 API_HASH = config_bot["API_HASH"]
 BOT_TOKEN = config_bot["BOT_TOKEN"]
+#BOT_TOKEN = "6388281047:AAFf-30F-CgfN55Fk19Oo0oh1ae749MnpSY" #is for test
 
 async def handle_text(client:Client, m:Message):
     if not m.from_user:

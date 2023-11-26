@@ -26,43 +26,36 @@ async def start(client: Client, m: Message):
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
     
     msg = await m.reply("<b>Doxxing...</b>", quote=True, parse_mode=ParseMode.HTML)
-    try:
-        name = m.from_user.first_name
-        target = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
-        doxed = await dox(target, name, user_id)
-        await msg.edit_text(
-            doxed,
-                disable_web_page_preview=True,
-                parse_mode=ParseMode.HTML
-            )
-        
-    except:
-        msg = await msg.edit_text(
-            "<b>Example to use:</b> >>> host/user/ip")
+    name = m.from_user.first_name
+    target = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+    doxed = await dox(target, name, user_id)
+    await msg.edit_text(
+        doxed,
+            disable_web_page_preview=True,
+            parse_mode=ParseMode.HTML
+        )
     return msg
     
-async def verify_web(url: str) -> bool:
+async def evaluate_objective(target: str) -> bool:
 
-    if not url.startswith('http://') and not url.startswith('https://'):
-        try: url = "http://"+url, get(url, timeout=10)
-        except: url = "https://"+url
-    else: url=url
-    return True, url
+    ip_regex = r'^\b(?:\d{1,3}\.){3}\d{1,3}\b$'
+    url_regex = r'^(https?://)?([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})(/[a-zA-Z0-9.-]*)*$'
+    url = None
 
-    
-async def is_a_valid_ip(ip:str) -> bool:
-    ip_pattern = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." \
-                 r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." \
-                 r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\." \
-                 r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-    return re.match(ip_pattern, ip) is not None
+    target_response = "IP" if re.match(ip_regex, target) else "SITE" if re.match(url_regex, target) else "user"
+
+    if target_response == "SITE":
+        if not target.startswith('http://') and not target.startswith('https://'):
+            try: url = "http://"+target, get(url)
+            except: url = "https://"+target
+        else: url=target
+    return target_response, url
     
 async def dox(t:str, u, id):
-    
-    do_is_site = await verify_web(t)
-    do_is_an_ip = await is_a_valid_ip(t)
-    if do_is_an_ip: msg = ip(t)
-    elif do_is_site: msg = w(do_is_site[1], u, id)
-    else: msg = shrlck(t)
+    check_target = await evaluate_objective(t)
+    if check_target[0] == "SITE": msg = w(check_target[1], u, id)
+    elif check_target[0] == "IP": msg = ip(t)
+    elif check_target[0] == "user": msg = shrlck(t)
+    else: msg = "<b>Example to use:</b> >>> host/user/ip"
 
     return msg

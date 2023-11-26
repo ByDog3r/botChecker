@@ -12,12 +12,12 @@
 ## .bycheck installation
 
 ```python
-pip install setup.py install
+pip install -r requirements.txt
 ```
 
 ## Details
 
-Bellow is a list with a requirements that your need to get in order to run without problem the bot.
+Bellow is a list with a requirements that your need to get in order to run the bot without problem.
 
 <details align="center">
 <summary> &#9655;</summary>
