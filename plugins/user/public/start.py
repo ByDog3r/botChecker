@@ -98,7 +98,9 @@ async def commands(client: Client, m: Message):
 
 @Client.on_callback_query(filters.regex("gates"))
 def gates_button_callback(client, callback_query):
-    callback_query.edit_message_text("┌ <b>Jeico (!jk)</b> ✅\n└ payflow auth gateway.",
+    callback_query.edit_message_text(f"""┌ <b>Jeico (<a href='https://t.me/ByDog3r'>!jk</a>)</b> ✅\n└ payflow auth gateway.\n
+┌ <b>Shell (<a href='https://t.me/ByDog3r'>!sh</a>)</b> ✅\n└ braintree auth gateway.\n""",
+                                     disable_web_page_preview=True,
                                      reply_markup=InlineKeyboardMarkup(
                 [
                     
@@ -123,17 +125,18 @@ def gates_button_callback(client, callback_query):
 def tools_button_callback(client, callback_query):
     callback_query.edit_message_text("""<b> Commands | 1/3 🔄 </b>
 ━━━━━━━━━━━━
-┌ <b>Faker</b> (!faker) ✅
+┌ <b>Faker</b> (<a href='https://t.me/ByDog3r'>!faker</a>) ✅
 └ Fake address generator.
 
-┌ <b>BIN</b> (!bin) ✅
+┌ <b>BIN</b> (<a href='https://t.me/ByDog3r'>!bin</a>) ✅
 └ Bin lookup tool.
 
-┌ <b>Gen</b> (!gen) ✅
+┌ <b>Gen</b> (<a href='https://t.me/ByDog3r'>!gen</a>) ✅
 └ CC generator
 
-┌ <b>Translator</b> (!tr) ✅
+┌ <b>Translator</b> (<a href='https://t.me/ByDog3r'>!tr</a>) ✅
 └ Translate to spanish""",
+disable_web_page_preview=True,
 reply_markup=InlineKeyboardMarkup(
                 [
                     [  # First row
@@ -190,11 +193,12 @@ def intial_menu_button_callback(client, callback_query):
 def ia_button_callback(client, callback_query):
     callback_query.edit_message_text("""<b> Artificial Intelligence | 2/3 🔄 </b>
 ━━━━━━━━━━━━
-┌ <b>GPT</b> (!gpt) ✅
+┌ <b>GPT</b> (<a href='https://t.me/ByDog3r'>!gpt</a>) ✅
 └ Llama IA chat.
 
-┌ <b>IMG</b> (!img) ✅
+┌ <b>IMG</b> (<a href='https://t.me/ByDog3r'>!img</a>) ✅
 └ IA img generator.""",
+disable_web_page_preview=True,
 reply_markup=InlineKeyboardMarkup(
                 [
                     [  # First row
@@ -222,8 +226,9 @@ reply_markup=InlineKeyboardMarkup(
 def quackingtools_button_callback(client, callback_query):
     callback_query.edit_message_text("""<b> Hacking Tools | 3/3 🔄 </b>
 ━━━━━━━━━━━━
-┌ <b>DoxToolkit</b> (>>>) ✅
+┌ <b>DoxToolkit</b> (<a href='https://t.me/ByDog3r'>>>></a>) ✅
 └ Dox a specific target.""",
+disable_web_page_preview=True,
 reply_markup=InlineKeyboardMarkup(
                 [
                     [  # First row
