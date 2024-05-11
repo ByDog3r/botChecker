@@ -231,4 +231,5 @@ async def getLive(card, msg):
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML)
         
     session.cookies.clear()
+    session.close()
         

@@ -1,4 +1,4 @@
-import re
+import re, sys
 from requests import get
 from pyrogram.types import Message
 from pyrogram import Client, filters, enums
@@ -26,17 +26,14 @@ async def start(client: Client, m: Message):
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
     name = m.from_user.first_name
     msg = await m.reply("<b>Doxxing...</b>", quote=True, parse_mode=ParseMode.HTML)
-    try:
-        
-        target = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
-        doxed = await dox(target, name, user_id)
-        await msg.edit_text(
-                doxed,
-                disable_web_page_preview=True,
-                parse_mode=ParseMode.HTML
-        )
-    except:
-        msg = await msg.edit_text("<b>Example to use:</b> >>> host/user/ip")
+    target = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+    sys.stdout.reconfigure(encoding="utf-8")
+    doxed = await dox(target, name, user_id)
+    await msg.edit_text(
+            doxed,
+            disable_web_page_preview=True,
+            parse_mode=ParseMode.HTML
+    )
     return msg
     
 async def evaluate_objective(target: str) -> bool:
@@ -60,5 +57,4 @@ async def dox(t:str, u, id):
     elif check_target[0] == "IP": msg = ip(t)
     elif check_target[0] == "user": msg = shrlck(t)
     else: msg = "<b>Example to use:</b> >>> host/user/ip"
-
-    
+    return msg

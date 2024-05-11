@@ -4,7 +4,6 @@ import json
 
 API = ["http://ip-api.com/json/", "https://scamalytics.com/ip/"]
 
-
 def ip_dox(ip):
   
     head = {

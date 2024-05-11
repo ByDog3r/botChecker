@@ -3,7 +3,9 @@ import random
 import datetime
 import re
 from pyrogram import Client, filters
-from pyrogram.types import Message
+from pyrogram.types import (InlineKeyboardMarkup,
+                            InlineKeyboardButton, Message)
+
 
 @Client.on_message(filters.command("gen", ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):
@@ -12,7 +14,18 @@ async def start(client: Client, m: Message):
     await m.reply(
             generate,
             quote=True,
+			reply_markup=InlineKeyboardMarkup(
+                [
+                    [  
+                        InlineKeyboardButton( 
+                            "Re-Gen",
+                            callback_data="regen"
+                        )
+                    ]
+                ]
+            )
         )
+
     
 class Generar_tarjeta():
 	def __init__(self,BIN, cantidad=1, solo_impresion=False):
@@ -223,10 +236,17 @@ async def GenerateCC(extra):
 <code>{ccs[8]}</code>
 <code>{ccs[9]}</code>
 ━━━━━━━━━━━
-{extra[:6]}"""
+<code>{extra[:6]}</code>"""
 
         return msg
 
 
     except:
         return "<b>Example to use:</b> /gen 411116xxxx"
+	
+
+
+@Client.on_callback_query(filters.regex("regen"))
+def regen_button_callback(client, callback_query):
+	msg = "not working now"
+	callback_query.edit_message_text(msg)

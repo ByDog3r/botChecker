@@ -13,6 +13,7 @@ class dox_site:
         self.url = url
         self.sesion = Session()
         self.code = self.sesion.get(self.url, headers=headers, timeout=3) 
+        self.soup = BeautifulSoup(self.code.text, 'html.parser')
 
     def cloudflare(self):
         return True if "cf-ray" in self.code.headers else False
@@ -27,6 +28,24 @@ class dox_site:
     def server(self):
         try: return self.code.headers['Server'] if self.code.headers else False
         except: return False
+
+    def gateway(self):
+        try:
+            if 'stripe.com' in self.code.text:
+                gate = "Stripe"
+
+            elif 'braintreegateway.com' in self.code.text:
+                gate = "B3"
+
+            elif 'paypalobjects.com' in self.code.text:
+                gate = "Paypal"
+
+            else:
+                gate = "none"
+
+            return gate
+        except:
+            pass
 
     
 def whois_lookup(site:str, name, user_id):
