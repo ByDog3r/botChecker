@@ -73,6 +73,7 @@ async def getMe(client: Client, message: Message):
 async def commands(client: Client, m: Message):
     await m.reply(
             "<b>Select an option:</b>",
+            disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(
                 [
                     [  # First row
@@ -91,7 +92,7 @@ async def commands(client: Client, m: Message):
                             callback_data="close"
                         )
                     ]
-                ]
+                ],
             )
         )
 
@@ -161,7 +162,7 @@ reply_markup=InlineKeyboardMarkup(
     
 @Client.on_callback_query(filters.regex("close"))
 def close_button_callback(client, callback_query):
-    callback_query.edit_message_text("<b>Closed</b>")
+    callback_query.edit_message_text("<b><a href='https://t.me/ByDog3r'>...</b></a>", disable_web_page_preview=True)
 
 @Client.on_callback_query(filters.regex("initial_menu"))
 def intial_menu_button_callback(client, callback_query):

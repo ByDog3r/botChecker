@@ -214,16 +214,18 @@ class Generar_tarjeta():
 		
 
 async def GenerateCC(extra):
-    try:
-        extra = extra.replace(":", "|").replace("/", "|").replace(" ", "|")
-        if int(extra[0])==3:
-            cant = 15
-        else:
-            cant = 16
 
-        gen = str(Generar_tarjeta(extra, cant, True))
-        ccs = gen.split("\n")
-        msg = f"""<b>Card Generator</b>
+	if extra.startswith("4") or extra.startswith("5") or extra.startswith("6") or extra.startswith("3"):
+		try:
+			extra = extra.replace(":", "|").replace("/", "|").replace(" ", "|")
+			if int(extra[0])==3:
+				cant = 15
+			else:
+				cant = 16
+		
+			gen = str(Generar_tarjeta(extra, cant, True))
+			ccs = gen.split("\n")
+			msg = f"""<b>Card Generator</b>
 ━━━━━━━━━━━
 <code>{ccs[0]}</code>
 <code>{ccs[1]}</code>
@@ -238,11 +240,16 @@ async def GenerateCC(extra):
 ━━━━━━━━━━━
 <code>{extra[:6]}</code>"""
 
-        return msg
+			return msg
 
 
-    except:
-        return "<b>Example to use:</b> /gen 411116xxxx"
+		except:
+			return "<b>Example to use:</b> /gen 411116xxxx"
+
+	else:
+		return "<b>Please use a valid bin.</b>"
+		
+		
 	
 
 
