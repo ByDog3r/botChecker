@@ -19,8 +19,7 @@ class dox_site:
         return True if "cf-ray" in self.code.headers else False
 
     def captcha(self):
-        soup = BeautifulSoup(self.code.text, 'html.parser')
-        return True if len(soup.select('form[action*="/captcha/"]')) > 0 else False
+        return True if len(self.soup.select('form[action*="/captcha/"]')) > 0 else False
    
     def recaptcha(self):
         return True if 'recaptcha/api.js' in self.code.text or 'g-recaptcha' in self.code.text or 'recaptcha/api.js' in self.code.text or 'www.google.com/recaptcha' in self.code.text else False
@@ -30,20 +29,95 @@ class dox_site:
         except: return False
 
     def gateway(self):
+
+        gateways = []
+
         try:
-            if 'stripe.com' in self.code.text:
-                gate = "Stripe"
+            if 'stripe' in self.code.text:
+                gateways.append("Stripe")
 
-            elif 'braintreegateway.com' in self.code.text:
-                gate = "B3"
+            if 'braintree' in self.code.text:
+                gateways.append("Braintree (B3)")
 
-            elif 'paypalobjects.com' in self.code.text:
-                gate = "Paypal"
+            if 'paypal' in self.code.text:
+                gateways.append("Paypal")
 
-            else:
-                gate = "none"
+            if 'squareup' in self.code.text or 'square' in self.code.text:
+                gateways.append("Square")
 
-            return gate
+            if 'shopify' in self.code.text:
+                gateways.append("Shopify")
+
+            if 'recurly' in self.code.text:
+                gateways.append("Recurly")
+
+            if 'adyen' in self.code.text:
+                gateways.append("Adyen")
+
+            if 'payeezy' in self.code.text:
+                gateways.append("Payeezy")
+
+            if 'wix' in self.code.text:
+                gateways.append("Wix")
+
+            if 'bluepay' in self.code.text:
+                gateways.append("bluepay")
+
+            if 'authorize.net' in self.code.text or 'authorize net' in self.code.text:
+                gateways.append("Authorize")
+
+            if 'cybersource' in self.code.text:
+                gateways.append("Cybersource")
+
+            if 'woocommerce' in self.code.text:
+                gateways.append("WooCommerce")
+
+            if 'moneris' in self.code.text:
+                gateways.append("Moneris")
+
+            if 'skrill' in self.code.text:
+                gateways.append("Skrill")
+
+            if '2checkout' in self.code.text or '2co' in self.code.text:
+                gateways.append("2Checkout")
+
+            if 'klarna' in self.code.text:
+                gateways.append("Klarna")
+            
+            if 'worldpay' in self.code.text:
+                gateways.append("Worldpay")
+
+            if 'amazon pay' in self.code.text or 'amazonpay' in self.code.text:
+                gateways.append("Amazon Pay")
+
+            if 'google pay' in self.code.text or 'googlepay' in self.code.text:
+                gateways.append("Google Pay")
+
+            if 'apple pay' in self.code.text or 'applepay' in self.code.text:
+                gateways.append("Apple Pay")
+
+            if 'bitpay' in self.code.text:
+                gateways.append("BitPay")
+
+            if 'coinbase' in self.code.text:
+                gateways.append("Coinbase")
+
+            if 'alipay' in self.code.text:
+                gateways.append("Alipay")
+
+            if 'afterpay' in self.code.text:
+                gateways.append("Afterpay")
+
+            gates = ""
+
+            for gate in gateways:
+                gates += gate + " "
+
+            if gates == "":
+                gates = "Gateway not found."
+            else: pass
+
+            return gates
         except:
             pass
 
@@ -59,6 +133,7 @@ def whois_lookup(site:str, name, user_id):
 ┌ <b>Cloudflare :</b> <code>{web.cloudflare()}</code>
 ├ <b>Captcha :</b> <code>{web.captcha()}</code>
 ├ <b>reCaptcha :</b> <code>{web.recaptcha()}</code>
+├ <b>Gateway :</b> <code>{web.gateway()}</code>
 └ <b>Server :</b> <code>{web.server()}</code>
 
 ━━━━━━━━━━━━

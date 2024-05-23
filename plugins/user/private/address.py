@@ -5,7 +5,7 @@ from pyrogram import Client, filters
 from pyrogram.enums import ParseMode, ChatAction
 from src.extras.rand_api import GenerateInformation
 from src.assets.functions import antispam
-from src.assets.Db import Database
+from src.assets.connection import Database
 
 
 @Client.on_message(filters.command(["faker", "fake"], ["/", ",", ".", ";"]))

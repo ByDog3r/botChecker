@@ -3,7 +3,7 @@ from pyrogram.enums import ParseMode
 from src.extras.hypergpt import chatgpt
 from pyrogram import Client, filters, enums
 from src.assets.functions import antispam
-from src.assets.Db import Database
+from src.assets.connection import Database
 
 @Client.on_message(filters.command(["gpt", "GPT"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):

@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from src.assets.Db import Database
+from src.assets.connection import Database
 
 
 

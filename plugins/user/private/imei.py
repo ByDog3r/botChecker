@@ -7,8 +7,9 @@ from twocaptcha import TwoCaptcha as captcha
 from pyrogram import Client, filters, enums
 from pyrogram.types import Message
 from src.assets.functions import antispam
-from src.assets.Db import Database
+from src.assets.connection import Database
 from pyrogram.enums import ParseMode
+from time import perf_counter
 
 def getIndex(response):
     with open("index.html", "w", encoding="utf-8") as f:
@@ -38,14 +39,16 @@ async def start(client: Client, m: Message):
         return await m.reply(
             f"Please wait <code>{antispam_result}'s</code>", quote=True
         )
+    name = m.from_user.first_name
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
-    msg = await m.reply("checking...", quote=True)
-    imei_checker = await check_imei(text, msg)
+    msg = await m.reply("checking...", parse_mode=ParseMode.HTML)
+    imei_checker = await check_imei(text, msg, name, user_id)
 
 
-async def check_imei(imei, msg):
+async def check_imei(imei, msg, name, user_id):
     
 # ================= First req: Getting the initial site ==============
+    init_time = perf_counter() 
 
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -60,7 +63,7 @@ async def check_imei(imei, msg):
     response = session.get('https://www.imeipro.info/', headers=headers)
     sitekey = getStr(response.text, "'sitekey' : '", "',")
 
-    await msg.edit_text("1", parse_mode=ParseMode.MARKDOWN)
+    await msg.edit_text("We are checking in Apple data base the info... please wait.", parse_mode=ParseMode.MARKDOWN)
 
 # =================== second req: Solving Recaptcha for blacklisted ===============
 
@@ -77,7 +80,7 @@ async def check_imei(imei, msg):
         g_capcha = getStr(g_capcha, '"', '"')
         captcha_id = json.dumps(response['captchaId'])
         captchaId = getStr(captcha_id, '"', '"')
-        await msg.edit_text("2", parse_mode=ParseMode.MARKDOWN)
+        await msg.edit_text("We checked, is done.", parse_mode=ParseMode.MARKDOWN)
 
 
     headers = {
@@ -99,11 +102,12 @@ async def check_imei(imei, msg):
     phone = getStr(response.text, '"phoneModel":"', '",')
     blacklisted = getStr(response.text, '"blacklisted":', ',')
 
-
+    final_time = perf_counter() - init_time
     msgg = f"""𝑰𝑴𝑬𝑰 𝑪𝒉𝒆𝒄𝒌𝒆𝒓 ✅
 ━━━━━━━━━━━━
-┌ IMEI: {imei}
-├ Model: {phone}
-└ Blacklisted: {blacklisted}"""
+┌ <b>IMEI:</b> <code>{imei}</code>
+├ <b>Model:</b> {phone}
+├ <b>Blacklisted:</b> {blacklisted}
+└ <b>Checked by :</b> <a href='tg://user?id={user_id}'>{name}</a>"""
     
-    await msg.edit_text(msgg, parse_mode=ParseMode.MARKDOWN)
+    await msg.edit_text(msgg, parse_mode=ParseMode.HTML)

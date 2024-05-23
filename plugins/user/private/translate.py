@@ -3,7 +3,7 @@ from requests import get
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from src.assets.functions import antispam
-from src.assets.Db import Database
+from src.assets.connection import Database
 
 @Client.on_message(filters.command(["tr", "tra"], ["/", ",", ".", ";"]))
 async def start(client: Client, m: Message):

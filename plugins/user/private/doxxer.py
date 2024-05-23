@@ -6,7 +6,7 @@ from src.extras.ip_tracker import ip_dox as ip
 from src.extras.sherlock import sherlock as shrlck
 from src.extras.whois_script import whois_lookup as w
 from src.assets.functions import antispam
-from src.assets.Db import Database
+from src.assets.connection import Database
 from pyrogram.enums import ParseMode
 
 @Client.on_message(filters.command([">>", ">"], ['>>', '>']))
@@ -43,10 +43,16 @@ async def evaluate_objective(target: str) -> bool:
     url = None
 
     target_response = "IP" if re.match(ip_regex, target) else "SITE" if re.match(url_regex, target) else "user"
+    if target_response == "user":
+        try:
+            get(target)
+            target_response = "SITE"
+        except:
+            pass
 
     if target_response == "SITE":
         if not target.startswith('http://') and not target.startswith('https://'):
-            try: url = "http://"+target, get(url)
+            try: url = "http://"+target, get(url, timeout=3)
             except: url = "https://"+target
         else: url=target
     return target_response, url

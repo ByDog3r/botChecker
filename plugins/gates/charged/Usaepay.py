@@ -1,7 +1,7 @@
 import requests as r
 import string, random, re
 from src.assets.functions import antispam
-from src.assets.Db import Database
+from src.assets.connection import Database
 from pyrogram.types import Message
 from pyrogram import Client, filters, enums
 from pyrogram.enums import ParseMode

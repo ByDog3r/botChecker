@@ -5,7 +5,7 @@ from pyrogram.types import Message
 from pyrogram.handlers.message_handler import MessageHandler
 from pyrogram.enums import ParseMode
 from src.assets.banner import banner
-from src.assets.Db import Database
+from src.assets.connection import Database
 
 
 config_bot = load(open("src/assets/cfgbot.json"))
