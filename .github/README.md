@@ -33,6 +33,7 @@ Bellow is a list with a requirements that your need to get in order to run the b
   - **bs4** -- [Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
   - **AioHTTP** -- [Documentation](https://docs.aiohttp.org/en/stable/)
   - **TGCrypto** -- [Documentation](https://pypi.org/project/TgCrypto/)
+  - **CloudScraper** -- [Documentation](https://pypi.org/project/cloudscraper/)
 
 <br>
 

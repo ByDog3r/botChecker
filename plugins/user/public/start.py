@@ -59,13 +59,13 @@ async def getMe(client: Client, message: Message):
     
     msg = f""" 👤  User: @{user}
 ━━━━━━━━━━━
-└ <b>ID:</b> <code>{userID}</code>
-└ <b>Name:</b> {name}
-└ <b>Credits:</b> {user_info["CREDITS"]}
+┌ <b>ID:</b> <code>{userID}</code>
+├ <b>Name:</b> {name}
+├ <b>Credits:</b> {user_info["CREDITS"]}
 └ <b>Estatus:</b> {user_info["MEMBERSHIP"].capitalize()}
 ━━━━━━━━━━━
 <b>Chat ID:</b> <code>{chatID}</code>"""
-    await message.reply_text(msg,quote=True)
+    await message.reply_photo("src/assets/dollar.jpeg", caption=msg)
     
 
 
@@ -99,8 +99,8 @@ async def commands(client: Client, m: Message):
 
 @Client.on_callback_query(filters.regex("gates"))
 def gates_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""┌ <b>Jeico (<a href='https://t.me/ByDog3r'>!jk</a>)</b> ✅\n└ payflow auth gateway.\n
-┌ <b>Shell (<a href='https://t.me/ByDog3r'>!sh</a>)</b> ✅\n└ braintree auth gateway.\n""",
+    callback_query.edit_message_text(f"""┌ <b>Jeico (<a href='https://t.me/ByDog3r'>!jk</a>)</b> ❌\n└ payflow auth gateway.\n
+┌ <b>Shell (<a href='https://t.me/ByDog3r'>!sh</a>)</b> ❌\n└ braintree auth gateway.\n""",
                                      disable_web_page_preview=True,
                                      reply_markup=InlineKeyboardMarkup(
                 [
@@ -131,10 +131,16 @@ def tools_button_callback(client, callback_query):
 
 ┌ <b>BIN</b> (<a href='https://t.me/ByDog3r'>!bin</a>) ✅
 └ Bin lookup tool.
+                                     
+┌ <b>GEN</b> (<a href='https://t.me/ByDog3r'>!gen</a>) ✅
+└ CC generator. 
 
-┌ <b>Gen</b> (<a href='https://t.me/ByDog3r'>!gen</a>) ✅
-└ CC generator
-
+┌ <b>Imei checker</b> (<a href='https://t.me/ByDog3r'>!imei</a>) ✅
+└ Check Apple Imei.
+                                     
+┌ <b>Zipcode Lookup</b> (<a href='https://t.me/ByDog3r'>!zip</a>) ✅
+└ Zipcode lookup.
+                                    
 ┌ <b>Translator</b> (<a href='https://t.me/ByDog3r'>!tr</a>) ✅
 └ Translate to spanish""",
 disable_web_page_preview=True,
@@ -194,10 +200,10 @@ def intial_menu_button_callback(client, callback_query):
 def ia_button_callback(client, callback_query):
     callback_query.edit_message_text("""<b> Artificial Intelligence | 2/3 🔄 </b>
 ━━━━━━━━━━━━
-┌ <b>GPT</b> (<a href='https://t.me/ByDog3r'>!gpt</a>) ✅
+┌ <b>GPT</b> (<a href='https://t.me/ByDog3r'>!gpt</a>) ❌
 └ Llama IA chat.
 
-┌ <b>IMG</b> (<a href='https://t.me/ByDog3r'>!img</a>) ✅
+┌ <b>IMG</b> (<a href='https://t.me/ByDog3r'>!img</a>) ❌
 └ IA img generator.""",
 disable_web_page_preview=True,
 reply_markup=InlineKeyboardMarkup(

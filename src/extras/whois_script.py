@@ -12,7 +12,7 @@ class dox_site:
     def __init__(self, url:str) -> None:
         self.url = url
         self.sesion = Session()
-        self.code = self.sesion.get(self.url, headers=headers, timeout=3) 
+        self.code = self.sesion.get(self.url, headers=headers, timeout=5) 
         self.soup = BeautifulSoup(self.code.text, 'html.parser')
 
     def cloudflare(self):
@@ -48,6 +48,9 @@ class dox_site:
             if 'shopify' in self.code.text:
                 gateways.append("Shopify")
 
+            if 'dlocal' in self.code.text:
+                gateways.append("Dlocal")
+
             if 'recurly' in self.code.text:
                 gateways.append("Recurly")
 
@@ -77,6 +80,12 @@ class dox_site:
 
             if 'skrill' in self.code.text:
                 gateways.append("Skrill")
+
+            if 'eway' in self.code.text:
+                gateways.append("Eway")
+
+            if 'magento' in self.code.text:
+                gateways.append("Magento")
 
             if '2checkout' in self.code.text or '2co' in self.code.text:
                 gateways.append("2Checkout")
