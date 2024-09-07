@@ -136,18 +136,17 @@ def whois_lookup(site:str, name, user_id):
     web = dox_site(site)
     final_time = perf_counter() - init_time
 
-    msg = f"""<b>𝑽𝒂𝒍𝒊𝒅 𝒑𝒂𝒈𝒆</b>
+    msg = f"""<b>Information found [ ☁️ ]</b>
 ━━━━━━━━━━━━
 <b>Security:</b>
-┌ <b>Cloudflare :</b> <code>{web.cloudflare()}</code>
-├ <b>Captcha :</b> <code>{web.captcha()}</code>
-├ <b>reCaptcha :</b> <code>{web.recaptcha()}</code>
-├ <b>Gateway :</b> <code>{web.gateway()}</code>
-└ <b>Server :</b> <code>{web.server()}</code>
+<a href="https://t.me/ByDog3r">↯</a> <b>Cloudflare :</b> <code>{web.cloudflare()}</code>
+<a href="https://t.me/ByDog3r">↯</a> <b>Captcha :</b> <code>{web.captcha()}</code>
+<a href="https://t.me/ByDog3r">↯</a> <b>reCaptcha :</b> <code>{web.recaptcha()}</code>
+<a href="https://t.me/ByDog3r">↯</a> <b>Gateway :</b> <code>{web.gateway()}</code>
+<a href="https://t.me/ByDog3r">↯</a> <b>Server :</b> <code>{web.server()}</code>
 
 ━━━━━━━━━━━━
-┌ <b>Site :</b> <code>{site}</code>
-├ <b>Time :</b> {final_time:0.2}
-└ <b>Checked by :</b> <a href='tg://user?id={user_id}'>{name}</a>"""
-
+<a href="https://t.me/ByDog3r">↯</a> <b>Site :</b> <code>{site}</code>
+<a href="https://t.me/ByDog3r">↯</a> <b>Time :</b> {final_time:0.2}
+<a href="https://t.me/ByDog3r">↯</a> <b>Checked by :</b> <a href='tg://user?id={user_id}'>{name}</a>"""
     return msg

@@ -41,7 +41,7 @@ async def start(client: Client, m: Message):
 \t├ <code>JP</code>  - Japan
 \t├ <code>DE</code>  - Germany
 \t├ <code>IT</code>  - Italy
-\t├ <code>PE</code>  - PERU
+\t├ <code>PE</code>  - Peru
 \t├ <code>RU</code>  - Russia
 \t├ <code>UK</code> - United Kingdom
 \t└ <code>ES</code>  - Spain

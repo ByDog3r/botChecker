@@ -45,7 +45,7 @@ async def StartFnction(client: Client, message: Message):
 
 
 
-@Client.on_message(filters.command("me", ["/", ",", ".", ";"]))
+@Client.on_message(filters.command("me", ["/", ",", ".", ";", "-"]))
 async def getMe(client: Client, message: Message):
     user = message.from_user.username
     first_name = message.from_user.first_name if message.from_user.first_name else ""
@@ -69,7 +69,7 @@ async def getMe(client: Client, message: Message):
     
 
 
-@Client.on_message(filters.command(["cmds", "cmd"], ["/", ",", ".", ";"]))
+@Client.on_message(filters.command(["cmds", "cmd"], ["/", ",", ".", ";", "-"]))
 async def commands(client: Client, m: Message):
     await m.reply(
             "<b>Select an option:</b>",
@@ -99,8 +99,12 @@ async def commands(client: Client, m: Message):
 
 @Client.on_callback_query(filters.regex("gates"))
 def gates_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""┌ <b>Jeico (<a href='https://t.me/ByDog3r'>!jk</a>)</b> ❌\n└ payflow auth gateway.\n
-┌ <b>Shell (<a href='https://t.me/ByDog3r'>!sh</a>)</b> ❌\n└ braintree auth gateway.\n""",
+    callback_query.edit_message_text(f"""<b> Gateways | 1/1 🔄 \n━━━━━━━━━━━━\n</b>┌ <b>Payflow Charged (<a href='https://t.me/ByDog3r'>!pc</a>) ✅</b>\n└ Payflow 60$ Charged gateway.\n
+┌ <b>Recurly Auth (<a href='https://t.me/ByDog3r'>!re</a>)</b> ✅\n└ Recurly auth gateway.
+\n┌ <b>Authorized Charged (<a href='https://t.me/ByDog3r'>!au</a>)</b> ✅\n└ Authorized Charged gateway.
+\n┌ <b>Braintree Auth (<a href='https://t.me/ByDog3r'>!b3</a>)</b> ✅ \n└ Woo Braintree add payment gateway.\n
+┌ <b>Authnet Charged (<a href='https://t.me/ByDog3r'>!an</a>)</b> ✅ \n└ Authnet Donate.\n
+┌ <b>Payeezy Payment (<a href='https://t.me/ByDog3r'>!yz</a>)</b> ✅ \n└ Payeezy Auth.\n""",
                                      disable_web_page_preview=True,
                                      reply_markup=InlineKeyboardMarkup(
                 [
@@ -135,7 +139,7 @@ def tools_button_callback(client, callback_query):
 ┌ <b>GEN</b> (<a href='https://t.me/ByDog3r'>!gen</a>) ✅
 └ CC generator. 
 
-┌ <b>Imei checker</b> (<a href='https://t.me/ByDog3r'>!imei</a>) ✅
+┌ <b>Imei checker</b> (<a href='https://t.me/ByDog3r'>!imei</a>) ❌
 └ Check Apple Imei.
                                      
 ┌ <b>Zipcode Lookup</b> (<a href='https://t.me/ByDog3r'>!zip</a>) ✅
@@ -234,7 +238,10 @@ def quackingtools_button_callback(client, callback_query):
     callback_query.edit_message_text("""<b> Hacking Tools | 3/3 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>DoxToolkit</b> (<a href='https://t.me/ByDog3r'>>>></a>) ✅
-└ Dox a specific target.""",
+└ Dox a specific target.
+                                     
+┌ <b>Chota Lookup</b> (<a href='https://t.me/ByDog3r'>!ch</a>) ✅
+└ ONI lookup""",
 disable_web_page_preview=True,
 reply_markup=InlineKeyboardMarkup(
                 [

@@ -63,7 +63,7 @@ def sherlock(user):
     WT = Sherlock(usr, API[12], "Wattpad").whois()
 
 
-    msg = f"""<b>𝘜𝘴𝘦𝘳 𝘥𝘰𝘹𝘹𝘦𝘥:</b> {usr}
+    msg = f"""<b>RRSS FOUND:</b> {usr}
 ━━━━━━━━━━━
 ┌ {FB}
 ├ {IG}

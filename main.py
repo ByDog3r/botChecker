@@ -36,6 +36,7 @@ if __name__ == "__main__":
         bot_token=BOT_TOKEN,
         plugins=dict(root="plugins"),
         parse_mode=ParseMode.HTML,
+        
     )
     app.add_handler(MessageHandler(handle_text, filters.text))
     logging.basicConfig(level=logging.ERROR)

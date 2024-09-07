@@ -2,8 +2,6 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from src.assets.connection import Database
 
-
-
 @Client.on_message(filters.command("claim", ["/", ",", ".", ";"]))
 async def claim(client: Client, m: Message):
     key = m.text[len(m.command[0]) + 2 :].strip()
