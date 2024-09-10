@@ -16,7 +16,7 @@ def banner():
               |  $$$$$$/                                                  
                \______/                                                   \n"""))
     
-    for i in lightgreen("\t\t.bychecker is initied\n\n"):
+    for i in lightgreen("\t\t.bychecker is started\n\n"):
         stdout.write(i)
         stdout.flush()
         sleep(1.0 / 12)

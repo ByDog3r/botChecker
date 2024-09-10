@@ -78,7 +78,7 @@ async def commands(client: Client, m: Message):
                 [
                     [  # First row
                         InlineKeyboardButton( 
-                            "Gates",
+                            "Gateways",
                             callback_data="gates"
                         ),
                         InlineKeyboardButton(
@@ -99,10 +99,10 @@ async def commands(client: Client, m: Message):
 
 @Client.on_callback_query(filters.regex("gates"))
 def gates_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""<b> Gateways | 1/1 🔄 \n━━━━━━━━━━━━\n</b>┌ <b>Payflow Charged (<a href='https://t.me/ByDog3r'>!pc</a>) ✅</b>\n└ Payflow 60$ Charged gateway.\n
+    callback_query.edit_message_text(f"""<b> Gateways | 1/2 🔄 \n━━━━━━━━━━━━\n</b>┌ <b>Payflow Charged (<a href='https://t.me/ByDog3r'>!pc</a>) ✅</b>\n└ Payflow 60$ Charged gateway.\n
 ┌ <b>Recurly Auth (<a href='https://t.me/ByDog3r'>!re</a>)</b> ✅\n└ Recurly auth gateway.
-\n┌ <b>Authorized Charged (<a href='https://t.me/ByDog3r'>!au</a>)</b> ✅\n└ Authorized Charged gateway.
-\n┌ <b>Braintree Auth (<a href='https://t.me/ByDog3r'>!b3</a>)</b> ✅ \n└ Woo Braintree add payment gateway.\n
+\n┌ <b>Authorize.net Charged (<a href='https://t.me/ByDog3r'>!au</a>)</b> ✅\n└ Authorize.Net Charged gateway.
+\n┌ <b>Braintree Auth (<a href='https://t.me/ByDog3r'>!b3</a>)</b> ❌ \n└ Woo Braintree add payment gateway.\n
 ┌ <b>Authnet Charged (<a href='https://t.me/ByDog3r'>!an</a>)</b> ✅ \n└ Authnet Donate.\n
 ┌ <b>Payeezy Payment (<a href='https://t.me/ByDog3r'>!yz</a>)</b> ✅ \n└ Payeezy Auth.\n""",
                                      disable_web_page_preview=True,
@@ -113,6 +113,43 @@ def gates_button_callback(client, callback_query):
                         InlineKeyboardButton( 
                             "Go back",
                             callback_data="initial_menu"
+                        ),
+
+                        InlineKeyboardButton( 
+                            "Close",
+                            callback_data="close"
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton( 
+                            "Next",
+                            callback_data="two"
+                        )
+                    ]
+                ]
+            )
+        )
+
+@Client.on_callback_query(filters.regex("two"))
+def two_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"""<b> Gateways | 2/2 🔄
+━━━━━━━━━━━━
+</b>┌ <b>PayPal Charged (<a href='https://t.me/ByDog3r'>!pp</a>) ✅
+</b>└ PayPal 0,1$ Charged gateway.
+                                     
+</b>┌ <b>Braintree Charged (<a href='https://t.me/ByDog3r'>!bra</a>) ✅
+</b>└ Braintree 6,40$ Charged gateway.
+
+</b>┌ <b>Adyen Charged (<a href='https://t.me/ByDog3r'>!any</a>) ✅
+</b>└ Adyen 30$ Charged gateway.""",
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
+                [
+                    
+                    [  
+                        InlineKeyboardButton( 
+                            "Go back",
+                            callback_data="gates"
                         )
                     ],
                     [
@@ -241,7 +278,10 @@ def quackingtools_button_callback(client, callback_query):
 └ Dox a specific target.
                                      
 ┌ <b>Chota Lookup</b> (<a href='https://t.me/ByDog3r'>!ch</a>) ✅
-└ ONI lookup""",
+└ ONI lookup
+
+┌ <b>Auto Hunter</b> (<a href='https://t.me/ByDog3r'>!ht</a>) ✅
+└ Hunter system.""",
 disable_web_page_preview=True,
 reply_markup=InlineKeyboardMarkup(
                 [

@@ -79,7 +79,7 @@ async def get_live(card, msg):
 
     try:
 
-        initial_time = time.perf_counter()
+        initial_time = time.time()
 
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -354,7 +354,7 @@ async def get_live(card, msg):
         card_response = getStr(response.text, 'Response Description :', "u003c/li").replace("\\", '')
         BIN = card[0:6]
         data = r.get(BIN_API+BIN).json()
-        final_time = time.perf_counter() - initial_time
+        final_time = time.time() - initial_time
 
         if "CVV2" in card_response:
             mssg = f"""<b>#Payflow_Charged ($pc) 🌩️</b>

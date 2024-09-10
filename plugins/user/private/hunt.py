@@ -3,7 +3,14 @@
 
 import requests as r
 from bs4 import BeautifulSoup
-from huepy import *
+from pyrogram.types import Message
+from src.assets.functions import antispam
+from src.assets.connection import Database
+from pyrogram.enums import ParseMode
+from pyrogram import Client, filters, enums
+
+
+
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -81,70 +88,88 @@ class GatewayChecker:
             "Vindi": ["vindi", "vindi.com.br"]
         }
         self.securities = ["Cloudflare", "Captcha", "ReCaptcha"]
-    
+
     def check_site(self, site, headers):
         gateways_found, securities_found = [], []
         try:
             code = r.get(site, headers=headers, timeout=5)
             soup = BeautifulSoup(code.text, 'html.parser')
-            
+
             gateways_found = [gateway for gateway, keywords in self.gateways.items() if any(keyword in code.text for keyword in keywords)]
-            
+
             if 'cf-ray' in code.headers:
                 securities_found.append("Cloudflare")
             if soup.select('form[action*="/captcha/"]'):
                 securities_found.append("Captcha")
             if any(keyword in code.text for keyword in ['recaptcha/api.js', 'g-recaptcha', 'www.google.com/recaptcha']):
                 securities_found.append("ReCaptcha")
-            
+
         except Exception as e:
-            print("\n\t"+info(f" {e}"))
-        return gateways_found, securities_found
+            return [], [], f"Error: {e}"
+        return gateways_found, securities_found, None
 
 class GoogleSearcher:
     def __init__(self, headers):
         self.headers = headers
-    
-    def search(self, query, num_results=1000):
+
+    def search(self, query, num_results=10):
         search_url = f"https://www.google.com/search?q={query}&num={num_results}"
         response = r.get(search_url, headers=self.headers)
         if response.status_code != 200:
-            return f"Error: Received status code {response.status_code}"
-        
+            return [], f"Error: Received status code {response.status_code}"
+
         soup = BeautifulSoup(response.text, 'html.parser')
         links = [a_tag['href'] for g in soup.find_all('div', class_='g') if (a_tag := g.find('a')) and 'href' in a_tag.attrs]
-        return links[:num_results]
+        return links[:num_results], None
 
-def main():
-    print(red("""
-  /$$$$$$              /$$               /$$   /$$                       /$$                        
- /$$__  $$            | $$              | $$  | $$                      | $$                        
-| $$  \ $$ /$$   /$$ /$$$$$$    /$$$$$$ | $$  | $$ /$$   /$$ /$$$$$$$  /$$$$$$    /$$$$$$   /$$$$$$ 
-| $$$$$$$$| $$  | $$|_  $$_/   /$$__  $$| $$$$$$$$| $$  | $$| $$__  $$|_  $$_/   /$$__  $$ /$$__  $$
-| $$__  $$| $$  | $$  | $$    | $$  \ $$| $$__  $$| $$  | $$| $$  \ $$  | $$    | $$$$$$$$| $$  \__/
-| $$  | $$| $$  | $$  | $$ /$$| $$  | $$| $$  | $$| $$  | $$| $$  | $$  | $$ /$$| $$_____/| $$      
-| $$  | $$|  $$$$$$/  |  $$$$/|  $$$$$$/| $$  | $$|  $$$$$$/| $$  | $$  |  $$$$/|  $$$$$$$| $$      
-|__/  |__/ \______/    \___/   \______/ |__/  |__/ \______/ |__/  |__/   \___/   \_______/|__/      
-                                    Made by @ByDog3r
-              """))
+@Client.on_message(filters.command(["hunt", "ht"], ["/", ",", ".", ";", "-"], case_sensitive=False))
+async def gateway(client: Client, m: Message):
+    query = " ".join(m.command[1:]) if not m.reply_to_message else m.reply_to_message.text
+    user_id = m.from_user.id
+    with Database() as db:
+        if not db.IsPremium(user_id):
+            return await m.reply("<b>You are not premium</b>", quote=True)
+        user_info = db.GetInfoUser(m.from_user.id)
+    if not query:
+        return await m.reply("You need to provide a dork or keyword to check sites", quote=True)
+    antispam_result = antispam(user_id, user_info["ANTISPAM"])
+    if antispam_result != False:
+        return await m.reply(
+            f"Please wait <code>{antispam_result}'s</code>", quote=True
+        )
+    await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
+    msgg = f"""<b>Checking... 🔎</b>
+━━━━━━━━━━━
+<b>Query:</b> {query}"""
+    msg = await m.reply(msgg, quote=True)
 
-    kw = input(info(lightgreen("Enter your keyword or dork: ")))
     searcher = GoogleSearcher(headers)
-    data = searcher.search(kw)
-    
+    data, error = searcher.search(query)
+    if error:
+        await m.reply(error)
+        return
+
     checker = GatewayChecker()
     excluded_sites = {"amazon", "walmart", "aliexpress", "homedepot", "alibaba", "pinterest", "tiktok", "youtube", "ebay"}
+    results = []
     counter = 1
 
     for site in data:
         if not any(excluded_site in site for excluded_site in excluded_sites):
-            gateways_found, securities_found = checker.check_site(site, headers)
+            gateways_found, securities_found, error = checker.check_site(site, headers)
+            if error:
+                results.append(error)
+                continue
+            
             gateways = ' '.join(gateways_found) or "No gateways found."
             securities = ' '.join(securities_found) or "No securities found."
-            if gateways_found:
-                print("\n\t" + white(f"┌ [{counter}] Site Found: ") + yellow(f"{site}") + white(f" Gateways found: ") + red(f"{gateways} \n\t└ ") + white(f"Securities: {securities}"))
-                counter += 1
-
-if __name__ == "__main__":
-    main()
-
+            result = (f"""↯ <b>Site [{counter}]:</b><br><a href='{site}'>{site}</a><br>"
+Gateway:</b> {gateways}
+<br>Securities:</b> {securities}<br>\n\n""")
+            results.append(result)
+            counter += 1
+    if results:
+        response = f"<b>{query}</b> 🔎\n<br>━━━━━━━━━━━━<br>\n{''.join(results)}"
+        await msg.edit_text(response, parse_mode=ParseMode.HTML, disable_web_page_preview=True,)
+    else:
+        await msg.edit_text("No se encontraron resultados.")

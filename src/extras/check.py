@@ -2,7 +2,6 @@ import requests as r
 import string, random, time
 from datetime import datetime
 
-
 class makeGate():
     def load_proxies(filename):
         with open(filename, 'r') as file:
