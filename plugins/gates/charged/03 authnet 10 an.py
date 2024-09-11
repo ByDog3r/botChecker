@@ -172,6 +172,9 @@ async def get_live(card, msg):
         status = "Approved ✅"
         response = "Your donation has been processed successfully."
 
+    elif "Sorry, there was a problem verifying the" in response.text:
+        status = "Declined ❌"
+        response = "There was an error with the page, please try again in some minutes."
     
     card_response = f"""<b>#Authnet_Donate ($an) 🌩️</b>
 ━━━━━━━━━━━

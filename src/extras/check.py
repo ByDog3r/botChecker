@@ -1,6 +1,7 @@
 import requests as r 
 import string, random, time
 from datetime import datetime
+import uuid
 
 class makeGate():
     def load_proxies(filename):
@@ -41,3 +42,7 @@ class makeGate():
             card_type = "AmEx"
 
         return ccn, month, year, cvv, card_type
+
+    def session_id():
+        session_code = str(uuid.uuid4())
+        return session_code

@@ -78,11 +78,11 @@ async def commands(client: Client, m: Message):
                 [
                     [  # First row
                         InlineKeyboardButton( 
-                            "Gateways",
+                            "Gateways  💸",
                             callback_data="gates"
                         ),
                         InlineKeyboardButton(
-                            "Tools",
+                            "Tools 🔨",
                             callback_data="tools"
                         ),
                     ],
@@ -99,49 +99,61 @@ async def commands(client: Client, m: Message):
 
 @Client.on_callback_query(filters.regex("gates"))
 def gates_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""<b> Gateways | 1/2 🔄 \n━━━━━━━━━━━━\n</b>┌ <b>Payflow Charged (<a href='https://t.me/ByDog3r'>!pc</a>) ✅</b>\n└ Payflow 60$ Charged gateway.\n
-┌ <b>Recurly Auth (<a href='https://t.me/ByDog3r'>!re</a>)</b> ✅\n└ Recurly auth gateway.
-\n┌ <b>Authorize.net Charged (<a href='https://t.me/ByDog3r'>!au</a>)</b> ✅\n└ Authorize.Net Charged gateway.
-\n┌ <b>Braintree Auth (<a href='https://t.me/ByDog3r'>!b3</a>)</b> ❌ \n└ Woo Braintree add payment gateway.\n
-┌ <b>Authnet Charged (<a href='https://t.me/ByDog3r'>!an</a>)</b> ✅ \n└ Authnet Donate.\n
-┌ <b>Payeezy Payment (<a href='https://t.me/ByDog3r'>!yz</a>)</b> ✅ \n└ Payeezy Auth.\n""",
+    callback_query.edit_message_text(f"""<b> Gateways | 0/3 💳
+━━━━━━━━━━━━
+Total Gates </b> <a href="https://t.me/ByDog3r">⊁</a> 11
+<b>Auth <a href="https://t.me/ByDog3r">⊁</a> 4</b>
+<b>Charged <a href="https://t.me/ByDog3r">⊁</a> 6</b>
+<b>VBV <a href="https://t.me/ByDog3r">⊁</a> 1</b>
+                                     
+<b>Select one of the buttons bellow to check base on the gate that you want</b>""",
                                      disable_web_page_preview=True,
                                      reply_markup=InlineKeyboardMarkup(
                 [
                     
                     [  
                         InlineKeyboardButton( 
-                            "Go back",
-                            callback_data="initial_menu"
+                            "Auth",
+                            callback_data="Auth"
                         ),
 
                         InlineKeyboardButton( 
-                            "Close",
-                            callback_data="close"
+                            "Charged",
+                            callback_data="charged"
+                        ),
+
+                        InlineKeyboardButton( 
+                            "VBV",
+                            callback_data="vbvv"
                         )
                     ],
                     [
                         InlineKeyboardButton( 
-                            "Next",
-                            callback_data="two"
+                            "Back",
+                            callback_data="initial_menu"
                         )
                     ]
                 ]
             )
         )
 
-@Client.on_callback_query(filters.regex("two"))
-def two_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""<b> Gateways | 2/2 🔄
-━━━━━━━━━━━━
-</b>┌ <b>PayPal Charged (<a href='https://t.me/ByDog3r'>!pp</a>) ✅
-</b>└ PayPal 0,1$ Charged gateway.
-                                     
-</b>┌ <b>Braintree Charged (<a href='https://t.me/ByDog3r'>!bra</a>) ✅
-</b>└ Braintree 6,40$ Charged gateway.
 
-</b>┌ <b>Adyen Charged (<a href='https://t.me/ByDog3r'>!any</a>) ✅
-</b>└ Adyen 30$ Charged gateway.""",
+
+@Client.on_callback_query(filters.regex("Auth"))
+def auth_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"""<b> Gateways Auth | 1/3 🔄
+━━━━━━━━━━━━
+<b>┌ <b>Recurly Auth (<a href='https://t.me/ByDog3r'>!re</a>) ✅
+</b>└ Recurly Auth gateway.
+                                     
+</b>┌ <b>Payeezy Auth (<a href='https://t.me/ByDog3r'>!yz</a>) ✅
+</b>└ Payeezy Auth gateway.
+                                     
+</b>┌ <b>Braintree Woo (<a href='https://t.me/ByDog3r'>!b3</a>) ❌
+</b>└ Braintree Auth Add payment gateway.
+
+</b>┌ <b>Stripe Auth (<a href='https://t.me/ByDog3r'>!st</a>) ❌
+</b>└ Stripe Auth gateway.""",
                                      disable_web_page_preview=True,
                                      reply_markup=InlineKeyboardMarkup(
                 [
@@ -152,20 +164,109 @@ def two_button_callback(client, callback_query):
                             callback_data="gates"
                         )
                     ],
-                    [
+                ]
+            )
+        )
+
+
+@Client.on_callback_query(filters.regex("charged"))
+def charged_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"""<b> Gateways Charged | 2/3 🔄
+━━━━━━━━━━━━
+</b>┌ <b>Authorize_net AVS (<a href='https://t.me/ByDog3r'>!au</a>) ❌
+</b>└ $16.95 Charged gateway.
+                                     
+</b>┌ <b>Braintree Charged (<a href='https://t.me/ByDog3r'>!bra</a>) ✅
+</b>└ $6,40 Charged gateway.
+                                     
+</b>┌ <b>Payflow Charged (<a href='https://t.me/ByDog3r'>!pc</a>) ✅
+</b>└ $60 Charged gateway.
+
+</b>┌ <b>Authnet Charged (<a href='https://t.me/ByDog3r'>!an</a>) ❌
+</b>└ $10 Charged gateway
+                                                                   
+</b>┌ <b>Paypal Charged (<a href='https://t.me/ByDog3r'>!st</a>) ✅
+</b>└ $0,1 Charged gateway
+                                     
+</b>┌ <b>Adyen Charged (<a href='https://t.me/ByDog3r'>!st</a>) ✅
+</b>└ 30$ Charged gateway""",
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
+                [
+                    
+                    [  
                         InlineKeyboardButton( 
-                            "Close",
-                            callback_data="close"
+                            "Go back",
+                            callback_data="gates"
+                        )
+                    ],
+                ]
+            )
+        )
+
+
+@Client.on_callback_query(filters.regex("vbvv"))
+def vbvv_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"""<b> Gateways Auth | 1/3 🔄
+━━━━━━━━━━━━
+</b>┌ <b>Braintree VBV (<a href='https://t.me/ByDog3r'>!vbv</a>) ✅
+</b>└ Braintree 3D.""",
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
+                [
+                    
+                    [  
+                        InlineKeyboardButton( 
+                            "Go back",
+                            callback_data="gates"
+                        )
+                    ],
+                ]
+            )
+        )
+                    
+
+@Client.on_callback_query(filters.regex("tools"))
+def tools_button_callback(client, callback_query):
+    callback_query.edit_message_text("""<b> Checker Tools | 0/3 🛠️ </b>
+━━━━━━━━━━━━
+<b>Total Tools </b> <a href="https://t.me/ByDog3r">⊁</a> 11
+<b>Bining Tools <a href="https://t.me/ByDog3r">⊁</a> 5</b>  
+<b>Artificial Intelligence Tools <a href="https://t.me/ByDog3r">⊁</a> 2</b>                          
+<b>Hacking Tools <a href="https://t.me/ByDog3r">⊁</a> 4</b>
+                                     
+<b>Select one of the buttons bellow to check base on the tool that you want</b>""",
+disable_web_page_preview=True,
+reply_markup=InlineKeyboardMarkup(
+                [
+                    [  # First row
+                        InlineKeyboardButton( 
+                            "Bining",
+                            callback_data="bining"
+                        ),
+                        InlineKeyboardButton(
+                            "IA",
+                            callback_data="iartificial"
+                        ),
+                        InlineKeyboardButton(
+                            "Hacking",
+                            callback_data="quacking"
+                        ),
+                    ],
+                    [  # Second row
+                        InlineKeyboardButton( 
+                            "Back",
+                            callback_data="initial_menu"
                         )
                     ]
                 ]
             )
         )
-                                     
 
-@Client.on_callback_query(filters.regex("tools"))
-def tools_button_callback(client, callback_query):
-    callback_query.edit_message_text("""<b> Commands | 1/3 🔄 </b>
+
+@Client.on_callback_query(filters.regex("bining"))
+def bining_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"""Commands | 1/3 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>Faker</b> (<a href='https://t.me/ByDog3r'>!faker</a>) ✅
 └ Fake address generator.
@@ -175,96 +276,46 @@ def tools_button_callback(client, callback_query):
                                      
 ┌ <b>GEN</b> (<a href='https://t.me/ByDog3r'>!gen</a>) ✅
 └ CC generator. 
-
-┌ <b>Imei checker</b> (<a href='https://t.me/ByDog3r'>!imei</a>) ❌
-└ Check Apple Imei.
                                      
 ┌ <b>Zipcode Lookup</b> (<a href='https://t.me/ByDog3r'>!zip</a>) ✅
 └ Zipcode lookup.
                                     
 ┌ <b>Translator</b> (<a href='https://t.me/ByDog3r'>!tr</a>) ✅
 └ Translate to spanish""",
-disable_web_page_preview=True,
-reply_markup=InlineKeyboardMarkup(
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
                 [
-                    [  # First row
+                    
+                    [  
                         InlineKeyboardButton( 
                             "Go back",
-                            callback_data="initial_menu"
-                        ),
-                        InlineKeyboardButton(
-                            "Next",
-                            callback_data="ia"
-                        ),
-                    ],
-                    [  # Second row
-                        InlineKeyboardButton( 
-                            "Close",
-                            callback_data="close"
-                        )
-                    ]
-                ]
-            )
-        )
-    
-@Client.on_callback_query(filters.regex("close"))
-def close_button_callback(client, callback_query):
-    callback_query.edit_message_text("<b><a href='https://t.me/ByDog3r'>...</b></a>", disable_web_page_preview=True)
-
-@Client.on_callback_query(filters.regex("initial_menu"))
-def intial_menu_button_callback(client, callback_query):
-    callback_query.edit_message_text("<b>Select an option:</b>", 
-    reply_markup=InlineKeyboardMarkup(
-                [
-                    [  # First row
-                        InlineKeyboardButton( 
-                            "Gates",
-                            callback_data="gates"
-                        ),
-                        InlineKeyboardButton(
-                            "Tools",
                             callback_data="tools"
-                        ),
-                    ],
-                    [  # Second row
-                        InlineKeyboardButton( 
-                            "Close",
-                            callback_data="close"
                         )
-                    ]
+                    ],
                 ]
             )
         )
     
 
-@Client.on_callback_query(filters.regex("ia"))
-def ia_button_callback(client, callback_query):
-    callback_query.edit_message_text("""<b> Artificial Intelligence | 2/3 🔄 </b>
+@Client.on_callback_query(filters.regex("iartificial"))
+def iartificial_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"""<b> Artificial Intelligence | 2/3 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>GPT</b> (<a href='https://t.me/ByDog3r'>!gpt</a>) ❌
 └ Llama IA chat.
 
 ┌ <b>IMG</b> (<a href='https://t.me/ByDog3r'>!img</a>) ❌
 └ IA img generator.""",
-disable_web_page_preview=True,
-reply_markup=InlineKeyboardMarkup(
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
                 [
-                    [  # First row
+                    
+                    [  
                         InlineKeyboardButton( 
                             "Go back",
                             callback_data="tools"
-                        ),
-                        InlineKeyboardButton(
-                            "Next",
-                            callback_data="quacking"
                         )
                     ],
-                    [  # Second row
-                        InlineKeyboardButton( 
-                            "Close",
-                            callback_data="close"
-                        )
-                    ]
                 ]
             )
         )
@@ -272,7 +323,7 @@ reply_markup=InlineKeyboardMarkup(
 
 @Client.on_callback_query(filters.regex("quacking"))
 def quackingtools_button_callback(client, callback_query):
-    callback_query.edit_message_text("""<b> Hacking Tools | 3/3 🔄 </b>
+    callback_query.edit_message_text(f"""<b> Hacking Tools | 3/3 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>DoxToolkit</b> (<a href='https://t.me/ByDog3r'>>>></a>) ✅
 └ Dox a specific target.
@@ -281,22 +332,52 @@ def quackingtools_button_callback(client, callback_query):
 └ ONI lookup
 
 ┌ <b>Auto Hunter</b> (<a href='https://t.me/ByDog3r'>!ht</a>) ✅
-└ Hunter system.""",
-disable_web_page_preview=True,
-reply_markup=InlineKeyboardMarkup(
+└ Hunter system.
+                                     
+┌ <b>Imei checker</b> (<a href='https://t.me/ByDog3r'>!imei</a>) ❌
+└ Check Apple Imei.""",
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
+                [
+                    
+                    [  
+                        InlineKeyboardButton( 
+                            "Go back",
+                            callback_data="tools"
+                        )
+                    ],
+                ]
+            )
+        )
+
+    
+@Client.on_callback_query(filters.regex("close"))
+def close(client, callback_query):
+    callback_query.edit_message_text("<b><a href='https://t.me/ByDog3r'>...</b></a>", disable_web_page_preview=True)
+
+@Client.on_callback_query(filters.regex("initial_menu"))
+def initial_menu_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"<b>Select an option:</b>",
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
                 [
                     [  # First row
                         InlineKeyboardButton( 
+                            "Gateways  💸",
+                            callback_data="gates"
+                        ),
+                        InlineKeyboardButton(
+                            "Tools 🔨",
+                            callback_data="tools"
+                        ),
+                    ],
+                    
+                    [  
+                        InlineKeyboardButton( 
                             "Go back",
-                            callback_data="ia"
+                            callback_data="tools"
                         )
                     ],
-                    [  # Second row
-                        InlineKeyboardButton( 
-                            "Close",
-                            callback_data="close"
-                        )
-                    ]
                 ]
             )
         )
