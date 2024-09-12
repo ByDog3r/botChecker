@@ -8,3 +8,4 @@ venv/
 bot.session
 bot.session-journal
 db_bot.db
+ciberinteligencia.db

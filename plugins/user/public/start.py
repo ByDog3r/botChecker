@@ -102,9 +102,9 @@ def gates_button_callback(client, callback_query):
     callback_query.edit_message_text(f"""<b> Gateways | 0/3 💳
 ━━━━━━━━━━━━
 Total Gates </b> <a href="https://t.me/ByDog3r">⊁</a> 11
-<b>Auth <a href="https://t.me/ByDog3r">⊁</a> 4</b>
-<b>Charged <a href="https://t.me/ByDog3r">⊁</a> 6</b>
-<b>VBV <a href="https://t.me/ByDog3r">⊁</a> 1</b>
+<b>Auth</b> <a href="https://t.me/ByDog3r">⊁</a> 4
+<b>Charged</b> <a href="https://t.me/ByDog3r">⊁</a> 6
+<b>VBV</b> <a href="https://t.me/ByDog3r">⊁</a> 1
                                      
 <b>Select one of the buttons bellow to check base on the gate that you want</b>""",
                                      disable_web_page_preview=True,
@@ -230,10 +230,11 @@ def vbvv_button_callback(client, callback_query):
 def tools_button_callback(client, callback_query):
     callback_query.edit_message_text("""<b> Checker Tools | 0/3 🛠️ </b>
 ━━━━━━━━━━━━
-<b>Total Tools </b> <a href="https://t.me/ByDog3r">⊁</a> 11
-<b>Bining Tools <a href="https://t.me/ByDog3r">⊁</a> 5</b>  
-<b>Artificial Intelligence Tools <a href="https://t.me/ByDog3r">⊁</a> 2</b>                          
-<b>Hacking Tools <a href="https://t.me/ByDog3r">⊁</a> 4</b>
+<b>Total Tools </b> <a href="https://t.me/ByDog3r">⊁</a> 19
+<b>Bining Tools</b>  <a href="https://t.me/ByDog3r">⊁</a> 5 
+<b>Artificial Intelligence Tools</b>  <a href="https://t.me/ByDog3r">⊁</a> 2                          
+<b>Hacking Tools</b>  <a href="https://t.me/ByDog3r">⊁</a> 4
+<b>CiberInteligenciaSV Leak</b>  <a href="https://t.me/ByDog3r">⊁</a> 9
                                      
 <b>Select one of the buttons bellow to check base on the tool that you want</b>""",
 disable_web_page_preview=True,
@@ -255,6 +256,12 @@ reply_markup=InlineKeyboardMarkup(
                     ],
                     [  # Second row
                         InlineKeyboardButton( 
+                            "CiberInteligenciaSV",
+                            callback_data="CiberInteligenciaSV"
+                        )
+                    ],
+                    [  # Third row
+                        InlineKeyboardButton( 
                             "Back",
                             callback_data="initial_menu"
                         )
@@ -266,7 +273,7 @@ reply_markup=InlineKeyboardMarkup(
 
 @Client.on_callback_query(filters.regex("bining"))
 def bining_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""Commands | 1/3 🔄 </b>
+    callback_query.edit_message_text(f"""Commands | 1/4 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>Faker</b> (<a href='https://t.me/ByDog3r'>!faker</a>) ✅
 └ Fake address generator.
@@ -297,9 +304,53 @@ def bining_button_callback(client, callback_query):
         )
     
 
+@Client.on_callback_query(filters.regex("CiberInteligenciaSV"))
+def CiberInteligenciaSV_button_callback(client, callback_query):
+    callback_query.edit_message_text(f"""<b> Leaks by <a href='https://t.me/guacamayal'>CiberInteligenciaSv</a> | 4/4 🔄 </b>
+━━━━━━━━━━━━
+┌ <b>Name</b> (<a href='https://t.me/ByDog3r'>!nombre</a>) ✅
+└ Doxxing by name.
+
+┌ <b>Email</b> (<a href='https://t.me/ByDog3r'>!email</a>) ✅
+└ Doxxing by email.
+                                     
+┌ <b>Phone Number</b> (<a href='https://t.me/ByDog3r'>!telefono</a>) ✅
+└ Doxxing by phone number.
+                                     
+┌ <b>ID</b> (<a href='https://t.me/ByDog3r'>!dui</a>) ✅
+└ Doxxing by ID.
+                                     
+┌ <b>Address</b> (<a href='https://t.me/ByDog3r'>!direccion</a>) ✅
+└ Doxxing by address.
+                                     
+┌ <b>Car Plate</b> (<a href='https://t.me/ByDog3r'>!placa</a>) ✅
+└ Doxxing by car plate.
+                                     
+┌ <b>Chota Lookup</b> (<a href='https://t.me/ByDog3r'>!oni</a>) ✅
+└ Doxxing by ONI.
+                                     
+┌ <b>Second address</b> (<a href='https://t.me/ByDog3r'>!direccion2</a>) ✅
+└ Doxxing by a possible address.
+                                     
+┌ <b>Second phone #</b> (<a href='https://t.me/ByDog3r'>!telefono2</a>) ✅
+└ Doxxing by a possible phone number.""",
+                                     disable_web_page_preview=True,
+                                     reply_markup=InlineKeyboardMarkup(
+                [
+                    
+                    [  
+                        InlineKeyboardButton( 
+                            "Go back",
+                            callback_data="tools"
+                        )
+                    ],
+                ]
+            )
+        )
+    
 @Client.on_callback_query(filters.regex("iartificial"))
 def iartificial_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""<b> Artificial Intelligence | 2/3 🔄 </b>
+    callback_query.edit_message_text(f"""<b> Artificial Intelligence | 2/4 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>GPT</b> (<a href='https://t.me/ByDog3r'>!gpt</a>) ❌
 └ Llama IA chat.
@@ -323,13 +374,10 @@ def iartificial_button_callback(client, callback_query):
 
 @Client.on_callback_query(filters.regex("quacking"))
 def quackingtools_button_callback(client, callback_query):
-    callback_query.edit_message_text(f"""<b> Hacking Tools | 3/3 🔄 </b>
+    callback_query.edit_message_text(f"""<b> Hacking Tools | 3/4 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>DoxToolkit</b> (<a href='https://t.me/ByDog3r'>>>></a>) ✅
 └ Dox a specific target.
-                                     
-┌ <b>Chota Lookup</b> (<a href='https://t.me/ByDog3r'>!ch</a>) ✅
-└ ONI lookup
 
 ┌ <b>Auto Hunter</b> (<a href='https://t.me/ByDog3r'>!ht</a>) ✅
 └ Hunter system.
