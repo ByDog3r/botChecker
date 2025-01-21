@@ -1,0 +1,10 @@
+#folders
+__pycache__
+venv/
+.env
+
+#files
+bot.session*
+db_bot.db
+ciberinteligencia.db
+.DS_Store
