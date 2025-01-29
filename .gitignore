@@ -4,7 +4,10 @@ venv/
 .env
 
 #files
-bot.session*
+bot.session
+bot.session-Journal
+bycheck.db
 db_bot.db
 ciberinteligencia.db
 .DS_Store
+Icon\r

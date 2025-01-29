@@ -11,9 +11,9 @@ from src.assets.connection import Database
 config_bot = load(open("src/assets/cfgbot.json"))
 API_ID = config_bot["API_ID"]
 API_HASH = config_bot["API_HASH"]
-# BOT_TOKEN = config_bot["BOT_TOKEN"]
+BOT_TOKEN = config_bot["BOT_TOKEN"]
 SESSION_STRING = config_bot["SESSION_STRING"]
-BOT_TOKEN = "6388281047:AAFf-30F-CgfN55Fk19Oo0oh1ae749MnpSY"  # is for test
+#BOT_TOKEN = "6388281047:AAFf-30F-CgfN55Fk19Oo0oh1ae749MnpSY"  # is for test
 
 
 async def handle_text(client: Client, m: Message):
@@ -47,5 +47,6 @@ if __name__ == "__main__":
     user.start()
     app.add_handler(MessageHandler(handle_text, filters.text))
     logging.basicConfig(level=logging.CRITICAL)
+    #logging.basicConfig(level=logging.ERROR)
 
     app.run()

