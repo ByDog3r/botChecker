@@ -7,7 +7,6 @@ from pyrogram.types import Message
 from pyrogram import Client, filters, enums
 from pyrogram.enums import ParseMode
 
-BIN_API = "https://bins.antipublic.cc/bins/"
 name_gate = "Recurly_Charged"
 subtype = "60.00$ Charged"
 command = "rec"

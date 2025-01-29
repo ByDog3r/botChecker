@@ -7,7 +7,6 @@ from pyrogram import Client, filters, enums
 from pyrogram.enums import ParseMode
 from src.extras.checklib import MakeGate, ScrapInfo
 
-BIN_API = "https://bins.antipublic.cc/bins/"
 name_gate = "Authorized"
 subtype = "16.95$ Charged"
 command = "au"
@@ -268,15 +267,19 @@ async def get_live(card, msg):
         "https://millerhats.com/store/index.php?route=checkout/confirm", headers=headers
     )
     try:
-        price = ScrapInfo().getStr(response.text, """ <td colspan="4" class="text-right"><strong>Total:</strong></td>
+        price = ScrapInfo().getStr(
+            response.text,
+            """ <td colspan="4" class="text-right"><strong>Total:</strong></td>
         <td class="text-right">$""",
-            '</td>',
+            "</td>",
         )
 
         login = ScrapInfo().getStr(response.text, 'x_login" value="', '" />')
         hash_ = ScrapInfo().getStr(response.text, 'x_fp_hash" value="', '" />')
         invoice = ScrapInfo().getStr(response.text, 'invoice_num" value="', '" />')
-        time_stamp = ScrapInfo().getStr(response.text, 'x_fp_timestamp" value="', '" />')
+        time_stamp = ScrapInfo().getStr(
+            response.text, 'x_fp_timestamp" value="', '" />'
+        )
         fp = ScrapInfo().getStr(response.text, 'x_fp_sequence" value="', '" />')
 
         #  ========= Eight req ========
@@ -404,7 +407,8 @@ async def get_live(card, msg):
             data=data,
         )
         card_response = (
-            ScrapInfo().getStr(response.text, "_response_reason_text=", "&x_avs_code")
+            ScrapInfo()
+            .getStr(response.text, "_response_reason_text=", "&x_avs_code")
             .replace("+", " ")
             .replace("%21", " ")
         )

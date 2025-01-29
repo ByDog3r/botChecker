@@ -139,7 +139,10 @@ def charged_button_callback(client, callback_query):
 </b>└ 10$ Charged gateway
 
 </b>┌ <b>Recurly Charged (<a href='https://t.me/ByDog3r'>!rec</a>) ✅
-</b>└ 60$ Charged gateway""",
+</b>└ 60$ Charged gateway
+
+</b>┌ <b>Braintree Charged (<a href='https://t.me/ByDog3r'>!bra</a>) ✅
+</b>└ 30$ Charged gateway""",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
             [
