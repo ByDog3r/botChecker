@@ -20,54 +20,54 @@ def remove_duplicates(messages):
 async def scrape_messages(user, channel_username, limit, keyword=None):
     messages = []
     offset = 0
-    pattern = r"\d{16}\D*\d{2}\D*\d{2,4}\D*\d{3,4}"  # Expresión regular para números de tarjeta
+    pattern = r"\d{16}\D*\d{2}\D*\d{2,4}\D*\d{3,4}"
 
-    while len(messages) < limit:
-        try:
-            async for message in user.search_messages(
-                channel_username, offset=offset, limit=100
-            ):
-                text = message.text if message.text else message.caption
-                if text:
-                    # Filtrar mensajes con la keyword (si se proporciona)
-                    if keyword:
-                        if keyword.replace(" ", "").isdigit():
-                            # Si la keyword es un número (posiblemente un BIN), buscar como subcadena
-                            if keyword.replace(" ", "") not in text.replace(" ", ""):
-                                continue
-                        elif keyword.lower() not in text.lower():
-                            continue
+    async def process_message(message):
+        text = message.text if message.text else message.caption
+        if text:
+            if keyword:
+                if keyword.replace(" ", "").isdigit():
+                    if keyword.replace(" ", "") not in text.replace(" ", ""):
+                        return
+                elif keyword.lower() not in text.lower():
+                    return
 
-                    # Buscar números de tarjeta en el mensaje
-                    matched_messages = re.findall(pattern, text)
-                    if matched_messages:
-                        formatted_messages = []
-                        for matched_message in matched_messages:
-                            extracted_values = re.findall(r"\d+", matched_message)
-                            if (
-                                len(extracted_values) == 4
-                            ):  # Validar estructura: tarjeta, mes, año, CVV
-                                card_number, mo, year, cvv = extracted_values
-                                year = year[-2:]
-                                formatted_messages.append(
-                                    f"{card_number}|{mo}|{year}|{cvv}"
-                                )
-                        messages.extend(formatted_messages)
+            matched_messages = re.findall(pattern, text)
+            if matched_messages:
+                formatted_messages = []
+                for matched_message in matched_messages:
+                    extracted_values = re.findall(r"\d+", matched_message)
+                    if len(extracted_values) == 4:
+                        card_number, mo, year, cvv = extracted_values
+                        year = year[-2:]
+                        formatted_messages.append(f"{card_number}|{mo}|{year}|{cvv}")
+                messages.extend(formatted_messages)
 
-                        if len(messages) >= limit:
-                            return messages[:limit]
+    tasks = []
+    try:
+        async for message in user.search_messages(
+            channel_username, offset=offset, limit=10000000
+        ):
+            tasks.append(asyncio.create_task(process_message(message)))
+            if len(tasks) >= 100:
+                await asyncio.gather(*tasks)
+                tasks.clear()
 
-                offset = message.id
-            if not message:
+            if len(messages) >= limit:
                 break
-        except PeerIdInvalid:
-            print(f"Error: Invalid peer ID for channel {channel_username}. Skipping...")
-            break
-        except Exception as e:
-            print(f"Error during message search: {str(e)}. Continuing...")
-            await asyncio.sleep(1)  # Esperar un segundo antes de continuar
 
-    return messages
+            offset = message.id
+
+        if tasks:
+            await asyncio.gather(*tasks)
+
+    except PeerIdInvalid:
+        print(f"Error: Invalid peer ID for channel {channel_username}. Skipping...")
+    except Exception as e:
+        print(f"Error during message search: {str(e)}. Continuing...")
+        await asyncio.sleep(1)
+
+    return messages[:limit]
 
 
 allow_users = ["7500654993", "6503743826", "830207365"]
@@ -93,9 +93,7 @@ async def scr_cmd(client, Message):
 
         try:
             input_text = args[0]
-            parsed_args = input_text.split(
-                " ", 2
-            )  # Dividir solo en 3 partes como máximo
+            parsed_args = input_text.split(" ", 2)
 
             if len(parsed_args) < 2:
                 raise ValueError("Invalid number of arguments.")
@@ -104,8 +102,7 @@ async def scr_cmd(client, Message):
             limit = int(parsed_args[1])
             keyword = " ".join(parsed_args[2:]) if len(parsed_args) > 2 else None
 
-            # Imprimir la keyword
-            print(f"Keyword used: {keyword}")
+            # print(f"Keyword used: {keyword}")
 
         except (ValueError, IndexError):
             return await Message.reply(
@@ -153,7 +150,7 @@ async def scr_cmd(client, Message):
                     f"<b>Duplicates Removed:</b> <code>{duplicates_removed}</code>\n"
                     f"<b>Keyword Used:</b> <code>{keyword or 'None'}</code>\n"
                     f"<b>━━━━━━━━━━</b>\n"
-                    f"<b>Generated by:</b> <a href='https://t.me/ByDog3r'>Leonel M.</a>\n"
+                    f"<b>Generated by:</b></a>\n"
                 )
                 await client.send_document(Message.chat.id, f, caption=caption)
             os.remove(file_name)
@@ -162,10 +159,6 @@ async def scr_cmd(client, Message):
                 "<b>❌ No results found for the specified criteria.</b>"
             )
 
-        if not unique_messages:
-            await progress_message.edit(
-                "<b>Scraping completed, but no valid messages were found.</b>"
-            )
     except Exception as e:
         print(f"Unexpected error in scr_cmd: {str(e)}")
         await Message.reply(
