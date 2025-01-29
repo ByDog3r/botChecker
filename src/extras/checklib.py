@@ -35,7 +35,7 @@ class ScrapInfo:
         session = r.Session()
         proxies = self.load_proxies("src/extras/proxies.txt")
         proxy = random.choice(proxies)
-        session.proxies = proxy
+        session.proxies = proxies
         return session
 
 

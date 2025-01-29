@@ -5,7 +5,9 @@ venv/
 
 #files
 bot.session
-bot.session-Journal
+ByCheckerBot.session
+ByCheckerBot.session-journal
+user_session.session
 bycheck.db
 db_bot.db
 ciberinteligencia.db

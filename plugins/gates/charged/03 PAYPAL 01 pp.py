@@ -76,7 +76,7 @@ async def get_live(card, msg):
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.67",
     }
 
-    for retry in range(max_retries):
+    for retry in range(3):
         try:
             response = session.get(
                 "https://schoolforstrings.org/donate/", headers=headers
