@@ -46,7 +46,7 @@ async def scrape_messages(user, channel_username, limit, keyword=None):
     tasks = []
     try:
         async for message in user.search_messages(
-            channel_username, offset=offset, limit=10000000
+            channel_username, offset=offset, limit=100000
         ):
             tasks.append(asyncio.create_task(process_message(message)))
             if len(tasks) >= 100:
