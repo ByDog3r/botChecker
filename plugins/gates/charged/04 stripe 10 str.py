@@ -53,7 +53,7 @@ async def get_live(card, msg):
     cvv = card_split[3]
 
     initial_time = time.time()
-    data_bin = MakeGate(card).bin_lookup()
+    data_bin = await MakeGate(card).bin_lookup()
 
     proxy = ScrapInfo().proxy_session()
     email = ScrapInfo().email_generator()

@@ -25,7 +25,7 @@ async def bin_lookup(BIN, user_id, u_name):
 
     initial_time = time.perf_counter()
     try:
-        data_bin = MakeGate(BIN).bin_lookup()
+        data_bin = await MakeGate(BIN).bin_lookup()
         final_time = time.perf_counter() - initial_time
         msg = f"""<b>[⛈️] #{BIN} FOUND</b>
 ━━━━━━━━━━━━

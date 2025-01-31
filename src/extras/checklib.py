@@ -1,5 +1,4 @@
-import requests as r
-import random, re, names
+import random, re, names, aiohttp
 
 
 class ScrapInfo:
@@ -81,17 +80,19 @@ class MakeGate:
     def get_card_details(self):
         return self.ccn, self.month, self.year, self.cvv, self.card_type
 
-    def bin_lookup(self):
+    async def bin_lookup(self):
         bin = self.ccn[:6]
         try:
-            data = r.get(self.api + bin).json()
-            return (
-                data["brand"],
-                data["type"],
-                data["level"],
-                data["bank"],
-                data["country_name"],
-                data["country_flag"],
-            )
-        except:
-            return "Please enter a valid bin."
+            async with aiohttp.ClientSession() as r:
+                async with r.get(self.api + bin) as data:
+                    data = await data.json()
+                    return (
+                        data["brand"],
+                        data["type"],
+                        data["level"],
+                        data["bank"],
+                        data["country_name"],
+                        data["country_flag"],
+                    )
+        except Exception as e:
+            return f"Error: {str(e)}"

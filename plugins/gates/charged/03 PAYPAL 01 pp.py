@@ -58,7 +58,7 @@ async def get_live(card, msg):
     email = ScrapInfo().email_generator()
 
     initial_time = time.time()
-    data_bin = MakeGate(card).bin_lookup()
+    data_bin = await MakeGate(card).bin_lookup()
     proxy = ScrapInfo().proxy_session()
 
     max_retries = 3
@@ -107,15 +107,15 @@ async def get_live(card, msg):
                     session.close()
 
         msgg = f"""<b>{current_time} 🌩️</b>
-    ━━━━━━━━━━━
-    <b>CC:</b> {ccnum}:{mes}:{ano}:{cvv}
-    <b>Status:</b> Loading...
-    ━━━━━━━━━━━
-    <code>| Bank Information</code>
-    ━━━━━━━━━━━
-    <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
-    <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
-    <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>"""
+━━━━━━━━━━━
+<b>CC:</b> {ccnum}:{mes}:{ano}:{cvv}
+<b>Status:</b> Loading...
+━━━━━━━━━━━
+<code>| Bank Information</code>
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>"""
         await msg.edit_text(
             msgg, parse_mode=ParseMode.HTML, disable_web_page_preview=True
         )
@@ -340,17 +340,17 @@ async def get_live(card, msg):
             respuesta = "Charge $0,1"
 
         card_response = f"""<b>#{name_gate} (${command}) 🌩️</b>
-    ━━━━━━━━━━━
-    <a href="https://t.me/ByDog3r">↯</a> <b>CC:<b> [<code>{ccnum}:{mes}:{ano}:{cvv}</code>]
-    <a href="https://t.me/ByDog3r">↯</a> <b>Status: {msgx}<b>
-    <a href="https://t.me/ByDog3r">↯</a> <b>Response:</b> {respuesta}
-    <a href="https://t.me/ByDog3r">↯</a> <b>Gateway: {subtype}</b>
-    ━━━━━━━━━━━
-    <code>| Bank Information</code>
-    ━━━━━━━━━━━
-    <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
-    <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
-    <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>"""
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">↯</a> <b>CC:<b> [<code>{ccnum}:{mes}:{ano}:{cvv}</code>]
+<a href="https://t.me/ByDog3r">↯</a> <b>Status: {msgx}<b>
+<a href="https://t.me/ByDog3r">↯</a> <b>Response:</b> {respuesta}
+<a href="https://t.me/ByDog3r">↯</a> <b>Gateway: {subtype}</b>
+━━━━━━━━━━━
+<code>| Bank Information</code>
+━━━━━━━━━━━
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
+<a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>"""
         await msg.edit_text(
             card_response, parse_mode=ParseMode.HTML, disable_web_page_preview=True
         )
