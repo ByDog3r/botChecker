@@ -77,8 +77,8 @@ async def commands(client: Client, m: Message):
 
 
 @Client.on_callback_query(filters.regex("gates"))
-def gates_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def gates_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""<b> Gateways | 0/3 💳
 ━━━━━━━━━━━━
 Total Gates </b> <a href="https://t.me/ByDog3r">⊁</a> 6
@@ -102,8 +102,8 @@ Total Gates </b> <a href="https://t.me/ByDog3r">⊁</a> 6
 
 
 @Client.on_callback_query(filters.regex("Auth"))
-def auth_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def auth_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""<b> Gateways Auth | 1/3 🔄
 ━━━━━━━━━━━━
 </b>┌ <b>Payeezy Auth (<a href='https://t.me/ByDog3r'>!yz</a>) ✅
@@ -122,8 +122,8 @@ def auth_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("charged"))
-def charged_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def charged_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""<b> Gateways Charged | 2/3 🔄
 ━━━━━━━━━━━━
 </b>┌ <b>Authorize_net AVS (<a href='https://t.me/ByDog3r'>!au</a>) ✅
@@ -157,8 +157,8 @@ def charged_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("vbvv"))
-def vbvv_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def vbvv_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""<b> Gateways Auth | 1/3 🔄
 ━━━━━━━━━━━━
 </b>┌ <b>Braintree VBV (<a href='https://t.me/ByDog3r'>!vbv</a>) ✅
@@ -176,8 +176,8 @@ def vbvv_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("tools"))
-def tools_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def tools_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         """<b> Checker Tools | 0/3 🛠️ </b>
 ━━━━━━━━━━━━
 <b>Total Tools </b> <a href="https://t.me/ByDog3r">⊁</a> 20
@@ -209,8 +209,8 @@ def tools_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("bining"))
-def bining_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def bining_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""Commands | 1/4 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>Faker</b> (<a href='https://t.me/ByDog3r'>!faker</a>) ❌
@@ -240,8 +240,8 @@ def bining_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("CiberInteligenciaSV"))
-def CiberInteligenciaSV_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def CiberInteligenciaSV_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""<b> Leaks by <a href='https://t.me/guacamayal'>CiberInteligenciaSv</a> | 4/4 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>Name</b> (<a href='https://t.me/ByDog3r'>!nombre</a>) ✅
@@ -283,8 +283,8 @@ def CiberInteligenciaSV_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("iartificial"))
-def iartificial_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def iartificial_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""<b> Artificial Intelligence | 2/4 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>GPT</b> (<a href='https://t.me/ByDog3r'>!gpt</a>) ❌
@@ -306,8 +306,8 @@ def iartificial_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("quacking"))
-def quackingtools_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def quackingtools_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"""<b> Hacking Tools | 3/4 🔄 </b>
 ━━━━━━━━━━━━
 ┌ <b>DoxToolkit</b> (<a href='https://t.me/ByDog3r'>>>></a>) ✅
@@ -316,7 +316,7 @@ def quackingtools_button_callback(client, callback_query):
 ┌ <b>Auto Hunter</b> (<a href='https://t.me/ByDog3r'>!ht</a>) ✅
 └ Hunter system.
 
-┌ <b>Imei checker</b> (<a href='https://t.me/ByDog3r'>!imei</a>) ❌
+┌ <b>Imei checker</b> (<a href='https://t.me/ByDog3r'>!imei</a>) ✅
 └ Check Apple Imei.
 
 ┌ <b>Scraper CC</b> (<a href='https://t.me/ByDog3r'>!scr</a>) ✅
@@ -335,15 +335,15 @@ def quackingtools_button_callback(client, callback_query):
 
 
 @Client.on_callback_query(filters.regex("close"))
-def close(client, callback_query):
-    callback_query.edit_message_text(
+async def close(client, callback_query):
+    await callback_query.edit_message_text(
         "<b><a href='https://t.me/ByDog3r'>...</b></a>", disable_web_page_preview=True
     )
 
 
 @Client.on_callback_query(filters.regex("initial_menu"))
-def initial_menu_button_callback(client, callback_query):
-    callback_query.edit_message_text(
+async def initial_menu_button_callback(client, callback_query):
+    await callback_query.edit_message_text(
         f"<b>Select an option:</b>",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(

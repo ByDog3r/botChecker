@@ -12,7 +12,7 @@ class ScrapInfo:
 
     def load_proxies(self, filename: str):
         with open(filename, "r") as file:
-            proxies = [{"http": line.strip()} for line in file if line.strip()]
+            proxies = [line.strip() for line in file if line.strip()]
         return proxies
 
     def open_files(self, file: str):
@@ -31,12 +31,9 @@ class ScrapInfo:
         email = f"{user}@{random.choice(dominio)}"
         return email
 
-    def session(self):
-        session = r.Session()
+    def proxy_session(self):
         proxies = self.load_proxies("src/extras/proxies.txt")
-        proxy = random.choice(proxies)
-        session.proxies = proxies
-        return session
+        return f"http://{random.choice(proxies)}"
 
 
 class MakeGate:

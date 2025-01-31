@@ -30,6 +30,6 @@ requests-toolbelt==1.0.0
 rsa==4.9
 soupsieve==2.6
 TgCrypto==1.2.5
-TwoCaptcha==0.0.1
+2captcha-python==1.5.1
 urllib3==2.2.3
 yarl==1.17.1

@@ -2,7 +2,7 @@
 # Site hunted by @TNT
 
 import requests as r
-import string, random, re, time
+import string, random, re, time, asyncio
 from datetime import datetime
 from src.assets.functions import antispam
 from src.assets.connection import Database
@@ -45,7 +45,8 @@ async def gateway(client: Client, m: Message):
 <b>CC:</b> {card_splited[0]}:{card_splited[1]}:{card_splited[2]}:{card_splited[3]}
 <b>Status:</b> Loading..."""
     msg = await m.reply(msgg, quote=True)
-    cc_check = await get_live(card, msg)
+    asyncio.gather(get_live(card, msg))
+
 
 
 async def get_live(card, msg):
