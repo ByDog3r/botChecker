@@ -158,11 +158,15 @@ async def GenerateCC(extra, is_regen=False):
             gen = str(gen_class)
             ccs = gen.split("\n")
 
+            # Generación del mensaje con valores seguros
+            cc_list = "".join([f"<code>{cc}</code>\n" for cc in ccs])
+            extra_code = extra[:6] if extra and len(extra) >= 6 else "N/A"
+
             msg = f"""<b>Card Generator</b>
 ━━━━━━━━━━━
-{''.join([f'<code>{cc}</code>\n' for cc in ccs])}
+{cc_list}
 ━━━━━━━━━━━
-<code>{extra[:6]}</code>"""
+<code>{extra_code}</code>"""
 
             return msg
 
