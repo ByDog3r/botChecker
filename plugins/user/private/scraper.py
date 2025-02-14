@@ -1,5 +1,4 @@
-import re
-import os
+import re, re, asyncio, os
 from urllib.parse import urlparse
 from pyrogram import filters
 from pyrogram.types import Message
@@ -7,8 +6,9 @@ from pyrogram import Client
 from src.assets.functions import antispam
 from src.assets.connection import Database
 from pyrogram.enums import ParseMode
-import asyncio
+from json import load
 from pyrogram.errors import PeerIdInvalid
+from main import SESSION_STRING
 
 
 def remove_duplicates(messages):
@@ -76,7 +76,8 @@ allow_users = ["7500654993", "6503743826", "830207365"]
 @Client.on_message(filters.command(["scr", "scraper"], ["/", ",", ".", ";", "-"]))
 async def scr_cmd(client, Message):
     try:
-        user = client.user_client
+        user = Client("user_session", session_string=SESSION_STRING)
+        await user.start()
         args = Message.text.split(maxsplit=1)[1:]
         user_id = str(Message.from_user.id)
 
