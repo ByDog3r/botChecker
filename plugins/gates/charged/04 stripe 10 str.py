@@ -75,7 +75,10 @@ async def get_live(card, msg):
         data = f"type=card&billing_details[address][postal_code]=10010&billing_details[address][city]=ny&billing_details[address][country]=US&billing_details[address][line1]=strett+456&billing_details[email]={email}&billing_details[name]=dhjjhwegewhj+edewfwrfe&card[number]={ccn}&card[cvc]={cvv}&card[exp_month]={month}&card[exp_year]={year}&guid=1ae2c337-d23e-4968-ba44-cf67f6c46ba8a11185&muid=378f9b34-2db6-4a34-abf8-44e51da597edfc2ba0&sid=fbcd4dec-ed92-4c12-8ae5-65e6537c3600810c12&payment_user_agent=stripe.js%2F4a30826976%3B+stripe-js-v3%2F4a30826976&time_on_page=1166374&key=pk_live_51049Hm4QFaGycgRKpWt6KEA9QxP8gjo8sbC6f2qvl4OnzKUZ7W0l00vlzcuhJBjX5wyQaAJxSPZ5k72ZONiXf2Za00Y1jRrMhU"
 
         async with session.post(
-            "https://api.stripe.com/v1/payment_methods", headers=headers, data=data
+            "https://api.stripe.com/v1/payment_methods",
+            headers=headers,
+            data=data,
+            proxy=proxy,
         ) as response:
 
             if "error" in await response.text():
@@ -190,6 +193,7 @@ async def get_live(card, msg):
             cookies=cookies,
             headers=headers,
             data=data,
+            proxy=proxy,
         ) as response1:
 
             if "Your card has insufficient funds." in await response1.text():

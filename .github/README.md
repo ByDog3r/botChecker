@@ -1,7 +1,7 @@
 <h1 align='center'> .𝑩𝒚𝑪𝒉𝒆𝒄𝒌 ﷻ</h1>
 <img align="center" src="https://user-images.githubusercontent.com/66902449/208341491-af5757b4-941b-4b8c-892b-a57dcad4d1e3.png">
 <h4 align="center">by <a href='https://github.com/ByDog3r/'>@ByDog3r.</a></h4>
-<h1 align="center">THIS IS THE BEST CHECKER BOT EVER</h1>
+<h1 align="center">THIS IS THE BEST RAW FOR A BOT CHECKER EVER EXIST</h1>
 
 <h2 align="center"> Some Functions </h2>
 
@@ -12,7 +12,7 @@
 ## .bycheck installation
 
 ```python
-pip install -r requirements.txt
+pip3 install -r .github/requirements.txt
 ```
 
 ## Details

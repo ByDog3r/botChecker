@@ -83,7 +83,7 @@ async def gates_button_callback(client, callback_query):
 ━━━━━━━━━━━━
 Total Gates </b> <a href="https://t.me/ByDog3r">⊁</a> 6
 <b>Auth</b> <a href="https://t.me/ByDog3r">⊁</a> 0
-<b>Charged</b> <a href="https://t.me/ByDog3r">⊁</a> 5
+<b>Charged</b> <a href="https://t.me/ByDog3r">⊁</a> 6
 <b>VBV</b> <a href="https://t.me/ByDog3r">⊁</a> 1
 
 <b>Select one of the buttons bellow to check base on the gate that you want</b>""",
@@ -126,7 +126,7 @@ async def charged_button_callback(client, callback_query):
     await callback_query.edit_message_text(
         f"""<b> Gateways Charged | 2/3 🔄
 ━━━━━━━━━━━━
-</b>┌ <b>Authorize_net AVS (<a href='https://t.me/ByDog3r'>!au</a>) ✅
+</b>┌ <b>Authorize_net AVS (<a href='https://t.me/ByDog3r'>!au</a>) ❌
 </b>└ $16.95 Charged gateway.
 
 </b>┌ <b>Payflow Charged (<a href='https://t.me/ByDog3r'>!pc</a>) ✅
@@ -142,7 +142,10 @@ async def charged_button_callback(client, callback_query):
 </b>└ 60$ Charged gateway
 
 </b>┌ <b>Braintree Charged (<a href='https://t.me/ByDog3r'>!bra</a>) ✅
-</b>└ 30$ Charged gateway""",
+</b>└ 30$ Charged gateway
+
+</b>┌ <b>Braintree Charged (<a href='https://t.me/ByDog3r'>!bet</a>) ✅
+</b>└ 2$ Charged gateway""",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
             [
