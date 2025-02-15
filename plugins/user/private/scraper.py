@@ -1,8 +1,9 @@
-import re, re, asyncio, os
+import re
+import asyncio
+import os
 from urllib.parse import urlparse
-from pyrogram import filters
+from pyrogram import filters, Client
 from pyrogram.types import Message
-from pyrogram import Client
 from src.assets.functions import antispam
 from src.assets.connection import Database
 from pyrogram.enums import ParseMode
@@ -17,7 +18,8 @@ def remove_duplicates(messages):
     return unique_messages, duplicates_removed
 
 
-async def scrape_messages(user, channel_username, limit, keyword=None):
+# Función para scrapear mensajes usando search_messages sobre el chat_id
+async def scrape_messages(user, chat_id, limit, keyword=None):
     messages = []
     offset = 0
     pattern = r"\d{16}\D*\d{2}\D*\d{2,4}\D*\d{3,4}"
@@ -45,9 +47,7 @@ async def scrape_messages(user, channel_username, limit, keyword=None):
 
     tasks = []
     try:
-        async for message in user.search_messages(
-            channel_username, offset=offset, limit=100000
-        ):
+        async for message in user.search_messages(chat_id, offset=offset, limit=100000):
             tasks.append(asyncio.create_task(process_message(message)))
             if len(tasks) >= 100:
                 await asyncio.gather(*tasks)
@@ -62,7 +62,7 @@ async def scrape_messages(user, channel_username, limit, keyword=None):
             await asyncio.gather(*tasks)
 
     except PeerIdInvalid:
-        print(f"Error: Invalid peer ID for channel {channel_username}. Skipping...")
+        print(f"Error: Invalid peer ID for chat {chat_id}. Skipping...")
     except Exception as e:
         print(f"Error during message search: {str(e)}. Continuing...")
         await asyncio.sleep(1)
@@ -70,60 +70,82 @@ async def scrape_messages(user, channel_username, limit, keyword=None):
     return messages[:limit]
 
 
-allow_users = ["7500654993", "6503743826", "830207365"]
-
-
 @Client.on_message(filters.command(["scr", "scraper"], ["/", ",", ".", ";", "-"]))
-async def scr_cmd(client, Message):
+async def scr_cmd(client, message: Message):
+    user = Client("user_session", session_string=SESSION_STRING)
     try:
-        user = Client("user_session", session_string=SESSION_STRING)
         await user.start()
-        args = Message.text.split(maxsplit=1)[1:]
-        user_id = str(Message.from_user.id)
+        args = message.text.split(maxsplit=1)[1:]
+        user_id = int(message.from_user.id)
 
-        if user_id not in allow_users:
-            return await Message.reply(
-                "<b>You are not authorized to use this command.</b>", quote=True
-            )
-
+        with Database() as db:
+            if not db.IsPremium(user_id):
+                return await message.reply("<b>You are not premium</b>", quote=True)
+            user_info = db.GetInfoUser(message.from_user.id)
         if not args:
-            return await Message.reply(
-                "<b>You need to provide a channel, amount of cards, and optionally a keyword.</b>",
+            return await message.reply(
+                "<b>You need to provide a channel/chat_id, amount of cards, and optionally a keyword.</b>",
                 quote=True,
+            )
+        antispam_result = antispam(user_id, user_info["ANTISPAM"])
+        if antispam_result != False:
+            return await message.reply(
+                f"Please wait <code>{antispam_result}'s</code>", quote=True
             )
 
         try:
             input_text = args[0]
             parsed_args = input_text.split(" ", 2)
-
             if len(parsed_args) < 2:
                 raise ValueError("Invalid number of arguments.")
 
             channel_identifier = parsed_args[0]
             limit = int(parsed_args[1])
             keyword = " ".join(parsed_args[2:]) if len(parsed_args) > 2 else None
-
-            # print(f"Keyword used: {keyword}")
-
         except (ValueError, IndexError):
-            return await Message.reply(
-                '<b>Usage:</b> /scr <channel> <amount_of_cards> ["keyword"]', quote=True
-            )
-
-        try:
-            parsed_url = urlparse(channel_identifier)
-            channel_username = (
-                parsed_url.path.lstrip("/") if parsed_url.scheme else channel_identifier
-            )
-            chat = await user.get_chat(channel_username)
-            channel_name = chat.title
-        except Exception as e:
-            return await Message.reply(
-                f"<b>Error:</b> Unable to access channel or chat. Please check if the bot is added to the channel or if the link is valid.\nError details: {str(e)}",
+            return await message.reply(
+                '<b>Usage:</b> /scr <channel/chat_id> <amount_of_cards> ["keyword"]',
                 quote=True,
             )
 
-        progress_message = await Message.reply(
+        # Determinar si se pasó un chat_id numérico o un username/URL
+        try:
+            if channel_identifier.lstrip("-").isdigit():
+                # Se asume que es un chat_id numérico (privado o grupo)
+                chat_id_int = int(channel_identifier)
+                try:
+                    chat = await user.get_chat(chat_id_int)
+                except PeerIdInvalid as e:
+                    # Si es numérico y falla, probablemente la cuenta no es miembro.
+                    return await message.reply(
+                        f"<b>Error:</b> Unable to access channel or chat. It seems you are not a member of this chat.\nError details: {str(e)}",
+                        quote=True,
+                    )
+            else:
+                # Se asume que es un username o URL (canal público)
+                parsed_url = urlparse(channel_identifier)
+                username = (
+                    parsed_url.path.lstrip("/")
+                    if parsed_url.scheme
+                    else channel_identifier
+                )
+                try:
+                    chat = await user.get_chat(username)
+                except PeerIdInvalid:
+                    # Si falla, se intenta unirse al chat (solo funciona en canales públicos)
+                    chat = await user.join_chat(username)
+            channel_name = (
+                chat.title
+                if hasattr(chat, "title") and chat.title
+                else (chat.first_name or "Chat")
+            )
+        except Exception as e:
+            return await message.reply(
+                f"<b>Error:</b> Unable to access channel or chat. Please check if you have access to it.\nError details: {str(e)}",
+                quote=True,
+            )
+
+        progress_message = await message.reply(
             "<b>Scraping in progress, please wait...</b>", quote=True
         )
 
@@ -139,7 +161,7 @@ async def scr_cmd(client, Message):
 
         if unique_messages:
             file_name = f"x{len(unique_messages)}_{channel_name.replace(' ', '_')}.txt"
-            with open(file_name, "w") as f:
+            with open(file_name, "w", encoding="utf-8") as f:
                 f.write("\n".join(unique_messages))
 
             with open(file_name, "rb") as f:
@@ -151,9 +173,9 @@ async def scr_cmd(client, Message):
                     f"<b>Duplicates Removed:</b> <code>{duplicates_removed}</code>\n"
                     f"<b>Keyword Used:</b> <code>{keyword or 'None'}</code>\n"
                     f"<b>━━━━━━━━━━</b>\n"
-                    f"<b>Generated by:</b></a>\n"
+                    f"<b>Generated by:</b>\n"
                 )
-                await client.send_document(Message.chat.id, f, caption=caption)
+                await client.send_document(message.chat.id, f, caption=caption)
             os.remove(file_name)
         else:
             await progress_message.edit(
@@ -162,6 +184,8 @@ async def scr_cmd(client, Message):
 
     except Exception as e:
         print(f"Unexpected error in scr_cmd: {str(e)}")
-        await Message.reply(
+        await message.reply(
             "<b>An unexpected error occurred. Please try again later.</b>", quote=True
         )
+    finally:
+        await user.stop()

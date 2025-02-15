@@ -5,6 +5,7 @@ venv/
 
 #files
 bot.session
+proxyChecker.py
 ByCheckerBot.session
 ByCheckerBot.session-journal
 user_session.session
