@@ -12,7 +12,7 @@
 ## .bycheck installation
 
 ```python
-pip3 install -r .github/requirements.txt
+chmod +x run; ./run
 ```
 
 ## Details
