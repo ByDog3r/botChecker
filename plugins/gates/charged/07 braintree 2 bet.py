@@ -12,8 +12,6 @@ name_gate = "Braintree_Charged"
 subtype = "2.00$ Charged"
 command = "bet"
 
-api_key = "59d78851f5181c59c1e5d0ec6d2a7ed2"
-
 
 @Client.on_message(
     filters.command([f"{command}"], ["/", ",", ".", ";", "-"], case_sensitive=False)
@@ -377,20 +375,29 @@ async def get_live(card, msg):
         # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[ Eleventh Request (step 5) ]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
         # solvin captcha
-        solver = captcha(api_key)
-
-        try:
-            captcha_response = solver.recaptcha(
-                site_key, "https://www.onceuponatimebooks.com/checkout/step4"
-            )
-        except Exception as e:
-            await msg.edit_text(f"Captcha Error: {e}", parse_mode=ParseMode.MARKDOWN)
-            return
+        solvin_captcha = ScrapInfo().captcha_solver(
+            "https://www.onceuponatimebooks.com/checkout/step4", site_key
+        )
+        if "Captcha Error" in solvin_captcha:
+            await msg.edit_text(solvin_captcha, parse_mode=ParseMode.MARKDOWN)
         else:
-            g_captcha = json.dumps(captcha_response["code"])
-            g_captcha = ScrapInfo().getStr(g_captcha, '"', '"')
-            captcha_id = json.dumps(captcha_response["captchaId"])
-            captchaId = ScrapInfo().getStr(captcha_id, '"', '"')
+            g_captcha = solvin_captcha[0]
+            captchaId = solvin_captcha[1]
+
+        # solver = captcha(api_key)
+
+        # try:
+        #     captcha_response = solver.recaptcha(
+        #         site_key, "https://www.onceuponatimebooks.com/checkout/step4"
+        #     )
+        # except Exception as e:
+        #     await msg.edit_text(f"Captcha Error: {e}", parse_mode=ParseMode.MARKDOWN)
+        #     return
+        # else:
+        #     g_captcha = json.dumps(captcha_response["code"])
+        #     g_captcha = ScrapInfo().getStr(g_captcha, '"', '"')
+        #     captcha_id = json.dumps(captcha_response["captchaId"])
+        #     captchaId = ScrapInfo().getStr(captcha_id, '"', '"')
 
         headers = {
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",

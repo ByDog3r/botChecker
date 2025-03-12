@@ -80,7 +80,8 @@ async def get_live(card, msg):
         for retry in range(3):
             try:
                 async with session.get(
-                    "https://schoolforstrings.org/donate/", headers=headers, proxy=proxy
+                    "https://schoolforstrings.org/donate/",
+                    headers=headers,
                 ) as response:
                     response = await response.text()
                     lines = response.split("\n")
@@ -205,7 +206,6 @@ async def get_live(card, msg):
                     params=params,
                     headers=headers,
                     json=json_data,
-                    proxy=proxy,
                 ) as response:
                     response = await response.json()
                     orderID = response["data"]["orderID"]
@@ -276,7 +276,6 @@ async def get_live(card, msg):
                     "https://www.paypal.com/graphql?fetch_credit_form_submit",
                     json=data,
                     headers=headers,
-                    proxy=proxy,
                 ) as resp:
                     response = resp.text()
                     break

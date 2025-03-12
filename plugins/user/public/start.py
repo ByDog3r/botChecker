@@ -82,7 +82,7 @@ async def gates_button_callback(client, callback_query):
         f"""<b> Gateways | 0/3 💳
 ━━━━━━━━━━━━
 Total Gates </b> <a href="https://t.me/ByDog3r">⊁</a> 6
-<b>Auth</b> <a href="https://t.me/ByDog3r">⊁</a> 0
+<b>Auth</b> <a href="https://t.me/ByDog3r">⊁</a> 2
 <b>Charged</b> <a href="https://t.me/ByDog3r">⊁</a> 6
 <b>VBV</b> <a href="https://t.me/ByDog3r">⊁</a> 1
 
@@ -106,8 +106,11 @@ async def auth_button_callback(client, callback_query):
     await callback_query.edit_message_text(
         f"""<b> Gateways Auth | 1/3 🔄
 ━━━━━━━━━━━━
-</b>┌ <b>Payeezy Auth (<a href='https://t.me/ByDog3r'>!yz</a>) ✅
-</b>└ Payeezy Auth gateway.
+</b>┌ <b>Stripe Auth (<a href='https://t.me/ByDog3r'>!st</a>) ✅
+</b>└ Stripe Auth gateway.
+
+</b>┌ <b>Custom Auth (<a href='https://t.me/ByDog3r'>!an</a>) ✅
+</b>└ Custom AVS Auth gateway.
 """,
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
@@ -162,7 +165,7 @@ async def charged_button_callback(client, callback_query):
 @Client.on_callback_query(filters.regex("vbvv"))
 async def vbvv_button_callback(client, callback_query):
     await callback_query.edit_message_text(
-        f"""<b> Gateways Auth | 1/3 🔄
+        f"""<b> Gateways VBV | 3/3 🔄
 ━━━━━━━━━━━━
 </b>┌ <b>Braintree VBV (<a href='https://t.me/ByDog3r'>!vbv</a>) ✅
 </b>└ Braintree 3D.""",

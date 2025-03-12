@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "[+] Updating the requirements for using."
+pip3 install -r .github/requirements.txt &>/dev/null
+clear
+echo "Is done."
+sleep 3
+clear
+python3 main.py >/dev/null 2>errors.txt &
+pid=$!
+echo "PID: $pid" >pid.txt
+disown
+echo "[+] PID has been saved ($pid)."
