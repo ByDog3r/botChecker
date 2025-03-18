@@ -17,7 +17,7 @@ chmod +x run; ./run
 
 ## Details
 
-Bellow is a list with a requirements that your need to get in order to run the bot without problem.
+Bellow is a list with a requirements that your need to get in order to run the bot without problem. For all further referances you can click <a href='https://github.com/ByDog3r/botChecker/wiki'> here </a>
 
 <details align="center">
 <summary> &#9655;</summary>
