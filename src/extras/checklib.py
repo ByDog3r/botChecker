@@ -1,4 +1,5 @@
-import random, re, names, aiohttp
+import random, re, names, aiohttp, json
+from twocaptcha import TwoCaptcha as captcha
 
 
 class ScrapInfo:
@@ -31,8 +32,25 @@ class ScrapInfo:
         return email
 
     def proxy_session(self):
-        proxies = self.load_proxies("src/extras/proxies.txt")
-        return f"http://{random.choice(proxies)}"
+        # proxies = self.load_proxies("src/extras/proxies.txt")
+        proxy_host = "rp.scrapegw.com"
+        proxy_port = 6060
+        proxy_user = "nv5mtihnt38gypv"
+        proxy_pass = "1bqbj8fcwit8yyt"
+        return f"http://{proxy_user}:{proxy_pass}@{proxy_host}:{proxy_port}"
+
+    async def captcha_solver(self, url: str, site_key: str):
+        solver = captcha("59d78851f5181c59c1e5d0ec6d2a7ed2")
+
+        try:
+            captcha_response = solver.recaptcha(site_key, url)
+        except Exception as e:
+            return f"Captcha Error: {e}"
+        else:
+            g_captcha = json.dumps(captcha_response["code"])
+            g_captcha = self.getStr(g_captcha, '"', '"')
+            captcha_id = json.dumps(captcha_response["captchaId"])
+            return g_captcha, captcha_id
 
 
 class MakeGate:
